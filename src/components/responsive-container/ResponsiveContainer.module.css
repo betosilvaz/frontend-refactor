@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    container-type: inline-size;
+    container-name: container;
+}
+
+.container > * {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: min(var(--min-width), 100%);
+    flex-basis: var(--min-width);
+}

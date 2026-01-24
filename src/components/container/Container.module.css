@@ -1,0 +1,15 @@
+.container {
+    width: min(1200px, 100%);
+}
+
+.largeContainer {
+    width: min(1440px, 100%);
+}
+
+.smallContainer {
+    width: min(900px, 100%);
+}
+
+.smallContainer, .container, .largeContainer {
+    margin: 0 auto;
+}
