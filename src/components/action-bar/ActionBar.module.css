@@ -1,0 +1,28 @@
+.actionBar {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    background-color: white;
+    display: flex;
+    z-index: 999999;
+}
+
+
+.actionBar a {
+    padding: 1rem;
+    flex-grow: 1;
+}
+
+.actionBar svg {
+    fill: black;
+    width: 30px;
+    height: 30px;
+}
+
+.actionBar a:hover svg {
+    fill: var(--primary-dark);
+}
