@@ -1,0 +1,40 @@
+.map {
+    width: 100%;
+    height: 100vh;
+}
+
+.popup {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    padding: 0.5rem;
+}
+
+.popup > h2 {
+    text-align: left;
+    font-size: 1.4rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid #CCCC;
+}
+
+.popupData {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dataItem h3 {
+    font-size: 1.3rem;
+
+}
+
+.dataItem {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+}
+
+.dataItem span {
+    color: #6B7280;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
