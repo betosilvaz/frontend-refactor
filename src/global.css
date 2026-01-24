@@ -9,5 +9,17 @@
 :root {
   font-size: 16px;
   font-family: sans-serif;
+  --background: #F7F9F7;
+  --primary: #D1E8D5;
+  --primary-dark: #84B38D;
+  --primary-darker: #2D4F35;
+  --secondary: #D1D9E0;
+  --secondary-dark: #455A64;
+  --link: #E2C391;
+  --shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 
+body {
+  background-color: var(--background);
+  min-height: 100vh;
+}
