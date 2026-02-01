@@ -38,3 +38,18 @@
     font-size: 1.2rem;
     font-weight: 600;
 }
+
+.button {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-dark);
+    font-size: 1.2rem;
+    border-radius: 10px;
+    color: white !important;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+}
+
+.button:hover {
+    background-color: var(--primary-darker);
+}

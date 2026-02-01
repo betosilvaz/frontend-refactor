@@ -3,6 +3,7 @@ import styles from './Map.module.css'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import Button from '@components/button/Button'
+import { Link } from 'react-router';
 
 export default function Map({ markers = []}) {
   const circles = {
@@ -29,7 +30,7 @@ export default function Map({ markers = []}) {
                   <span>{marker.area}m²</span>
                 </div>
               </div>
-              <Button to="" style={{fontSize: '1.1rem'}}>Detalhes</Button>
+              <Link to={marker.url} className={styles.button}>Detalhes</Link>
             </div>
           </Popup>
         </Marker>
