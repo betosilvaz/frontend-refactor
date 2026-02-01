@@ -1,18 +1,21 @@
 import styles from './Register.module.css'
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { Link } from 'react-router'
 
 import Center from '@components/center/Center'
 import FormGroup from '@components/form-group/FormGroup'
 import Input from '@components/input/Input'
 import Button from '@components/button/Button'
 import FloatingButton from '@components/floating-button/FloatingButton'
+import ResponsiveRow from '@components/responsive-row/ResponsiveRow'
 
-import safeFetch, { ERROR_CODES } from '@utils/safeFetch.js'
+import { ERROR_CODES } from '@utils/safeFetch.js'
 import AppError from '@utils/AppError.js'
 import { API_URL } from '@config/api/api.js'
+import { useAuth } from '@providers/AuthProvider'
 
 export default function Register() {
+  const { login } = useAuth();
   const [error, setError] = useState(null);
   const [form, setForm] = useState({
     name: "",
@@ -21,7 +24,6 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   })
-  const navigate = useNavigate();
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -32,26 +34,30 @@ export default function Register() {
     e.preventDefault();
     try {
       validateForm(form);
-      await safeFetch(API_URL + "/api/auth/register", {
-        method: "POST",
-        credentials: "include",
+      const response = await fetch(API_URL + '/api/auth/register', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(form)
       });
+
+      if (!response.ok) {
+        let data = await response.json();
+        throw new AppError({
+          message: data.message,
+          status: response.status
+        });
+      }
     } catch (error) {
       setError(error.message);
       return;
     }
-    navigate("/login");
   }
 
   return (
     <Center>
-      <FloatingButton to="/">
-        Voltar
-      </FloatingButton>
+      <FloatingButton to="/">Voltar</FloatingButton>
       <div className={styles.panel}>
         <div className={styles.panelImage}></div>
         <form className={styles.form}>
@@ -68,7 +74,7 @@ export default function Register() {
             <label htmlFor="cpf">CPF</label>
             <Input type="text" name="cpf" id="cpf" placeholder="111.222.333-44" onChange={handleChange}/>
           </FormGroup>
-          <div className={styles.row}>
+          <ResponsiveRow>
             <FormGroup>
               <label htmlFor='password'>Senha</label>
               <Input type="password" name="password" id="password" placeholder="********" onChange={handleChange}/>
@@ -77,7 +83,7 @@ export default function Register() {
               <label htmlFor='confirmPassword'>Confirmar Senha</label>
               <Input type="password" name="confirmPassword" id="confirmPassword" placeholder="********" onChange={handleChange}/>
             </FormGroup>
-          </div>
+          </ResponsiveRow>
           {error && <span style={{color: 'red'}}>{error}</span>}
           <Button type="submit" onClick={handleSubmit}>Cadastrar-se</Button>
           <span className={styles.message}>Já possui uma conta? <Link to="/login">Entrar</Link></span>
