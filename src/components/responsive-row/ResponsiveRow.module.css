@@ -1,0 +1,11 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.row > * {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+}
