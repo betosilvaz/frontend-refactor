@@ -11,5 +11,6 @@
 }
 
 .smallContainer, .container, .largeContainer {
+    padding-block: 1rem 200px;
     margin: 0 auto;
 }
