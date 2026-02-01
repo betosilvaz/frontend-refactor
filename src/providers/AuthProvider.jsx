@@ -1,59 +1,64 @@
 import { createContext, useContext, useState, useEffect } from "react"
+
+import { jwtDecode } from "jwt-decode";
+
 import { API_URL } from '@config/api/api.js'
-import safeFetch, { ERROR_CODES } from "@utils/safeFetch";
 import AppError from '@utils/AppError'
 
 export const Auth = createContext();
 
 export default function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [expiration, setExpiration] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [roles, setRoles] = useState([]);
 
   useEffect(() => {
     async function verifyAuthentication() {
-      try {
-        let endpoint = API_URL + '/api/auth/me';
-        const data = await safeFetch(endpoint, {
-          method: 'GET',
-          credentials: 'include',
-        });
-        
-        setIsAuthenticated(true);
-        setExpiration(data.expiration);
-        setRoles(data.roles);
-      } catch (error) {
-        // limpa o estado de uma sessão que era válida, mas foi expirada
-        setIsAuthenticated(false)
-        setExpiration(null);
-        setRoles([]);
-        console.log(error.message);
-      } finally {
-        setIsLoading(false);
+      let jwt = localStorage.getItem("jwt");
+      if (!jwt) {
+        setIsAuthenticated(false);
+        return;
       }
 
+      try {
+        const decoded = jwtDecode(jwt);
+        const currentTime = Date.now() / 1000;
+        if(decoded.exp < currentTime) {
+          console.log("Token Jwt expirado!");
+          localStorage.removeItem("jwt");
+          setIsAuthenticated(false);
+        } else {
+          setIsAuthenticated(true);
+        }
+      } catch (err) {
+        console.log("Erro ao tentar autenticação!");
+      }
     }
     verifyAuthentication();
   }, [])
 
   async function login(email, password) {
     try {
-      let data = await safeFetch(`${API_URL}/api/auth/login`, {
+
+      const response = await fetch(API_URL + '/api/auth/login', {
         method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
       });
-      setExpiration(data.expiration);
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new AppError({
+          status: data.status,
+          message: data.message,
+        });
+      }
+
+      const data = await response.json();
+      localStorage.setItem("jwt", data.jwt);
       setIsAuthenticated(true);
-      setRoles(data.roles);
+
     } catch (error) {
+      localStorage.removeItem("jwt");
+      setIsAuthenticated(false);
       throw new AppError({
         code: error.code,
         message: 'Erro ao logar: ' + error.message,
@@ -64,24 +69,20 @@ export default function AuthProvider({ children }) {
 
   async function logout() {
     try {
-      await safeFetch(`${API_URL}/api/auth/logout`, {
-        method: 'POST',
-        credentials: 'include',
-      });
+      localStorage.removeItem("jwt");
       setIsAuthenticated(false);
-      setRoles([]);
-      setExpiration(null);
+      window.location.href = "/login";
     } catch (error) {
       throw new AppError({
         code: error.code,
-        message: 'Erro ao logar: ' + error.message,
+        message: 'Erro ao deslogar: ' + error.message,
         status: error.status,
       });
     }
   }
 
   return (
-    <Auth.Provider value={{ isAuthenticated, expiration, roles, isLoading, login, logout }}>
+    <Auth.Provider value={{ isAuthenticated, login, logout }}>
       {children}
     </Auth.Provider>
   )
