@@ -13,6 +13,7 @@ export default function Home() {
       area: 734,
       latitude: -8.061616277946458, 
       longitude: -34.87220432682779,
+      url: '/green-roof/1'
     }
   ];
 

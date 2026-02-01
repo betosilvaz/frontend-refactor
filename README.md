@@ -4,6 +4,3 @@ Esse repositório serve como front-end do sistema de cadastro e georreferenciame
 
 ## Colaborares
 - [Gilberto Silva](https://github.com/betosilvaz)
-
-## Orientadora
-- Vânia Soares de Carvalho
