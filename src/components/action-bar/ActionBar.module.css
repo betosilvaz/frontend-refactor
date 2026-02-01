@@ -26,3 +26,16 @@
 .actionBar a:hover svg {
     fill: var(--primary-dark);
 }
+
+@media (max-width: 768px) {
+    .actionBar {
+        bottom: 0px;
+        left: 0px;
+        width: 100%;
+        border-radius: 0;
+        transform: translate(0px);
+    }
+    .actionBar a {
+        text-align: center;
+    }
+}
