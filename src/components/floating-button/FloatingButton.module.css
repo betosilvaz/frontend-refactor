@@ -3,10 +3,13 @@
     box-shadow: var(--shadow);
     border-radius: 5px;
     color: var(--primary-darker);
-    position: absolute;
+    /* use fixed so the button stays relative to the viewport (more predictable) */
+    position: fixed;
     top: 30px;
     left: 30px;
+    z-index: 1000;
     text-decoration: none;
+    background-color: white;
 }
 
 .button:hover {
