@@ -19,21 +19,26 @@ export default async function safeFetch(url, options) {
     });
   }
 
-  if (!response.ok) {
-    throw new AppError({
-      code: ERROR_CODES.HTTP,
-      message: 'Erro na API',
-      status: response.status,
-    });
-  }
-
+  console.log(response);
+  let data;
   try {
-    return await response.json();
+    data = await response.json();
   } catch {
+    console.log(data);
     throw new AppError({
       code: ERROR_CODES.PARSE,
       message: 'Resposta inválida',
     });
   }
+
+  if (!response.ok) {
+    throw new AppError({
+      code: ERROR_CODES.HTTP,
+      message: data.message,
+      status: response.status,
+    });
+  }
+
+  return data;
 }
 
