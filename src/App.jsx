@@ -13,6 +13,8 @@ import Profile from '@pages/user/profile/Profile'
 import Reports from '@pages/user/reports/Reports'
 import Notifications from '@pages/user/notifications/Notifications'
 import Unauthorized from '@pages/auth/unauthorized/Unauthorized'
+import ResetPassword from '@pages/auth/reset-password/ResetPassword'
+
 import ProtectedRoutes from '@components/protected-routes/ProtectedRoutes'
 
 import AuthProvider from '@providers/AuthProvider'
@@ -29,7 +31,8 @@ export default function App() {
           <Route path="/search" element={<SearchGreenRoof/>}/>
           <Route path="/green-roof/:id" element={<GreenRoofDetails/>}/>
           <Route path="/unauthorized" element={<Unauthorized/>}/>
-          <Route element={<ProtectedRoutes/>}>
+          <Route path="/reset-password" element={<ResetPassword/>}/>
+          <Route element={<ProtectedRoutes allowedRoles={["gestor"]}/>}>
             <Route path="/green-roof/create" element={<CreateGreenRoof/>}/>
             <Route path="/green-roof/update" element={<UpdateGreenRoof/>}/>
             <Route path="/profile" element={<Profile/>}/>
