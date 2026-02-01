@@ -8,11 +8,12 @@ import Input from '@components/input/Input'
 import Button from '@components/button/Button'
 import FloatingButton from '@components/floating-button/FloatingButton'
 
-import safeFetch, { ERROR_CODES } from '@utils/safeFetch.js'
 import AppError from '@utils/AppError.js'
-import { API_URL } from '@config/api/api.js'
+import { useAuth } from '../../../providers/AuthProvider'
 
 export default function Login() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [form, setForm] = useState({
     email: "",
@@ -28,16 +29,8 @@ export default function Login() {
       e.preventDefault();
       try {
         validateForm(form);
-        await safeFetch(API_URL + "/api/auth/login", {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        });
+        await login(form.email, form.password);
       } catch (error) {
-        console.log(error);
         setError(error.message);
         return;
       }
@@ -46,9 +39,7 @@ export default function Login() {
 
   return (
     <Center>
-      <FloatingButton to="/">
-        Voltar
-      </FloatingButton>
+      <FloatingButton to="/">Voltar</FloatingButton>
       <div className={styles.panel}>
         <div className={styles.panelImage}></div>
         <form className={styles.form}>
@@ -61,6 +52,7 @@ export default function Login() {
             <label htmlFor='password'>Senha</label>
             <Input type="password" name="password" id="password" placeholder="********" onChange={handleChange} />
           </FormGroup>
+          <Link to="/forgot-password" className={styles.forgotPasswordLink}>Esqueci a senha</Link>
           {error && <span style={{ color: 'red' }}>{error}</span>}
           <Button type="submit" onClick={handleSubmit}>Entrar</Button>
           <span className={styles.message}>Não possui uma conta? <Link to="/register">Cadastrar-se</Link></span>
