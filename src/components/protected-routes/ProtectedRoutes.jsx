@@ -1,20 +1,20 @@
 import { Outlet, Navigate } from "react-router"
+import { jwtDecode } from "jwt-decode";
 
 import { useAuth } from '@providers/AuthProvider'
-import Center from '@components/center/Center'
 
 export default function ProtectedRoutes({ allowedRoles }) {
-    const { isAuthenticated, expiration, roles, isLoading } = useAuth();
+    const { isAuthenticated } = useAuth();
 
-    if(isLoading) return (
-        <Center>
-            <span style={{fontWeight: 700, fontSize: '1.5rem'}}>Carregando permissões...</span>
-        </Center>
-    );
+    let jwt = localStorage.getItem("jwt");
+    if (!jwt) return <Navigate to="/login" replace/>
 
-    if(isAuthenticated && expiration != null && expiration > Date.now()) {
+    let decoded = jwtDecode(jwt);
+    let currentTime = Date.now() / 1000;
+
+    if(isAuthenticated && ( decoded.exp > currentTime )) {
         if (!allowedRoles || allowedRoles.length === 0) return <Outlet/>
-        for(let role of roles)
+        for(let role of decoded.roles)
             if(allowedRoles.includes(role)) return <Outlet/>
     }
 
