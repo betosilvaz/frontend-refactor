@@ -1,5 +1,8 @@
-import { useState } from 'react';
 import styles from './Carousel.module.css';
+
+import { useState } from 'react';
+
+import { API_URL } from '@config/api/api.js'
 
 const Carousel = ({ images }) => {
   const [indiceAtual, setIndiceAtual] = useState(0);
@@ -20,14 +23,19 @@ const Carousel = ({ images }) => {
     }
   };
 
-  if (!images || images.length === 0)
-    return <div>Sem imagens para exibir</div>;
+  if (!images || images.length === 0) {
+    return (
+      <div className={styles["carousel-container"]}>
+        <span>Sem imagens</span>
+      </div>
+    )
+  }
 
   return (
     <div className={styles["carousel-container"]}>
       <button onClick={imagemAnterior} className={`${styles["btn-control"]} ${styles["left"]}`}>&#10094;</button>
       <img
-        src={images[indiceAtual]}
+        src={`${API_URL}/${images[indiceAtual].url}`}
         alt={`Slide ${indiceAtual}`}
         className={styles["carousel-image"]}
       />
