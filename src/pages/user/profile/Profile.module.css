@@ -1,0 +1,76 @@
+.box {
+    border-radius: 5px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 3rem;
+}
+
+.box > svg {
+    width: 100px;
+    height: 100px;
+    fill: var(--primary-dark);
+    padding: 0.5rem;
+    border-radius: 50%;
+    border: 4px solid var(--primary-dark);
+    box-sizing: content-box;
+    margin: 0 auto;
+}
+
+.header {
+    color: var(--primary-dark);
+    text-align: center;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+
+.changePasswordButton {
+    padding: 0.8rem 2rem;
+    background-color: var(--primary-dark);
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+}
+
+.changePasswordButton:hover {
+    background-color: var(--primary-darker);
+}
+
+.editButton, .saveButton {
+    padding: 0.8rem 2rem;
+    background-color: var(--primary-dark);
+    border-radius: 5px;
+    color: white;
+    font-weight: 700;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}
+
+.editButton:hover, .saveButton:hover {
+    background-color: var(--primary-darker);
+}
+
+.cancelButton {
+    padding: 0.8rem 2rem;
+    background-color: #CCCC;
+    border-radius: 5px;
+    color: white;
+    font-weight: 700;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}
+
+.cancelButton:hover {
+    background-color: #AAAA;
+}
