@@ -1,40 +1,95 @@
 import styles from './GreenRoofDetails.module.css'
 
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router'
+
 import Carousel from '@components/carousel/Carousel'
 import Container from '@components/container/Container'
 import ActionBar from '@components/action-bar/ActionBar'
 
+import { API_URL } from '@config/api/api.js'
+
 export default function GreenRoofDetails() {
+  const { id } = useParams();
+  const [data, setData] = useState(null);
+  const [reservoir, setReservoir] = useState(null);
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const images = [
-    "https://pegoriniarquitetura.com.br/wp-content/uploads/2023/09/QUAIS-VANTAGENS-E-DESVANTAGENS-DO-TELHADO-VERDE___.jpg",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJM-WCeEgGLAXtN8KJFI2InXqgaCsbUFufIg&s",
-  ];
+  useEffect(() => {
+    async function getData() {
+      await getRoofs();
+      await getReservoirs();
+      await getImages();
+      setLoading(false);
+    }
 
-  const data = {
-    name: "Telhado Verde SOFTEX",
-    description: "  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida.",
-    address: "Rua da Aurora, 245",
-    conclusion: 2026,
-    latitude: -8.061904930037372,
-    longitude: -34.872218781184536,
-    type: "Intensivo",
-    area: 725,
-    slope: 2,
-    depth: 95,
-    weight: 130.40,
-    isAcessible: true,
-    isMandatory: true,
-    images: [
-      "https://pegoriniarquitetura.com.br/wp-content/uploads/2023/09/QUAIS-VANTAGENS-E-DESVANTAGENS-DO-TELHADO-VERDE___.jpg",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJM-WCeEgGLAXtN8KJFI2InXqgaCsbUFufIg&s",
-    ],
-    reservoirName: "Reservatório 1",
-    reservoirType: "Acúmulo",
-    reservoirMaterial: "Concreto",
-    reservoirUseCases: "Lavar chão",
-    reservoirVolume: 5000,
+    getData();
+  }, [id]);
+
+  async function getRoofs() {
+    try {
+      const response = await fetch(API_URL + '/api/green-roofs/' + id, {
+        method: 'GET',
+      });
+
+      if (!response.ok) {
+        // TODO: implementar uma tela de erro
+        console.log("ERRO NA API: Não foi possível carregar os dados deste telhado!");
+      }
+
+      const data = await response.json();
+      console.log(data);
+      setData(data);
+
+    } catch (err) {
+      console.log("Erro inesperado ao carregar dados do telhado!");
+    }
   }
+
+  async function getReservoirs() {
+    try {
+      const response = await fetch(API_URL + `/api/green-roofs/${id}/reservoirs`, {
+        method: 'GET'
+      });
+
+      if (!response.ok) {
+        console.log("ERRO NA API: não foi possível carregar os dados do reservatório");
+        return;
+      }
+
+      const data = await response.json();
+      setReservoir(data[0]);
+
+    } catch (err) {
+      console.log("Erro inesperado ao carregar dados do reservatório");
+    }
+  }
+
+  async function getImages() {
+    try {
+
+      const endpoint = `${API_URL}/api/green-roofs/${id}/images`;
+      const response = await fetch(endpoint, {
+        method: 'GET'
+      })
+
+      if (!response.ok) {
+        console.log("Erro na api: não foi possível retornar as imagens");
+        return;
+      }
+
+      const data = await response.json();
+      console.log(data[0].url);
+
+      setImages(data);
+
+    } catch (err) {
+
+    }
+  }
+
+  if (loading) return <span>Carregando...</span>
 
   return (
     <>
@@ -72,31 +127,33 @@ export default function GreenRoofDetails() {
               </div>
             </div>
           </section>
-          <section className={styles.infoGroup}>
-            <h2>Reservatório</h2>
-            <div>
-              <div className={styles.item}>
-                <span>Nome</span>
-                <span>{data.reservoirName}</span>
+          {reservoir && (
+            <section className={styles.infoGroup}>
+              <h2>Reservatório</h2>
+              <div>
+                <div className={styles.item}>
+                  <span>Nome</span>
+                  <span>{reservoir?.name}</span>
+                </div>
+                <div className={styles.item}>
+                  <span>Tipo</span>
+                  <span>{reservoir?.type}</span>
+                </div>
+                <div className={styles.item}>
+                  <span>Volume (Litros)</span>
+                  <span>{reservoir?.capacity}</span>
+                </div>
+                <div className={styles.item}>
+                  <span>Material</span>
+                  <span>{reservoir?.material}</span>
+                </div>
+                <div className={styles.item}>
+                  <span>Casos de uso</span>
+                  <span>{reservoir?.useCases}</span>
+                </div>
               </div>
-              <div className={styles.item}>
-                <span>Tipo</span>
-                <span>{data.reservoirType}</span>
-              </div>
-              <div className={styles.item}>
-                <span>Volume (Litros)</span>
-                <span>{data.reservoirVolume}</span>
-              </div>
-              <div className={styles.item}>
-                <span>Material</span>
-                <span>{data.reservoirMaterial}</span>
-              </div>
-              <div className={styles.item}>
-                <span>Casos de uso</span>
-                <span>{data.reservoirUseCases}</span>
-              </div>
-            </div>
-          </section>
+            </section>
+          )}
           <section className={styles.infoGroup}>
             <h2>Localização</h2>
             <div>
