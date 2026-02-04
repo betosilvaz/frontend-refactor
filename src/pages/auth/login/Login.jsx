@@ -9,7 +9,7 @@ import Button from '@components/button/Button'
 import FloatingButton from '@components/floating-button/FloatingButton'
 
 import AppError from '@utils/AppError.js'
-import { useAuth } from '../../../providers/AuthProvider'
+import { useAuth } from '@providers/AuthProvider'
 
 export default function Login() {
   const { login } = useAuth();
@@ -26,16 +26,16 @@ export default function Login() {
   }
 
   async function handleSubmit(e) {
-      e.preventDefault();
-      try {
-        validateForm(form);
-        await login(form.email, form.password);
-      } catch (error) {
-        setError(error.message);
-        return;
-      }
-      navigate("/");
+    e.preventDefault();
+    try {
+      validateForm(form);
+      await login(form.email, form.password);
+    } catch (error) {
+      setError(error.message);
+      return;
     }
+    navigate("/");
+  }
 
   return (
     <Center>
