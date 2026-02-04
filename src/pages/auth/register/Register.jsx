@@ -1,6 +1,6 @@
 import styles from './Register.module.css'
 import { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 import Center from '@components/center/Center'
 import FormGroup from '@components/form-group/FormGroup'
@@ -15,6 +15,7 @@ import { API_URL } from '@config/api/api.js'
 import { useAuth } from '@providers/AuthProvider'
 
 export default function Register() {
+  const navigatee = useNavigate();
   const { login } = useAuth();
   const [error, setError] = useState(null);
   const [form, setForm] = useState({
@@ -49,6 +50,7 @@ export default function Register() {
           status: response.status
         });
       }
+      navigatee("/");
     } catch (error) {
       setError(error.message);
       return;
