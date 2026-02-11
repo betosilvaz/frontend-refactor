@@ -1,6 +1,6 @@
 import styles from './Profile.module.css'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 
 import FloatingButton from '@components/floating-button/FloatingButton';
@@ -9,16 +9,100 @@ import UserIcon from '@components/icons/UserIcon'
 import FormGroup from '@components/form-group/FormGroup'
 import Input from '@components/input/Input'
 import ResponsiveRow from '@components/responsive-row/ResponsiveRow'
+import Center from '@components/center/Center'
+import SuccessIcon from '@components/icons/SuccessIcon'
+
+import { API_URL } from '@config/api/api.js'
 
 export default function Profile() {
   const [status, setStatus] = useState("viewing");
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState();
+  const [data, setData] = useState();
 
-  const userData = {
-    name: "John Doe",
-    email: "johndoe@example.com",
-    number: "(81) 98888 7777",
-    cpf: "777.888.999.80",
-    role: "admin",
+  useEffect(() => {
+    async function getData() {
+      try {
+
+        const jwt = localStorage.getItem("jwt");
+
+        const endpoint = `${API_URL}/api/auth/me`;
+        const response = await fetch(endpoint, {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + jwt
+          }
+        });
+
+        if (!response.ok) {
+          const data = await response.json();
+          setError(data.message);
+          console.log("Erro na API: não foi possivel retornar os dados do usuário");
+          return;
+        }
+
+        const data = await response.json();
+        setData(data);
+
+      } catch(err) {
+        setError(err.message);
+        console.log("erro");
+      }
+    }
+    getData();
+  }, []);
+
+  async function submit(e) {
+    e.preventDefault();
+
+    try {
+
+      const jwt = localStorage.getItem("jwt");
+
+      const endpoint = `${API_URL}/api/users`;
+      const response = await fetch(endpoint, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + jwt
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.message);
+        return;
+      }
+
+      setStatus("viewing")
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 2000);
+
+    } catch(err) {
+      setError(err.message);
+    }
+  }
+  
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  if (success) {
+    return (
+      <Center>
+        <div className={styles.successScreen}>
+          <SuccessIcon/>
+          <span>Alteração concluida!</span>
+        </div>
+      </Center>
+    )
   }
 
   return (
@@ -27,27 +111,27 @@ export default function Profile() {
       <div className={styles.box}>
         <h1 className={styles.header}>Detalhes da conta</h1>
         <UserIcon />
-        <form action="" method="POST" className={styles.form}>
+        <form onSubmit={submit} method="POST" className={styles.form}>
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>Informações Pessoais</h2>
             <ResponsiveRow>
               <FormGroup>
                 <label htmlFor="name">Nome Completo</label>
-                <Input type="text" name="name" value={userData.name} disabled={status === "viewing" ? true : false} />
+                <Input type="text" name="name" value={data?.name} onChange={handleChange} disabled={status === "viewing" ? true : false} />
               </FormGroup>
               <FormGroup>
                 <label htmlFor="email">E-mail</label>
-                <Input type="email" name="email" value={userData.email} disabled={status === "viewing" ? true : false} />
+                <Input type="email" name="email" value={data?.email} onChange={handleChange} disabled={status === "viewing" ? true : false} />
               </FormGroup>
             </ResponsiveRow>
             <ResponsiveRow>
               <FormGroup>
                 <label htmlFor="number">Telefone</label>
-                <Input type="text" name="number" value={userData.number} disabled={status === "viewing" ? true : false} />
+                <Input type="text" name="number" value={data?.number} onChange={handleChange} disabled={status === "viewing" ? true : false} />
               </FormGroup>
               <FormGroup>
                 <label htmlFor="cpf">CPF</label>
-                <Input type="text" name="cpf" value={userData.cpf} disabled={status === "viewing" ? true : false} />
+                <Input type="text" name="cpf" value={data?.cpf} onChange={handleChange} disabled={status === "viewing" ? true : false} />
               </FormGroup>
             </ResponsiveRow>
           </div>
@@ -55,7 +139,7 @@ export default function Profile() {
             <h2 className={styles.sectionTitle}>Informações da Conta</h2>
             <FormGroup>
               <label htmlFor="role">Função</label>
-              <Input type="text" name="role" value={userData.role == "manager" ? "Gestor" : userData.role == "admin" ? "Administrador" : "Inválido"} disabled />
+              <Input type="text" name="role" value={data?.roles[0]} disabled />
             </FormGroup>
           </div>
           <div className={styles.section}>
@@ -75,6 +159,7 @@ export default function Profile() {
             )}
           </div>
         </form>
+        <span style={{color: "red"}}>{error}</span>
       </div>
     </Container>
   );

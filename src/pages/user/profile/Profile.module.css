@@ -74,3 +74,24 @@
 .cancelButton:hover {
     background-color: #AAAA;
 }
+
+.successScreen {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+    align-items: center;
+}
+
+.successScreen svg {
+    padding: 1rem;
+    border-radius: 50%;
+    background-color: var(--primary-dark);
+    width: 70px;
+    height: 70px;
+    fill: white;
+    box-sizing: content-box;
+}
+
+.successScreen p {
+    font-style: italic;
+}
