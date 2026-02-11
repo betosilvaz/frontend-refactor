@@ -125,3 +125,16 @@
     background-color: var(--primary-dark);
     color: white;
 }
+
+.error {
+    animation-name: fadein;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

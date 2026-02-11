@@ -13,56 +13,61 @@ import ActionBar from '@components/action-bar/ActionBar'
 import ResponsiveRow from '@components/responsive-row/ResponsiveRow'
 
 import { API_URL } from '@config/api/api.js'
-import safeFetch, { ERROR_CODES } from '@utils/safeFetch.js'
-import AppError from '@utils/AppError.js'
 
 export default function SearchGreenRoof() {
+  const [error, setError] = useState(undefined);
   const [results, setResults] = useState([]);
   const [form, setForm] = useState({
-    searchField: null,
-    filters: {
-      type: null,
-      minArea: null,
-      maxArea: null,
-      minConclusion: null,
-      maxConclusion: null,
-      isAccessible: null,
-      isMandatory: null,
-    },
+    page: 0,
+    size: 12,
   });
 
   const options = [
-    {
-      name: "Intensivo",
-      value: "intensivo"
-    },
-    {
-      name: "Semi-Intensivo",
-      value: "semi-intensivo"
-    },
-    {
-      name: "Extensivo",
-      value: "extensivo"
-    }
+    {name: "Intensivo", value: "intensivo"},
+    {name: "Semi-Intensivo", value: "semi-intensivo"},
+    {name: "Extensivo", value: "extensivo"}
   ]
 
   async function submit(e) {
     e.preventDefault();
-    const query = new URLSearchParams(form.filters).toString();
-    const data = await safeFetch(`${API_URL}/api/green-roofs/search?${query}`);
-    setResults(data);
+
+    try {
+      const query = new URLSearchParams(form).toString();
+      const endpoint = `${API_URL}/api/green-roofs?${query}`;
+
+      const response = await fetch(endpoint, {
+        method: 'GET'
+      });
+
+      if (!response.ok) {
+        setError("Ocorreu um erro inesperado na API");
+        return;
+      }
+
+      const data = await response.json();
+      setResults(data.content);
+      console.log(data.content);
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
 
-  function onInputChange(e) {
+  function onInputChange(e) { 
+    const { name, value } = e.target;
     setForm(prev => ({
       ...prev,
-      filters: {
-        ...prev.filters,
-        [e.target.name]: e.target.value
-      }
+      [name]: value
     }));
-    console.log(form);
+  }
+
+  function handlePagination(e) {
+    if (form.page == 0) return;
+    
+    setForm(prev => ({
+      ...prev,
+        page: e == "back" ? prev.page - 1 : prev.page + 1
+    }));
   }
 
   return (
@@ -75,31 +80,32 @@ export default function SearchGreenRoof() {
         <section className={styles.searchArea}>
           <form className={styles.form}>
             <div className={styles.searchBar}>
-              <input type="text" name="searchField"/>
+              <input type="text" name="name" onChange={onInputChange}/>
               <button type="button" onClick={submit}><SearchIcon/></button>
             </div>
             <div className={styles.filters}>
               <FormGroup>
                 <label htmlFor="type">Tipo</label>
-                <Select value={form.filters.type} options={options} onSelect={onInputChange}/>
+                <Select value={form.type} options={options} onSelect={onInputChange}/>
               </FormGroup>
               <ResponsiveRow>
                 <FormGroup>
                   <label htmlFor="minArea">Área mínima</label>
-                  <Input type="number" name="minArea" onChange={onInputChange}/>
+                  <Input type="number" value={form.minArea} name="minArea" onChange={onInputChange}/>
                 </FormGroup>
                 <FormGroup>
                   <label htmlFor="maxArea">Área máxima</label>
-                  <Input type="number" name="maxArea" onChange={onInputChange}/>
+                  <Input type="number" value={form.maxArea} name="maxArea" onChange={onInputChange}/>
                 </FormGroup>
                 <FormGroup>
                   <label htmlFor="minConclusion">Ano minimo de conclusão</label>
-                  <Input type="number" name="minConclusion" onChange={onInputChange}/>
+                  <Input type="number" value={form.minConclusion} name="minConclusion" onChange={onInputChange}/>
                 </FormGroup>
                 <FormGroup>
                   <label htmlFor="maxConclusion">Ano máximo de conclusão</label>
-                  <Input type="number" name="maxConclusion" onChange={onInputChange}/>
+                  <Input type="number" value={form.maxConclusion} name="maxConclusion" onChange={onInputChange}/>
                 </FormGroup>
+                {error && <span style={styles.error}>{error}</span>}
                 <Button type="button" onClick={submit}>Filtrar</Button>
               </ResponsiveRow>
             </div>
@@ -110,8 +116,8 @@ export default function SearchGreenRoof() {
           {results.map(c => <Card data={c}/>)}
         </section>
         <section className={styles.paginationButtons}>
-          <button type="button">Anterior</button>
-          <button type="button">Proxima</button>
+          <button type="button" onClick={() => handlePagination("back")}>Anterior</button>
+          <button type="button" onClick={() => handlePagination("forward")}>Proxima</button>
         </section>
       </div>
     </Container>

@@ -9,6 +9,7 @@ export const Auth = createContext();
 
 export default function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function verifyAuthentication() {
@@ -31,6 +32,7 @@ export default function AuthProvider({ children }) {
       } catch (err) {
         console.log("Erro ao tentar autenticação!");
       }
+      setIsLoading(false);
     }
     verifyAuthentication();
   }, [])
