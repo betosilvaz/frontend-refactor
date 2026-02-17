@@ -1,0 +1,58 @@
+.formSection {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+}
+
+.sectionHeader {
+    font-size: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid rgba(230, 230, 230);
+}
+
+/* ### INFORMATION FORM STYLES */
+.mapButton, .actualLocationButton {
+    padding: 0.7rem;
+    border-radius: 5px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    color: white !important;
+}
+
+.mapButton {
+    background-color: var(--primary-dark);
+}
+
+.mapButton:hover {
+    background-color: var(--primary-darker);
+}
+
+.actualLocationButton {
+    background-color: rgba(220, 220, 220);
+}
+
+.actualLocationButton:hover {
+    background-color: rgba(200, 200, 200);
+}
+
+.textarea {
+    resize: vertical;
+    size: 100%;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #CCCC;
+    outline: none;
+}
+
+.textarea:focus {
+    outline: none;
+}
+
+@media (max-width: 600px) {
+    .sectionHeader {
+        font-size: 1.1rem;
+    }
+
+}

@@ -1,0 +1,110 @@
+.imagesForm {
+	border: 1px solid rgba(230, 230, 230);
+	border-radius: 7px;
+	padding: 2rem;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.header {
+	font-size: 1.5rem;
+	text-align: center;
+}
+
+.formGroup {
+	border-radius: 5px;
+}
+
+.imageInput {
+	display: none;
+}
+
+.addImageButton {
+	background-color: transparent;
+	border-radius: 7px;
+	color: var(--primary-dark);
+	border: 1px solid var(--primary-dark);
+	padding: 1rem;
+	cursor: pointer;
+	width: 100%;
+}
+
+.addImageButton:hover {
+	background-color: var(--primary-dark);
+	color: white;
+}
+
+.previewGrid {
+	border-top: 1px solid rgba(230, 230, 230);
+	padding-top: 2rem;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 1rem;
+}
+
+.imageGroup {
+	position: relative;
+}
+
+.imageGroup button {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	border: 1px solid red;
+	border-radius: 50%;
+	z-index: 100000;
+	background-color: transparent;
+	padding: 0.3rem;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.imageGroup button svg {
+	width: 15px;
+	height: 15px;
+	fill: red;
+}
+
+.imageGroup button:hover {
+	background-color: red;
+}
+
+.imageGroup button:hover svg {
+	fill: white;
+}
+
+.previewGrid img {
+	width: 100%;
+	height: auto;
+	border-radius: 5px;
+	transition: transform 0.2s ease-in-out;
+	aspect-ratio: 16/9;
+	object-fit: cover;
+	object-position: center;
+	cursor: pointer;
+}
+
+.imageGroup {
+	transition: transform 0.2s ease-in-out;
+	border: 1px solid var(--primary-darker);
+	border-radius: 5px;
+}
+
+.imageGroup:hover {
+	transform: scale(1.05);
+}
+
+@media (max-width: 1024px) {
+	.previewGrid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (max-width: 768px) {
+	.previewGrid {
+		grid-template-columns: 1fr;
+	}
+}
