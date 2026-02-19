@@ -23,7 +23,7 @@ export default function ReservoirSection({ data, handleChangeReservoir }) {
         <ResponsiveRow>
           <FormGroup>
             <label htmlFor="type">Tipo</label>
-            <Select value={data.type ?? ""} options={typeOptions} onSelect={() => {}} />
+            <Select value={data?.type ?? ""} options={typeOptions} onSelect={handleChangeReservoir} />
           </FormGroup>
           <FormGroup>
             <label htmlFor="capacity">Capacidade do Reservatório (Em Litros)</label>

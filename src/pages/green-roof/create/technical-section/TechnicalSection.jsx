@@ -26,7 +26,7 @@ export default function TechnicalSection({ data, handleChange, handleVegetationC
         <ResponsiveRow>
           <FormGroup>
             <label htmlFor="type">Tipo</label>
-            <Select value={data?.type ?? ""} options={typeOptions} onSelect={() => { /* TODO: adicionar função */ }} />
+            <Select value={data?.type ?? ""} options={typeOptions} onSelect={handleChange} />
           </FormGroup>
           <FormGroup>
             <label htmlFor="conclusion">Data de Conclusão</label>
@@ -76,7 +76,10 @@ export default function TechnicalSection({ data, handleChange, handleVegetationC
             <Input type="number" name="slope" placeholder="Ex: 2" value={data?.slope ?? ""} onChange={handleChange} />
           </FormGroup>
         </ResponsiveRow>
-        <TagInput name="vegetation" label="Vegetação" value={data.vegetation} onChange={handleVegetationChange} />
+        <ResponsiveRow>
+          <label htmlFor="vegetation">Vegetação</label>
+          <TagInput name="vegetation" value={data?.vegetation ?? []} onChange={handleVegetationChange} />
+        </ResponsiveRow>
       </section>
       <section className={styles.formSection}>
         <h2 className={styles.sectionHeader}>Informações do Proprietário</h2>

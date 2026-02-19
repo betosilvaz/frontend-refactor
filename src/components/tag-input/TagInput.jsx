@@ -5,7 +5,7 @@ import "@yaireo/tagify/dist/tagify.css";
 
 import { useEffect, useRef } from "react";
 
-export default function TagInput({ value = [], onChange, label, name }) {
+export default function TagInput({ value = [], onChange, name }) {
   const inputRef = useRef(null);
   const tagifyRef = useRef(null);
 
@@ -21,13 +21,16 @@ export default function TagInput({ value = [], onChange, label, name }) {
       }
     });
 
-    tagifyRef.current.on("change", e => {
-      onChange?.(e);
-    });
-
     return () => {
       tagifyRef.current.destroy();
     };
+  }, []);
+
+  useEffect(() => {
+    tagifyRef.current.on("change", e => {
+      const tags = JSON.parse(e.detail.value || "[]").map(t => t.value);
+      onChange?.(tags);
+    });
   }, [onChange]);
 
   useEffect(() => {
@@ -43,9 +46,6 @@ export default function TagInput({ value = [], onChange, label, name }) {
   }, [value]);
 
   return (
-    <div className={styles.input}>
-      <label htmlFor={name}>{label}</label>
-      <input ref={inputRef} name={name} id={name} />
-    </div>
+    <input ref={inputRef} name={name} id={name} />
   );
 }

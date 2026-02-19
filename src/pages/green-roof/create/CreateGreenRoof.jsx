@@ -10,195 +10,138 @@ import SuccessIcon from '@components/icons/SuccessIcon'
 import Container from '@components/container/Container'
 import MapPicker from "@components/map-picker/MapPicker"
 
-import { useEffect, useState, useReducer } from "react";
+import { useEffect, useState, useReducer, useRef } from "react";
 import { Link } from "react-router";
+import toast from "react-hot-toast";
 
-function inputReducer(state, action) {
-  const { name, value } = action.element.target;
+function stateReducer(state, action) {
   switch (action.type) {
-    case 'green-roof-change':
-      return {
-        ...state, 
-        roof: {
-          ...state.roof, 
-          [name]: value
-        }
-      }
-      break;
-    case 'reservoir-change':
-      return {
-        ...state, 
-        reservoir: {
-          ...state.reservoir,
-          [name]: value
-        }
-      }
-      break;
-    case 'vegetation-change':
-
-      const tags = JSON.parse(e.detail.value || "[]").map(t => t.value);
+    case "set-location":
       return {
         ...state,
-        roof: {
-          ...state.roof, 
-          vegetation: tags
+        greenroof: {
+          ...state.greenroof,
+          latitude: action?.latitude || state?.greenroof?.latitude,
+          longitude: action?.longitude || state?.greenroof?.longitude,
+          address: action?.address || state?.greenroof?.address || null,
         }
       }
-      break;
+    case "on-greenroof-change":
+      return {
+        ...state,
+        greenroof: {
+          ...state.greenroof,
+          [action.name]: action.value
+        }
+      }
+    case "on-reservoir-change":
+      return {
+        ...state,
+        reservoir: {
+          ...state.reservoir,
+          [action.name]: action.value
+        }
+      }
+    case "on-vegetation-change":
+      return {
+        ...state,
+        greenroof: {
+          ...state.greenroof,
+          vegetation: action.tags
+        }
+      }
+    case "add-image":
+      return {
+        ...state,
+        images: [
+          ...state.images,
+          action.image
+        ]
+      }
+    case "remove-image":
+      return {
+        ...state,
+        images: state.images.filter(img => img !== action.image)
+      }
+    default:
+      return state;
   }
 }
 
 export default function CreateGreenRoof() {
-
   const [isPickingLocation, setIsPickingLocation] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(null);
-
   const [tab, setTab] = useState(1);
+  const [state, dispatch] = useReducer(stateReducer, {});
 
-  const [images, setImages] = useState([]);
-  const [form, setForm] = useState({
-    name: "",
-    type: "",
-    conclusion: "",
-    area: "",
-    latitude: "",
-    longitude: "",
-    address: "",
-    description: "",
-    depth: "",
-    weight: "",
-    slope: "",
-    vegetation: [],
-    ownerName: "",
-    ownerEmail: "",
-    ownerNumber: "",
-  });
-  const [reservoirForm, setReservoirForm] = useState({
-    name: "",
-    type: "",
-    capacity: "",
-    useCase: "",
-  })
-
-  const [forms, dispatch] = useReducer(inputReducer, {});
-
-  function handleActualLocation() {
-    if (!navigator.geolocation) return alert("Geolocalização não suportada");
+  function actualLocation() {
+    if (!navigator.geolocation) return toast.error("Geolocalização não é suportada pelo seu navegador!");
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const { latitude, longitude } = position.coords;
-
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, { headers: { "User-Agent": "greenroof/0.1" } })
-          .then((response) => response.json())
-          .then((data) => {
-            setForm({
-              ...form,
-              latitude: latitude,
-              longitude: longitude,
-              address: data.display_name,
-            });
-          })
+        const coords = {
+          latitude: position.coords.latitude, 
+          longitude: position.coords.longitude 
+        };
+        setLocation(coords);
       }, (error) => {
-        console.log("Erro: ", error);
+        toast.error("Não foi possível obter sua localização atual. Por favor, selecione manualmente no mapa.");
       }
     );
   }
 
-  async function handleSetLocation(coords) {
+  function setLocation(coords) {
     if (coords == undefined) return;
 
-    let response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}`);
-    let data = await response.json();
-    setForm({
-      ...form,
-      latitude: coords.lat,
-      longitude: coords.lng,
-      address: data.display_name,
-    });
-    setIsPickingLocation(false);
+    const options = { headers: { "User-Agent": "greenroof/0.1" } };
+    const enpoint = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}`;
+    fetch(enpoint, options)
+      .then(res => res.json())
+      .then(data => {
+        dispatch({ 
+          type: "set-location", 
+          latitude: coords.lat, 
+          longitude: coords.lng, 
+          address: data.display_name
+        });
+        setIsPickingLocation(false);
+      })
+      .catch(err => {
+        toast.error("Não foi possível obter o endereço a partir da localização. Por favor, tente novamente.");
+      });
   }
 
-  function handleChange(e) {
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
+
+  function onGreenRoofChange(e) {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    dispatch({ type: "on-greenroof-change", name, value });
   }
 
-  function handleChangeReservoir(e) {
+  function onReservoirChange(e) {
     const { name, value } = e.target;
-    setReservoirForm(prev => ({ ...prev, [name]: value }));
+    dispatch({ type: "on-reservoir-change", name, value });
   }
 
-  const handleVegetationChange = (e) => {
-    const tags = JSON.parse(e.detail.value || "[]").map(t => t.value);
-    setForm(prev => ({ ...prev, vegetation: tags }));
+  function onVegetationChange(tags) {
+    dispatch({ type: "on-vegetation-change", tags });
   };
 
-  async function handleSubmit() {
-    let response = await handleSubmitGreenRoofData();
-    if (!response) throw new Error("Erro no salvamento do telhado! ");
-    await handleSubmitReservoirData(response.id);
-    await handleSubmitImages(response.id);
-    setSuccess(true);
-    console.log(form);
+  function addImage(image) {
+    dispatch({ type: "add-image", image });
   }
 
-  async function handleSubmitGreenRoofData() {
-    let payload = { ...form };
-    try {
-      const response = await fetch("http://localhost:8080/api/greenroofs", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      let data = await response.json();
-
-      if (!response.ok) {
-        if (!data.error) setError("Algo deu errado!");
-        else setError(data.error);
-        throw new Error("Erro ao salvar dados do telhado!");
-      }
-      return data;
-    } catch (err) {
-      console.error(err);
-    }
+  function removeImage(image) {
+    dispatch({ type: "remove-image", image });
   }
 
-  async function handleSubmitReservoirData(greenRoofId) {
-    let payload = { ...reservoirForm, greenRoofId: greenRoofId };
-    try {
-      const response = await fetch("http://localhost:8080/api/reservoirs", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok)
-        throw new Error("Erro ao salvar reservatório!");
-      console.log("Reservatório salvo com sucesso!");
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  async function handleSubmitImages(greenRoofId) {
-    let formData = new FormData();
-    images.forEach(file => formData.append("images", file));
-    formData.append("greenRoofId", greenRoofId);
-    try {
-      const response = await fetch("http://localhost:8080/api/images", {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      });
-      if (!response.ok)
-        throw new Error("Erro ao salvar as imagens!");
-      console.log("Imagens salvas com sucesso!");
-    } catch (err) {
-      console.error(err);
-    }
+  async function submit() {
+    let greenroof = await submitGreenRoofData(state.greenroof);
+    if (!greenroof) return toast.error("Erro ao salvar telhado!");
+    submitReservoirData(state.reservoir, greenroof.id);
+    submitImages(state.images, greenroof.id);
   }
 
   let tabOptions = [
@@ -208,19 +151,8 @@ export default function CreateGreenRoof() {
     "Salvar"
   ]
 
-  if (success) {
-    return (
-      <div className={styles.successScreen}>
-        <span className={styles.successIcon}><SuccessIcon/></span>
-        <p>Telhado cadastrado com sucesso!</p>
-        <Link to="/">Inicio</Link>
-      </div>
-    );
-  }
-
-  if (isPickingLocation) {
-    return <MapPicker onConfirm={handleSetLocation} onExit={() => {}} />
-  }
+  if (success) return <SuccessScreen/>
+  if (isPickingLocation) return <MapPicker onConfirm={setLocation} onExit={() => {}} />
 
   return (
     <>
@@ -233,10 +165,10 @@ export default function CreateGreenRoof() {
         <div className={styles.infos}>
           <Tabs changeTab={(tabNumber) => setTab(tabNumber)} actual={tab} options={tabOptions} />
           <div className={styles.forms}>
-            {tab === 1 && <TechnicalSection data={form} handleChange={handleChange} handleVegetationChange={handleVegetationChange} onSelectMap={() => setIsPickingLocation(true)} handleActualLocation={handleActualLocation} />}
-            {tab === 2 && <ReservoirSection data={reservoirForm} handleChangeReservoir={handleChangeReservoir} />}
-            {tab === 3 && <ImageSection images={images} setImages={setImages} />}
-            {tab === 4 && <SaveSection handleSubmit={handleSubmit} />}
+            {tab === 1 && <TechnicalSection data={state?.greenroof} handleChange={onGreenRoofChange} handleVegetationChange={onVegetationChange} onSelectMap={() => setIsPickingLocation(true)} handleActualLocation={actualLocation} />}
+            {tab === 2 && <ReservoirSection data={state?.reservoir} handleChangeReservoir={onReservoirChange} />}
+            {tab === 3 && <ImageSection images={state?.images ?? []} addImage={addImage} removeImage={removeImage} />}
+            {tab === 4 && <SaveSection handleSubmit={submit} />}
           </div>
         </div>
       </Container>
@@ -244,10 +176,81 @@ export default function CreateGreenRoof() {
   );
 }
 
-function validateForm(form) {
-  if (!form.name) return false;
-  if (!form.type) return false;
-  if (!form.address) return false;
-  if (!form.latitude) return false;
-  if (!form.longitude) return false;
+function SuccessScreen() {
+  return (
+    <div className={styles.successScreen}>
+      <span className={styles.successIcon}><SuccessIcon/></span>
+      <p>Telhado cadastrado com sucesso!</p>
+      <Link to="/">Inicio</Link>
+    </div>
+  );
+}
+
+function submitGreenRoofData(payload) {
+  let options = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  };
+  return fetch("http://localhost:8080/api/green-roofs", options)
+    .then(res => {
+      if (!res.ok) throw new Error("Erro ao cadastrar telhado!");
+      return res.json();
+    })
+    .then(data => {
+      toast.success("Telhado cadastrado com sucesso!");
+      return data;
+    })
+    .catch(err => {
+      toast.error("Erro ao cadastrar telhado!");
+      console.log(err);
+      return false;
+    });
+}
+
+function submitReservoirData(data, greenRoofId) {
+  const payload = { ...data, greenRoofId };
+  const endpoint = "http://localhost:8080/api/reservoirs";
+  const options = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  };
+  return fetch(endpoint, options)
+    .then(res => {
+      if (!res.ok) throw new Error("Erro ao cadastrar reservatório!");
+      return res.json();
+    })
+    .then(data => {
+      toast.success("Reservatório cadastrado com sucesso!");
+    })
+    .catch(err => {
+      toast.error("Erro ao cadastrar reservatório!");
+      console.error(err);
+    });
+}
+
+function submitImages(images, greenRoofId) {
+  let formData = new FormData();
+  images.forEach(file => {
+    formData.append("images", file);
+  });
+  formData.append("greenRoofId", greenRoofId);
+  const endpoint = "http://localhost:8080/api/images";
+  const options = {
+    method: "POST",
+    body: formData,
+  };
+  return fetch(endpoint, options)
+    .then(res => {
+      if (!res.ok) throw new Error("Erro ao salvar as imagens!");
+      return res.json();
+    })
+    .then(data => {
+      toast.success("Imagens salvas com sucesso!");
+    })
+    .catch(err => {
+      toast.error("Erro ao salvar as imagens!");
+      console.error(err);
+    });
 }

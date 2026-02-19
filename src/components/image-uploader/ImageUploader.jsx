@@ -4,7 +4,7 @@ import CloseIcon from '@components/icons/CloseIcon'
 
 import { useState, useRef, useEffect } from "react";
 
-export default function ImageUploader({ images, setImages, setImagesToRemove }) {
+export default function ImageUploader({ images, addImage, removeImage }) {
 	const [previews, setPreviews] = useState([]);
 	const imageInputRef = useRef();
 
