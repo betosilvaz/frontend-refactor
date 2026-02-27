@@ -37,7 +37,7 @@ export default function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route element={<ProtectedRoutes allowedRoles={["gestor"]} />}>
               <Route path="/green-roof/create" element={<CreateGreenRoof />} />
-              <Route path="/green-roof/update" element={<UpdateGreenRoof />} />
+              <Route path="/green-roof/update/:id" element={<UpdateGreenRoof />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/notifications" element={<Notifications />} />
