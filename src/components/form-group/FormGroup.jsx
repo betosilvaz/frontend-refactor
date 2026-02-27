@@ -3,7 +3,8 @@ export default function FormGroup({ children }) {
         display: 'flex',
         flexDirection: 'column',
         gap: '0.5rem',
-        minWidth: '0px'
+        minWidth: '0px',
+        flex: '1'
     }
     return <div style={styles}>{ children }</div>
 }
