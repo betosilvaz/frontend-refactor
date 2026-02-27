@@ -2,6 +2,8 @@ import styles from './Register.module.css'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 
+import toast from 'react-hot-toast'
+
 import Center from '@components/center/Center'
 import FormGroup from '@components/form-group/FormGroup'
 import Input from '@components/input/Input'
@@ -14,24 +16,24 @@ import AppError from '@utils/AppError.js'
 import { API_URL } from '@config/api/api.js'
 import { useAuth } from '@providers/AuthProvider'
 
+const initialState = {
+  name: "",
+  email: "",
+  cpf: "",
+  password: "",
+  confirmPassword: "",
+}
+
 export default function Register() {
-  const navigatee = useNavigate();
-  const { login } = useAuth();
-  const [error, setError] = useState(null);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    cpf: "",
-    password: "",
-    confirmPassword: "",
-  })
+  const [form, setForm] = useState(initialState);
+  const navigate = useNavigate();
 
   function handleChange(e) {
     const { name, value } = e.target;
     setForm(prev => ({...prev, [name]: value}));
   }
 
-  async function handleSubmit(e) {
+  async function submit(e) {
     e.preventDefault();
     try {
       validateForm(form);
@@ -50,10 +52,9 @@ export default function Register() {
           status: response.status
         });
       }
-      navigatee("/");
+      navigate("/");
     } catch (error) {
-      setError(error.message);
-      return;
+      return toast.error(error.message);
     }
   }
 
@@ -86,8 +87,7 @@ export default function Register() {
               <Input type="password" name="confirmPassword" id="confirmPassword" placeholder="********" onChange={handleChange}/>
             </FormGroup>
           </ResponsiveRow>
-          {error && <span style={{color: 'red'}}>{error}</span>}
-          <Button type="submit" onClick={handleSubmit}>Cadastrar-se</Button>
+          <Button type="submit" onClick={submit}>Cadastrar-se</Button>
           <span className={styles.message}>Já possui uma conta? <Link to="/login">Entrar</Link></span>
         </form>
       </div>
