@@ -10,7 +10,7 @@
     padding: 0.5rem;
 }
 
-.popup > h2 {
+.popup>h2 {
     text-align: left;
     font-size: 1.4rem;
     padding-block: 1rem;
@@ -53,4 +53,19 @@
 
 .button:hover {
     background-color: var(--primary-darker);
+}
+
+/* Ajuste para telas mobile */
+@media (max-width: 640px) {
+
+    /* Empurra os controles do topo para baixo */
+    :global(.leaflet-top) {
+        margin-top: 70px;
+        /* Altura aproximada da sua barra de pesquisa */
+    }
+
+    /* Se a barra estiver embaixo, ajuste o .leaflet-bottom */
+    :global(.leaflet-bottom) {
+        margin-bottom: 20px;
+    }
 }
