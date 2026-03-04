@@ -1,72 +1,193 @@
+/* =========================================
+   Estados da Página (Loading e Erro)
+========================================= */
+.loadingContainer,
+.errorContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1rem;
+    text-align: center;
+    color: #6b7280;
+    min-height: 50vh;
+}
+
+.errorContainer h2 {
+    color: #ef4444;
+    /* Vermelho suave para erro */
+    margin-bottom: 0.5rem;
+}
+
+.errorContainer a {
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #10b981;
+    /* Verde esmeralda combinando com o tema */
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.errorContainer a:hover {
+    background-color: #059669;
+}
+
+/* =========================================
+   Conteúdo Principal
+========================================= */
 .data {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    padding: 2.5rem;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    /* Sombra elegante */
     margin-top: 2rem;
+    margin-bottom: 3rem;
 }
 
 .info {
     display: flex;
     flex-direction: column;
-    row-gap: 1rem;
-    padding-bottom: 2rem;
+    gap: 0.75rem;
 }
 
-.infoGroup {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    row-gap: 1rem;
-}
-
-.infoGroup > div {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.infoGroup > div > * {
-    display: flex;
-    flex-direction: column;
-    row-gap: 1rem;
-    border: 2px solid var(--primary-dark);
-    border-radius: 10px;
-    padding: 1rem;
-}
-
-.infoGroup > div > * > span:nth-child(1) {
-    font-size: 1.2rem;
+.name {
+    margin: 0;
+    font-size: 2.25rem;
+    color: #111827;
     font-weight: 700;
+    line-height: 1.2;
 }
 
+.description {
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.7;
+    font-size: 1.125rem;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 0;
+}
+
+/* =========================================
+   Grupos de Informação (Secções)
+========================================= */
+.infoGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.infoGroup h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #059669;
+    /* Verde para destacar as seções */
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Grid responsivo: cria colunas automaticamente baseadas no espaço */
+.infoGroup>div {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+/* =========================================
+   Itens de Dados (Micro-componente)
+========================================= */
+.item {
+    display: flex;
+    flex-direction: column;
+    background-color: #f9fafb;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    border: 1px solid #f3f4f6;
+    transition: border-color 0.2s ease;
+}
+
+.item:hover {
+    border-color: #d1d5db;
+    /* Feedback sutil ao passar o mouse */
+}
+
+/* Label (Rótulo) */
+.item span:first-child {
+    font-size: 0.85rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+/* Value (Valor) */
+.item span:last-child {
+    font-size: 1.05rem;
+    color: #1f2937;
+    font-weight: 500;
+    word-break: break-word;
+    /* Evita que textos longos quebrem o layout */
+}
+
+/* =========================================
+   Botão Flutuante (Floating Action Button)
+========================================= */
 .updateButton {
     position: fixed;
-    bottom: 100px;
-    right: 20px;
-    padding: 1.5rem;
-    border: 1px solid var(--primary-dark);
-    background-color: white;
-    border-radius: 5px;
-    box-sizing: content-box;
-}
-
-.updateButton {
-    width: 30px;
-    height: 30px;
-    fill: var(--primary-dark);
-}
-
-@media (max-width: 900px) {
-    .info, .infoGroup {
-        padding-inline: 1.5rem;
-    }
+    bottom: 4rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    background-color: #10b981;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s;
+    z-index: 100;
 }
 
 @media (max-width: 768px) {
-    .infoGroup > div {
-        grid-template-columns: 1fr 1fr;
+    .updateButton {
+        bottom: 7rem;
+        right: 2rem;
     }
 }
 
-@media (max-width: 600px) {
-    .infoGroup > div {
-        grid-template-columns: 1fr;
+.updateButton svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
+}
+
+.updateButton:hover {
+    transform: scale(1.08) translateY(-2px);
+    background-color: #059669;
+}
+
+/* Ajustes para telas menores (Mobile) */
+@media (max-width: 640px) {
+    .data {
+        padding: 1.5rem;
+        gap: 1.5rem;
+    }
+
+    .name {
+        font-size: 1.75rem;
     }
 }

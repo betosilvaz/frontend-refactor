@@ -1,185 +1,174 @@
-import styles from './GreenRoofDetails.module.css'
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router';
+import { createPortal } from 'react-dom';
 
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router'
+import styles from './GreenRoofDetails.module.css';
 
-import Carousel from '@components/carousel/Carousel'
-import Container from '@components/container/Container'
-import ActionBar from '@components/action-bar/ActionBar'
-import EditIcon from '@components/icons/EditIcon'
+// import Carousel from '@components/carousel/Carousel';
+import Container from '@components/container/Container';
+import ActionBar from '@components/action-bar/ActionBar';
+import EditIcon from '@components/icons/EditIcon';
+import FloatingButton from '@components/floating-button/FloatingButton';
+import Carousel from './Carousel/Carousel';
 
-import { API_URL } from '@config/api/api.js'
-import { createPortal } from 'react-dom'
+import { API_URL } from '@config/api/api.js';
 
-export default function GreenRoofDetails() {
-  const { id } = useParams();
+// 1. Custom Hook para isolar a regra de negócio e requisições
+function useGreenRoofData(id) {
   const [data, setData] = useState(null);
   const [reservoir, setReservoir] = useState(null);
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function getData() {
-      await getRoofs();
-      await getReservoirs();
-      await getImages();
-      setLoading(false);
+    if (!id) return;
+
+    async function fetchAllData() {
+      setLoading(true);
+      setError(null);
+
+      try {
+        // Executa todas as requisições em paralelo para maior performance
+        const [roofRes, reservoirRes, imagesRes] = await Promise.all([
+          fetch(`${API_URL}/api/green-roofs/${id}`),
+          fetch(`${API_URL}/api/green-roofs/${id}/reservoirs`),
+          fetch(`${API_URL}/api/green-roofs/${id}/images`)
+        ]);
+
+        // Se a requisição principal falhar, interrompemos e lançamos o erro
+        if (!roofRes.ok) throw new Error("Não foi possível carregar os dados deste telhado.");
+        
+        const roofData = await roofRes.json();
+        setData(roofData);
+
+        // Tratamento tolerante a falhas para dados secundários
+        if (reservoirRes.ok) {
+          const reservoirData = await reservoirRes.json();
+          setReservoir(reservoirData[0] || null);
+        }
+
+        if (imagesRes.ok) {
+          const imagesData = await imagesRes.json();
+          setImages(imagesData || []);
+        }
+
+      } catch (err) {
+        console.error(err);
+        setError(err.message || "Erro inesperado ao carregar os dados.");
+      } finally {
+        setLoading(false);
+      }
     }
 
-    getData();
+    fetchAllData();
   }, [id]);
 
-  async function getRoofs() {
-    try {
-      const response = await fetch(API_URL + '/api/green-roofs/' + id, {
-        method: 'GET',
-      });
+  return { data, reservoir, images, loading, error };
+}
 
-      if (!response.ok) {
-        // TODO: implementar uma tela de erro
-        console.log("ERRO NA API: Não foi possível carregar os dados deste telhado!");
-      }
+// 2. Componente principal focado apenas em UI
+export default function GreenRoofDetails() {
+  const { id } = useParams();
+  const { data, reservoir, images, loading, error } = useGreenRoofData(id);
 
-      const data = await response.json();
-      console.log(data);
-      setData(data);
-
-    } catch (err) {
-      console.log("Erro inesperado ao carregar dados do telhado!");
-    }
+  // Tratamento de Estados (Loading, Error, Empty)
+  if (loading) {
+    return (
+      <Container variant="small">
+        <div className={styles.loadingContainer}>Carregando detalhes do telhado verde...</div>
+      </Container>
+    );
   }
 
-  async function getReservoirs() {
-    try {
-      const response = await fetch(API_URL + `/api/green-roofs/${id}/reservoirs`, {
-        method: 'GET'
-      });
-
-      if (!response.ok) {
-        console.log("ERRO NA API: não foi possível carregar os dados do reservatório");
-        return;
-      }
-
-      const data = await response.json();
-      setReservoir(data[0]);
-
-    } catch (err) {
-      console.log("Erro inesperado ao carregar dados do reservatório");
-    }
+  if (error || !data) {
+    return (
+      <Container variant="small">
+        <div className={styles.errorContainer}>
+          <h2>Ops! Algo deu errado.</h2>
+          <p>{error || "Nenhum dado encontrado."}</p>
+          <Link to="/">Voltar para o início</Link>
+        </div>
+      </Container>
+    );
   }
-
-  async function getImages() {
-    try {
-
-      const endpoint = `${API_URL}/api/green-roofs/${id}/images`;
-      const response = await fetch(endpoint, {
-        method: 'GET'
-      })
-
-      if (!response.ok) {
-        console.log("Erro na api: não foi possível retornar as imagens");
-        return;
-      }
-
-      const data = await response.json();
-      console.log(data[0].url);
-
-      setImages(data);
-
-    } catch (err) {
-
-    }
-  }
-
-  if (loading) return <span>Carregando...</span>
 
   return (
     <>
-      <UpdateButton id={id}/>
+      <FloatingButton to="-1">Voltar</FloatingButton>
+      <UpdateButton id={id} />
       <ActionBar />
+      
       <Container variant="small">
-        <Carousel images={images} />
+        { /* <Carousel images={images} /> */}
+        <Carousel slides={Array.from(Array(5).keys())} option={{dragFree: true, loop: true }}/>
+        
         <div className={styles.data}>
           <section className={styles.info}>
             <h1 className={styles.name}>{data.name}</h1>
             <p className={styles.description}>{data.description}</p>
           </section>
+          
           <hr />
-          <section className={styles.infoGroup}>
+          
+          {(data.type || data.area || data.slope || data.depth || data.weight) && (<section className={styles.infoGroup}>
             <h2>Detalhes técnicos</h2>
             <div>
-              <div className={styles.item}>
-                <span>Tipo</span>
-                <span>{data.type}</span>
-              </div>
-              <div className={styles.item}>
-                <span>Área</span>
-                <span>{data.area}</span>
-              </div>
-              <div className={styles.item}>
-                <span>Inclinação (graus)</span>
-                <span>{data.slope}</span>
-              </div>
-              <div className={styles.item}>
-                <span>Profundidade (cm)</span>
-                <span>{data.depth}</span>
-              </div>
-              <div className={styles.item}>
-                <span>Peso (Kg/m²)</span>
-                <span>{data.weight}</span>
-              </div>
+              <InfoItem label="Tipo" value={data.type} />
+              <InfoItem label="Área" value={data.area} />
+              <InfoItem label="Inclinação (graus)" value={data.slope} />
+              <InfoItem label="Profundidade (cm)" value={data.depth} />
+              <InfoItem label="Peso (Kg/m²)" value={data.weight} />
             </div>
           </section>
+          )}
+
           {reservoir && (
             <section className={styles.infoGroup}>
               <h2>Reservatório</h2>
               <div>
-                <div className={styles.item}>
-                  <span>Nome</span>
-                  <span>{reservoir?.name}</span>
-                </div>
-                <div className={styles.item}>
-                  <span>Tipo</span>
-                  <span>{reservoir?.type}</span>
-                </div>
-                <div className={styles.item}>
-                  <span>Volume (Litros)</span>
-                  <span>{reservoir?.capacity}</span>
-                </div>
-                <div className={styles.item}>
-                  <span>Material</span>
-                  <span>{reservoir?.material}</span>
-                </div>
-                <div className={styles.item}>
-                  <span>Casos de uso</span>
-                  <span>{reservoir?.useCases}</span>
-                </div>
+                <InfoItem label="Nome" value={reservoir.name} />
+                <InfoItem label="Tipo" value={reservoir.type} />
+                <InfoItem label="Volume (Litros)" value={reservoir.capacity} />
+                <InfoItem label="Material" value={reservoir.material} />
+                <InfoItem label="Casos de uso" value={reservoir.useCases} />
               </div>
             </section>
           )}
+
           <section className={styles.infoGroup}>
             <h2>Localização</h2>
             <div>
-              <div className={styles.item}>
-                <span>Latitude</span>
-                <span>{data.latitude}</span>
-              </div>
-              <div className={styles.item}>
-                <span>Longitude</span>
-                <span>{data.longitude}</span>
-              </div>
+              <InfoItem label="Latitude" value={data.latitude} />
+              <InfoItem label="Longitude" value={data.longitude} />
             </div>
           </section>
         </div>
       </Container>
     </>
-  )
+  );
+}
+
+// 3. Micro-componente para evitar repetição de HTML
+function InfoItem({ label, value }) {
+  // Opcional: Não renderiza a linha se a informação não existir
+  if (value === undefined || value === null || value === '') return null;
+  
+  return (
+    <div className={styles.item}>
+      <span>{label}</span>
+      <span>{value}</span>
+    </div>
+  );
 }
 
 function UpdateButton({ id }) {
-  return createPortal((
+  if (typeof document === 'undefined') return null; // Previne erros em SSR (ex: Next.js)
+
+  return createPortal(
     <Link to={`/green-roof/update/${id}`} className={styles.updateButton}>
-      <EditIcon/>
-    </Link>
-  ), document.body);
+      <EditIcon />
+    </Link>,
+    document.body
+  );
 }
