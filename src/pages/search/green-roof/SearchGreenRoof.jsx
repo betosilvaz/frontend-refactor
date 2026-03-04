@@ -113,10 +113,12 @@ export default function SearchGreenRoof() {
         <section className={styles.results}>
           {results.map(c => <Card data={c}/>)}
         </section>
-        <section className={styles.paginationButtons}>
-          <button type="button" onClick={() => handlePagination("back")}>Anterior</button>
-          <button type="button" onClick={() => handlePagination("forward")}>Proxima</button>
-        </section>
+        { results.length > 0 &&
+          (<section className={styles.paginationButtons}>
+            <button type="button" onClick={() => handlePagination("back")}>Anterior</button>
+            <button type="button" onClick={() => handlePagination("forward")}>Proxima</button>
+          </section>)
+        }
       </div>
     </Container>
   )
