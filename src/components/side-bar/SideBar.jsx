@@ -1,33 +1,79 @@
 import styles from './SideBar.module.css'
-
-import { createPortal } from 'react-dom'
 import { Link } from 'react-router';
 import { useAuth } from '@providers/AuthProvider';
+
+import UserIcon from '@components/icons/UserIcon'
 
 export default function SideBar({ onClose }) {
   const { isAuthenticated, logout } = useAuth();
 
-  return createPortal((
-    <div className={styles.overlay} onClick={() => onClose()}>
-      <aside className={styles.sidebar} onClick={e => e.stopPropagation()}>
-        <h1>Menu</h1>
-        <ul className={styles.links}>
-          {isAuthenticated ? (
-            <>
-              <li><Link to="/profile">Conta</Link></li>
-              <li><Link to="/green-roof/create">Registrar novo telhado</Link></li>
-              <li><Link to="/reports">Relatórios</Link></li>
-              <li><Link to="/notifications">Alertas</Link></li>
-              <li><Link onClick={() => logout()}>Sair</Link></li>
-            </>
-          ) : (
-            <>
-              <li><Link to="/login">Entrar</Link></li>
-              <li><Link to="/register">Cadastro</Link></li>
-            </>
-          )}
-        </ul>
-      </aside>
-    </div>
-  ), document.body);
+  return (
+    <aside className={styles.sidebar}>
+      <h1>Menu</h1>
+      <ul className={styles.links}>
+        {isAuthenticated ? (
+          <>
+            <li><Link to="/profile" onClick={onClose}>Conta <UserIcon/></Link></li>
+            <li><Link to="/green-roof/create" onClick={onClose}>Novo Telhado <PlusIcon/></Link></li>
+            <li><Link to="/reports" onClick={onClose}>Relatórios <ReportIcon/></Link></li>
+            <li><Link to="/notifications" onClick={onClose}>Alertas <AlertIcon/></Link></li>
+            <li><Link onClick={() => { logout(); onClose(); }}>Sair <LogoutIcon/></Link></li>
+          </>
+        ) : (
+          <>
+            <li><Link to="/login" onClick={onClose}>Entrar <LoginIcon/></Link></li>
+            <li><Link to="/register" onClick={onClose}>Cadastro <SignupIcon/></Link></li>
+          </>
+        )}
+      </ul>
+    </aside>
+  )
+}
+
+function LoginIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+      <path d="M416 160L480 160C497.7 160 512 174.3 512 192L512 448C512 465.7 497.7 480 480 480L416 480C398.3 480 384 494.3 384 512C384 529.7 398.3 544 416 544L480 544C533 544 576 501 576 448L576 192C576 139 533 96 480 96L416 96C398.3 96 384 110.3 384 128C384 145.7 398.3 160 416 160zM406.6 342.6C419.1 330.1 419.1 309.8 406.6 297.3L278.6 169.3C266.1 156.8 245.8 156.8 233.3 169.3C220.8 181.8 220.8 202.1 233.3 214.6L306.7 288L96 288C78.3 288 64 302.3 64 320C64 337.7 78.3 352 96 352L306.7 352L233.3 425.4C220.8 437.9 220.8 458.2 233.3 470.7C245.8 483.2 266.1 483.2 278.6 470.7L406.6 342.7z"/>
+    </svg>
+  )
+}
+
+function SignupIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+      <path d="M285.7 368C384.2 368 464 447.8 464 546.3C464 562.7 450.7 576 434.3 576L77.7 576C61.3 576 48 562.7 48 546.3C48 447.8 127.8 368 226.3 368L285.7 368zM528 144C541.3 144 552 154.7 552 168L552 216L600 216C613.3 216 624 226.7 624 240C624 253.3 613.3 264 600 264L552 264L552 312C552 325.3 541.3 336 528 336C514.7 336 504 325.3 504 312L504 264L456 264C442.7 264 432 253.3 432 240C432 226.7 442.7 216 456 216L504 216L504 168C504 154.7 514.7 144 528 144zM256 312C189.7 312 136 258.3 136 192C136 125.7 189.7 72 256 72C322.3 72 376 125.7 376 192C376 258.3 322.3 312 256 312z"/>
+    </svg>
+  )
+}
+
+function PlusIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+      <path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/>
+    </svg>
+  )
+}
+
+function ReportIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+      <path d="M304 112L192 112C183.2 112 176 119.2 176 128L176 512C176 520.8 183.2 528 192 528L448 528C456.8 528 464 520.8 464 512L464 272L376 272C336.2 272 304 239.8 304 200L304 112zM444.1 224L352 131.9L352 200C352 213.3 362.7 224 376 224L444.1 224zM128 128C128 92.7 156.7 64 192 64L325.5 64C342.5 64 358.8 70.7 370.8 82.7L493.3 205.3C505.3 217.3 512 233.6 512 250.6L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 128z"/>
+    </svg>
+  )
+}
+
+function AlertIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+      <path d="M320 64C306.7 64 296 74.7 296 88L296 97.7C214.6 109.3 152 179.4 152 264L152 278.5C152 316.2 142 353.2 123 385.8L101.1 423.2C97.8 429 96 435.5 96 442.2C96 463.1 112.9 480 133.8 480L506.2 480C527.1 480 544 463.1 544 442.2C544 435.5 542.2 428.9 538.9 423.2L517 385.7C498 353.1 488 316.1 488 278.4L488 263.9C488 179.3 425.4 109.2 344 97.6L344 87.9C344 74.6 333.3 63.9 320 63.9zM488.4 432L151.5 432L164.4 409.9C187.7 370 200 324.6 200 278.5L200 264C200 197.7 253.7 144 320 144C386.3 144 440 197.7 440 264L440 278.5C440 324.7 452.3 370 475.5 409.9L488.4 432zM252.1 528C262 556 288.7 576 320 576C351.3 576 378 556 387.9 528L252.1 528z"/>
+    </svg>
+  )
+}
+
+function LogoutIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+      <path d="M224 160C241.7 160 256 145.7 256 128C256 110.3 241.7 96 224 96L160 96C107 96 64 139 64 192L64 448C64 501 107 544 160 544L224 544C241.7 544 256 529.7 256 512C256 494.3 241.7 480 224 480L160 480C142.3 480 128 465.7 128 448L128 192C128 174.3 142.3 160 160 160L224 160zM566.6 342.6C579.1 330.1 579.1 309.8 566.6 297.3L438.6 169.3C426.1 156.8 405.8 156.8 393.3 169.3C380.8 181.8 380.8 202.1 393.3 214.6L466.7 288L256 288C238.3 288 224 302.3 224 320C224 337.7 238.3 352 256 352L466.7 352L393.3 425.4C380.8 437.9 380.8 458.2 393.3 470.7C405.8 483.2 426.1 483.2 438.6 470.7L566.6 342.7z"/>
+    </svg>
+  )
 }
