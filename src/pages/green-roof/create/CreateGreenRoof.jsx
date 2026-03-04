@@ -53,16 +53,40 @@ function stateReducer(state, action) {
     case "add-image":
       return {
         ...state,
-        images: [
-          ...state.images,
-          action.image
-        ]
+        images: {
+          ...state?.images,
+          toAdd: [
+            ...state?.images?.toAdd,
+            action.image
+          ]
+        }
       }
     case "remove-image":
+      // Se a imagem tiver um ID, ela já existe no banco de dados (original)
+      const isExistingImage = action.image && action.image.id;
+
+      if (isExistingImage) {
+        return {
+          ...state,
+          images: {
+            ...state.images,
+            // Remove da lista de exibição (original)
+            original: state.images.original.filter((img) => img.id !== action.image.id),
+            // Adiciona à lista de IDs que serão deletados no backend
+            toRemove: [...state.images.toRemove, action.image.id]
+          }
+        };
+      }
+
+      // Se não tem ID, é uma imagem recém-adicionada (Blob/File) que ainda não foi salva
       return {
         ...state,
-        images: state.images.filter(img => img !== action.image)
-      }
+        images: {
+          ...state.images,
+          // Filtramos pelo índice ou pelo próprio objeto de arquivo
+          toAdd: state.images.toAdd.filter((_, index) => index !== action.index)
+        }
+      };
     default:
       return state;
   }
@@ -70,9 +94,16 @@ function stateReducer(state, action) {
 
 export default function CreateGreenRoof() {
   const [isPickingLocation, setIsPickingLocation] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [tab, setTab] = useState(1);
-  const [state, dispatch] = useReducer(stateReducer, {});
+  const [state, dispatch] = useReducer(stateReducer, {
+    greenroof: {},
+    reservoir: {},
+    images: {
+      toAdd: [],
+      toRemove: [],
+      original: []
+    }
+  });
 
   function actualLocation() {
     if (!navigator.geolocation) return toast.error("Geolocalização não é suportada pelo seu navegador!");
@@ -111,10 +142,6 @@ export default function CreateGreenRoof() {
       });
   }
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
-
   function onGreenRoofChange(e) {
     const { name, value } = e.target;
     dispatch({ type: "on-greenroof-change", name, value });
@@ -133,15 +160,15 @@ export default function CreateGreenRoof() {
     dispatch({ type: "add-image", image });
   }
 
-  function removeImage(image) {
-    dispatch({ type: "remove-image", image });
+  function removeImage(image, index) {
+    dispatch({ type: "remove-image", image, index });
   }
 
   async function submit() {
     let greenroof = await submitGreenRoofData(state.greenroof);
-    if (!greenroof) return toast.error("Erro ao salvar telhado!");
+    if (!greenroof) return;
     submitReservoirData(state.reservoir, greenroof.id);
-    submitImages(state.images, greenroof.id);
+    submitImages(state?.images?.toAdd, greenroof.id);
   }
 
   let tabOptions = [
@@ -151,8 +178,7 @@ export default function CreateGreenRoof() {
     "Salvar"
   ]
 
-  if (success) return <SuccessScreen/>
-  if (isPickingLocation) return <MapPicker onConfirm={setLocation} onExit={() => {}} />
+  if (isPickingLocation) return <MapPicker marker={{lat: state?.greenroof?.latitude, lng: state?.greenroof?.longitude}} onConfirm={setLocation} onExit={() => {setIsPickingLocation(false)}} />
 
   return (
     <>
@@ -189,16 +215,19 @@ function SuccessScreen() {
 function submitGreenRoofData(payload) {
   let options = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("jwt"),
+    },
     body: JSON.stringify(payload),
   };
   return fetch("http://localhost:8080/api/green-roofs", options)
     .then(res => {
       if (!res.ok) throw new Error("Erro ao cadastrar telhado!");
+      toast.success("Telhado cadastrado com sucesso!");
       return res.json();
     })
     .then(data => {
-      toast.success("Telhado cadastrado com sucesso!");
       return data;
     })
     .catch(err => {
@@ -213,7 +242,10 @@ function submitReservoirData(data, greenRoofId) {
   const endpoint = "http://localhost:8080/api/reservoirs";
   const options = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("jwt"), 
+    },
     body: JSON.stringify(payload),
   };
   return fetch(endpoint, options)
@@ -239,6 +271,9 @@ function submitImages(images, greenRoofId) {
   const endpoint = "http://localhost:8080/api/images";
   const options = {
     method: "POST",
+    headers: {
+      "Authorization": "Bearer " + localStorage.getItem("jwt"), 
+    },
     body: formData,
   };
   return fetch(endpoint, options)

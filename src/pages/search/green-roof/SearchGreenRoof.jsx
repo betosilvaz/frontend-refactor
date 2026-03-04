@@ -1,6 +1,6 @@
 import styles from './SearchGreenRoof.module.css'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import Container from '@components/container/Container'
 import FormGroup from '@components/form-group/FormGroup'
@@ -13,9 +13,9 @@ import ActionBar from '@components/action-bar/ActionBar'
 import ResponsiveRow from '@components/responsive-row/ResponsiveRow'
 
 import { API_URL } from '@config/api/api.js'
+import toast from 'react-hot-toast';
 
 export default function SearchGreenRoof() {
-  const [error, setError] = useState(undefined);
   const [results, setResults] = useState([]);
   const [form, setForm] = useState({
     page: 0,
@@ -28,30 +28,28 @@ export default function SearchGreenRoof() {
     {name: "Extensivo", value: "extensivo"}
   ]
 
-  async function submit(e) {
-    e.preventDefault();
-
+  
+  // useCallback garante que a função só mude se o 'form' mudar
+  const submit = useCallback(async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    
     try {
       const query = new URLSearchParams(form).toString();
       const endpoint = `${API_URL}/api/green-roofs?${query}`;
-
-      const response = await fetch(endpoint, {
-        method: 'GET'
-      });
-
-      if (!response.ok) {
-        setError("Ocorreu um erro inesperado na API");
-        return;
-      }
-
+      
+      const response = await fetch(endpoint);
+      if (!response.ok) return toast.error("Ocorreu um erro na API");
+      
       const data = await response.json();
-      setResults(data.content);
-      console.log(data.content);
+      setResults(data.content || []);
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     }
-  }
-
+  }, [form]);
+  
+  useEffect(() => {
+    submit();
+  }, [form.page, submit]);
 
   function onInputChange(e) { 
     const { name, value } = e.target;
@@ -59,14 +57,15 @@ export default function SearchGreenRoof() {
       ...prev,
       [name]: value
     }));
+
   }
 
-  function handlePagination(e) {
-    if (form.page == 0) return;
-    
+  function handlePagination(direction) {
+    if (direction == 'forward' && results.length < form.size) return;
+
     setForm(prev => ({
       ...prev,
-        page: e == "back" ? prev.page - 1 : prev.page + 1
+      page: direction === "back" ? Math.max(0, prev.page - 1) : prev.page + 1
     }));
   }
 
@@ -105,7 +104,6 @@ export default function SearchGreenRoof() {
                   <label htmlFor="maxConclusion">Ano máximo de conclusão</label>
                   <Input type="number" value={form.maxConclusion} name="maxConclusion" onChange={onInputChange}/>
                 </FormGroup>
-                {error && <span style={styles.error}>{error}</span>}
                 <Button type="button" onClick={submit}>Filtrar</Button>
               </ResponsiveRow>
             </div>

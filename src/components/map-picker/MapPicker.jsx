@@ -3,10 +3,11 @@ import styles from './MapPicker.module.css'
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 
 import { createPortal } from 'react-dom';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-export default function MapPicker({ onConfirm, onExit }) {
-  const [coords, setCoords] = useState();
+export default function MapPicker({ marker, onConfirm, onExit }) {
+  const [coords, setCoords] = useState(marker);
+  const markerRef = useRef();
 
   function handleReturn(e) {
     e.preventDefault();
@@ -19,6 +20,14 @@ export default function MapPicker({ onConfirm, onExit }) {
     onConfirm(coords);
   }
 
+  useEffect(() => {
+    setTimeout(() => {
+      markerRef.current?.openPopup();
+    }, 100);
+  }, [coords]);
+
+  const hasValidCoords = coords && coords?.lat !== undefined && coords?.lng !== undefined;
+
   return (
     <>
       <FloatingButton onClick={handleReturn}/>
@@ -27,7 +36,11 @@ export default function MapPicker({ onConfirm, onExit }) {
       <MapContainer center={[-8.058211417035023, -34.871517645983225]} zoom={13} className={styles.map}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap" />
         <MapClickHandler setCoords={setCoords}/>
-        {coords && <Marker position={coords}><Popup>Ponto selecionado</Popup></Marker>}
+        {hasValidCoords && (
+          <Marker ref={markerRef} position={coords}>
+            <Popup>Ponto selecionado</Popup>
+          </Marker>
+        )}
       </MapContainer>
     </>
   );

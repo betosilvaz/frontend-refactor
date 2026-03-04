@@ -1,13 +1,15 @@
 import styles from './GreenRoofDetails.module.css'
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { Link, useParams } from 'react-router'
 
 import Carousel from '@components/carousel/Carousel'
 import Container from '@components/container/Container'
 import ActionBar from '@components/action-bar/ActionBar'
+import EditIcon from '@components/icons/EditIcon'
 
 import { API_URL } from '@config/api/api.js'
+import { createPortal } from 'react-dom'
 
 export default function GreenRoofDetails() {
   const { id } = useParams();
@@ -93,6 +95,7 @@ export default function GreenRoofDetails() {
 
   return (
     <>
+      <UpdateButton id={id}/>
       <ActionBar />
       <Container variant="small">
         <Carousel images={images} />
@@ -171,4 +174,12 @@ export default function GreenRoofDetails() {
       </Container>
     </>
   )
+}
+
+function UpdateButton({ id }) {
+  return createPortal((
+    <Link to={`/green-roof/update/${id}`} className={styles.updateButton}>
+      <EditIcon/>
+    </Link>
+  ), document.body);
 }

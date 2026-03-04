@@ -1,79 +1,68 @@
 import styles from "./ImageUploader.module.css";
-
-import CloseIcon from '@components/icons/CloseIcon'
-
+import CloseIcon from '@components/icons/CloseIcon';
 import { useState, useRef, useEffect } from "react";
 
 export default function ImageUploader({ images, addImage, removeImage }) {
-	const [previews, setPreviews] = useState([]);
-	const imageInputRef = useRef();
+  const [newImageUrls, setNewImageUrls] = useState([]);
+  const imageInputRef = useRef();
 
-	function handleAddImage(e) {
-		const files = Array.from(e.target.files);
-		setImages(prev => [...prev, ...files]);
-		e.target.value = ""; // permite selecionar o mesmo arquivo de novo
-	}
+  function handleAddImage(e) {
+    const files = Array.from(e.target.files);
+    files.forEach(img => addImage(img));
+    e.target.value = ""; 
+  }
 
-	function handleButtonClick() {
-		imageInputRef.current.click();
-	}
-	
-	function handleRemoveImage(indexToRemove) {
-		setImages(prev => {
-			let removed = prev[indexToRemove];
-			
-			if (typeof removed === "string") {
-				setImagesToRemove(p => [...p, removed]);
-			}
-			
-			return prev.filter((item, index) => index !== indexToRemove);
-		});
-	}
+  // Gerencia APENAS as URLs das imagens recém-adicionadas (arquivos locais)
+  useEffect(() => {
+    const toAdd = images?.toAdd || [];
+    const urls = toAdd.map(file => URL.createObjectURL(file));
+    
+    setNewImageUrls(urls);
 
-	useEffect(() => {
-		if (!images.length) {
-			setPreviews([]);
-			return;
-		}
+    return () => {
+      urls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [images?.toAdd]); 
 
-		const urls = images.map(file => {
-			if(typeof file === "string") {
-				return file;
-			} else {
-				return URL.createObjectURL(file)
-			}
-		});
-		setPreviews(urls);
+  const originals = images?.original || [];
 
-		return () => {
-			urls.forEach(p => {
-				if (typeof p === "string") return;
-				URL.revokeObjectURL(p);
-			});
-		};
+  return (
+    <div className={styles.imagesForm}>
+      <h1 className={styles.header}>Selecione algumas imagens</h1>
+      <div className={styles.formGroup}>
+        <input 
+          type="file" 
+          multiple 
+          onChange={handleAddImage} 
+          ref={imageInputRef} 
+          style={{ display: 'none' }} 
+        />
+        <button type="button" className={styles.addImageButton} onClick={() => imageInputRef.current.click()}>
+          Adicionar Imagem
+        </button>
+      </div>
+      
+      <div className={styles.previewGrid}>
+        
+        {originals.map((img) => (
+          <div key={img.id} className={styles.imageGroup}>
+            <button type="button" onClick={() => removeImage(img, null)}>
+              <CloseIcon/>
+            </button>
+            <img src={img.url}/>
+          </div>
+        ))}
 
-	}, [images, setPreviews]);
+        {newImageUrls.map((url, index) => (
+          <div key={url} className={styles.imageGroup}>
+            <button type="button" onClick={() => removeImage(null, index)}>
+              <CloseIcon/>
+            </button>
+            <img src={url}/>
+          </div>
+        ))}
 
-	return (
-		<div className={styles.imagesForm}>
-			<h1 className={styles.header}>Selecione algumas imagens</h1>
-			<div className={styles.formGroup}>
-				<input type="file" name="images" id="imageInput" className={styles.imageInput} multiple onChange={handleAddImage} ref={imageInputRef} />
-				<button type="button" className={styles.addImageButton} onClick={handleButtonClick}>Adicionar Imagem</button>
-			</div>
-			<div className={styles.previewGrid}>
-				{previews.map((image, index) => {
-					return (
-						<div className={styles.imageGroup}>
-							<button type="button" onClick={() => { handleRemoveImage(index) }}>
-								<CloseIcon/>
-							</button>
-							<img src={image}/>
-						</div>
-					);
-				})}
-			</div>
-		</div>
-	);
-
+      </div>
+    </div>
+  );
 }

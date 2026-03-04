@@ -9,30 +9,32 @@ import Button from '@components/button/Button'
 import FloatingButton from '@components/floating-button/FloatingButton'
 
 import AppError from '@utils/AppError.js'
+import { ERROR_CODES } from '@utils/safeFetch.js'
 import { useAuth } from '@providers/AuthProvider'
+import toast from 'react-hot-toast'
+
+const initialState = {
+  email: "",
+  password: "",
+}
 
 export default function Login() {
-  const { login } = useAuth();
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  })
+  const { login } = useAuth();
+  const [form, setForm] = useState(initialState);
 
   function handleChange(e) {
     const { name, value } = e.target;
     setForm(prev => ({...prev, [name]: value}));
   }
 
-  async function handleSubmit(e) {
+  async function submit(e) {
     e.preventDefault();
     try {
       validateForm(form);
       await login(form.email, form.password);
     } catch (error) {
-      setError(error.message);
-      return;
+      return toast.error(error.message);
     }
     navigate("/");
   }
@@ -53,8 +55,7 @@ export default function Login() {
             <Input type="password" name="password" id="password" placeholder="********" onChange={handleChange} />
           </FormGroup>
           <Link to="/forgot-password" className={styles.forgotPasswordLink}>Esqueci a senha</Link>
-          {error && <span style={{ color: 'red' }}>{error}</span>}
-          <Button type="submit" onClick={handleSubmit}>Entrar</Button>
+          <Button type="submit" onClick={submit}>Entrar</Button>
           <span className={styles.message}>Não possui uma conta? <Link to="/register">Cadastrar-se</Link></span>
         </form>
       </div>
