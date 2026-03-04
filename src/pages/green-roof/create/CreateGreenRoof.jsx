@@ -124,7 +124,7 @@ export default function CreateGreenRoof() {
   function setLocation(coords) {
     if (coords == undefined) return;
 
-    const options = { headers: { "User-Agent": "greenroof/0.1" } };
+    const options = { headers: { "User-Agent": "GreenRoofApp/1.0" } };
     const enpoint = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}`;
     fetch(enpoint, options)
       .then(res => res.json())
