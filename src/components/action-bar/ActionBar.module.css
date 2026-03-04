@@ -12,9 +12,15 @@
 }
 
 
-.actionBar a {
+.actionBar a, .actionBar button {
     padding: 1rem;
     flex-grow: 1;
+    cursor: pointer;
+}
+
+.actionBar button {
+    background-color: transparent;
+    border: none;
 }
 
 .actionBar svg {
@@ -23,7 +29,7 @@
     height: 30px;
 }
 
-.actionBar a:hover svg {
+.actionBar a:hover svg, .actionBar button:hover svg {
     fill: var(--primary-dark);
 }
 
