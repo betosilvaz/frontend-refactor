@@ -95,14 +95,21 @@ const EmblaCarousel = (props) => {
     <div className="embla">
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
-          {slides.map((index) => (
+          {slides.length === 0 ? (
+            <div className="embla__slide" key={"empty"}>
+              <div className="embla__parallax">
+                <div className="embla__parallax__layer">
+                  <div className="emptySlide">Sem imagens</div>
+                </div>
+              </div>
+            </div>
+          ) : slides.map((url, index) => (
             <div className="embla__slide" key={index}>
               <div className="embla__parallax">
                 <div className="embla__parallax__layer">
                   <img
                     className="embla__slide__img embla__parallax__img"
-                    src={`https://picsum.photos/600/350?v=${index}`}
-                    alt="Your alt text"
+                    src={`${url}`}
                   />
                 </div>
               </div>
@@ -111,7 +118,7 @@ const EmblaCarousel = (props) => {
         </div>
       </div>
 
-      <div className="embla__controls">
+      <div className="embla__controls theme-light">
         <div className="embla__buttons">
           <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
           <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />

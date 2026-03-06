@@ -100,8 +100,8 @@ export default function GreenRoofDetails() {
       <ActionBar />
       
       <Container variant="small">
-        { /* <Carousel images={images} /> */}
-        <Carousel slides={Array.from(Array(5).keys())} option={{dragFree: true, loop: true }}/>
+          { /* <Carousel images={images} /> */}
+          <Carousel slides={["https://picsum.photos/800/600", "https://picsum.photos/800/600"]} options={{ loop: true }}/>
         
         <div className={styles.data}>
           <section className={styles.info}>
