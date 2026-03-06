@@ -11,6 +11,7 @@ import Button from '@components/button/Button'
 import FloatingButton from '@components/floating-button/FloatingButton' 
 
 import { API_URL } from '@config/api/api.js'
+import toast from 'react-hot-toast'
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
@@ -18,9 +19,9 @@ export default function ResetPassword() {
   const [changing, setChanging] = useState(false);
   const [error, setError] = useState(null);
   const [form, setForm] = useState({
-    password: "",
-    confirmPassword: "",
-    token: ""
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: ""
   });
 
   useEffect(() => {
@@ -50,23 +51,22 @@ export default function ResetPassword() {
 
       const response = await fetch(API_URL + '/api/auth/reset-password', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          password: form.password,
-          confirmPassword: form.confirmPassword,
-          token: form.token
-        })
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem("jwt")
+        },
+        body: JSON.stringify(form)
       });
 
       if (!response.ok) {
         const data = await response.json();
-        setError(data?.message || "Erro inesperado ao redefinir senha")
-        return;
+        setChanging(false);
+        return toast.error(data?.message || "Erro inesperado ao redefinir senha");
       }
 
       setSuccess(true);
     } catch (err) {
-
+      toast.error(err?.message || "Erro inesperado ao redefinir senha")
     } finally {
       setChanging(false);
     }
@@ -76,7 +76,6 @@ export default function ResetPassword() {
   if (changing) {
     return (
       <Center>
-        <FloatingButton to="/">Inicio</FloatingButton>
         <div className={styles.container2}>
           <p>Redefinindo...</p>
         </div>
@@ -101,17 +100,19 @@ export default function ResetPassword() {
       <div className={styles.container}>
         {searchParams.get("token")}
         <h1>Redefinir senha</h1>
-        <p>Por favor, digite sua nova senha</p>
         <form className={styles.form}>
           <FormGroup>
-            <label htmlFor='password'>Nova senha</label>
-            <Input type="password" name="password" value={form.password} id="password" onChange={handleChange}/>
+            <label htmlFor='oldPassword'>Senha atual</label>
+            <Input type="password" name="oldPassword" value={form.oldPassword} id="oldPassword" onChange={handleChange}/>
           </FormGroup>
           <FormGroup>
-            <label htmlFor='confirmPassword'>Confirme sua nova senha</label>
-            <Input type="password" name="confirmPassword" value={form.confirmPassword} id="confirmPassword" onChange={handleChange}/>
+            <label htmlFor='newPassword'>Nova senha</label>
+            <Input type="password" name="newPassword" value={form.newPassword} id="newPassword" onChange={handleChange}/>
           </FormGroup>
-          { error && <span style={{color: "red"}}>{error}</span>}
+          <FormGroup>
+            <label htmlFor='confirmNewPassword'>Confirme sua nova senha</label>
+            <Input type="password" name="confirmNewPassword" value={form.confirmNewPassword} id="confirmNewPassword" onChange={handleChange}/>
+          </FormGroup>
           <Button type="button" onClick={handleClick}>Confirmar</Button>
         </form>
       </div>
