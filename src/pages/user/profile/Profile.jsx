@@ -13,11 +13,11 @@ import Center from '@components/center/Center'
 import SuccessIcon from '@components/icons/SuccessIcon'
 
 import { API_URL } from '@config/api/api.js'
+import toast from 'react-hot-toast';
 
 export default function Profile() {
   const [status, setStatus] = useState("viewing");
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState();
   const [data, setData] = useState();
 
   useEffect(() => {
@@ -36,17 +36,14 @@ export default function Profile() {
 
         if (!response.ok) {
           const data = await response.json();
-          setError(data.message);
-          console.log("Erro na API: não foi possivel retornar os dados do usuário");
-          return;
+          return toast.error(data.message);
         }
 
         const data = await response.json();
         setData(data);
 
       } catch(err) {
-        setError(err.message);
-        console.log("erro");
+        return toast.error(err.message);
       }
     }
     getData();
@@ -71,8 +68,7 @@ export default function Profile() {
 
       if (!response.ok) {
         const data = await response.json();
-        setError(data.message);
-        return;
+        return toast.error(data.message);
       }
 
       setStatus("viewing")
@@ -82,7 +78,7 @@ export default function Profile() {
       }, 2000);
 
     } catch(err) {
-      setError(err.message);
+      return toast.error(data.message);
     }
   }
   
@@ -144,7 +140,7 @@ export default function Profile() {
           </div>
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>Ações Avançadas</h2>
-            <Link to="/change-password" className={styles.changePasswordButton}>Redefinir Senha</Link>
+            <Link to="/reset-password" className={styles.changePasswordButton}>Redefinir Senha</Link>
           </div>
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>Controles do Formulário</h2>
@@ -159,7 +155,6 @@ export default function Profile() {
             )}
           </div>
         </form>
-        <span style={{color: "red"}}>{error}</span>
       </div>
     </Container>
   );
