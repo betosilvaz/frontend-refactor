@@ -30,7 +30,7 @@ export default function ActionBar() {
               position: 'fixed',
               top: 0, left: 0, right: 0, bottom: 0,
               backgroundColor: 'rgba(0, 0, 0, 0.5)', // Cor do fundo escuro
-              zIndex: 999
+              zIndex: 9999
             }}
             onClick={closeSideBar} // Clicar no fundo escuro fecha o menu
           >
@@ -47,6 +47,7 @@ export default function ActionBar() {
                 height: '100vh',
                 // Remova o width abaixo se a largura já estiver definida no seu SideBar.module.css
                 width: '300px', 
+                zIndex: 100000000 // Certifique-se de que o z-index do menu seja maior que o do overlay
               }}
               onClick={(e) => e.stopPropagation()} // Evita que clicar no menu feche ele
             >
