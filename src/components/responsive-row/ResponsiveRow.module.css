@@ -5,7 +5,12 @@
 }
 
 .row > * {
-    flex-grow: 1;
-    flex-shrink: 1;
+    flex: 1 1 200px;
     min-width: 0;
+}
+
+@media (max-width: 600px) {
+    .row > * {
+        flex-basis: 100%;
+    }
 }
