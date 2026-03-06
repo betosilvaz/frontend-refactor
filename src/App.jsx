@@ -34,8 +34,8 @@ export default function App() {
             <Route path="/search" element={<SearchGreenRoof />} />
             <Route path="/green-roof/:id" element={<GreenRoofDetails />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
             <Route element={<ProtectedRoutes allowedRoles={["gestor"]} />}>
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/green-roof/create" element={<CreateGreenRoof />} />
               <Route path="/green-roof/update/:id" element={<UpdateGreenRoof />} />
               <Route path="/profile" element={<Profile />} />
