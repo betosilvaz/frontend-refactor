@@ -111,9 +111,10 @@ export default function CreateGreenRoof() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const coords = {
-          latitude: position.coords.latitude, 
-          longitude: position.coords.longitude 
+          lat: position.coords.latitude, 
+          lng: position.coords.longitude 
         };
+        console.log(coords);
         setLocation(coords);
       }, (error) => {
         toast.error("Não foi possível obter sua localização atual. Por favor, selecione manualmente no mapa.");
@@ -125,7 +126,7 @@ export default function CreateGreenRoof() {
     if (coords == undefined) return;
 
     const options = { headers: { "User-Agent": "GreenRoofApp/1.0" } };
-    const enpoint = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}`;
+    const enpoint = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}&email=gilbertozn527@gmail.com`;
     fetch(enpoint, options)
       .then(res => res.json())
       .then(data => {
