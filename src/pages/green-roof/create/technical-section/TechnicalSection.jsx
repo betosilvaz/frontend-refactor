@@ -19,10 +19,12 @@ export default function TechnicalSection({ data, handleChange, handleVegetationC
     <form className={styles.technicalDataForm} onSubmit={(e) => e.preventDefault()}>
       <section className={styles.formSection}>
         <h2 className={styles.sectionHeader}>Informações do Telhado Verde</h2>
-        <FormGroup>
-          <label htmlFor="name">Nome</label>
-          <Input type="text" name="name" placeholder="Ex: Edificio Cobertura Principal" value={data?.name ?? ""} onChange={handleChange} />
-        </FormGroup>
+        <ResponsiveRow>
+          <FormGroup>
+            <label htmlFor="name">Nome</label>
+            <Input type="text" name="name" placeholder="Ex: Edificio Cobertura Principal" value={data?.name ?? ""} onChange={handleChange} />
+          </FormGroup>
+        </ResponsiveRow>
         <ResponsiveRow>
           <FormGroup>
             <label htmlFor="type">Tipo</label>
@@ -53,8 +55,10 @@ export default function TechnicalSection({ data, handleChange, handleVegetationC
             <Input type="text" name="longitude" value={data?.longitude ?? ""} onChange={handleChange} />
           </FormGroup>
         </ResponsiveRow>
-        <button type="button" className={styles.mapButton} onClick={onSelectMap}>Mapa Interativo</button>
-        <button type="button" className={styles.actualLocationButton} onClick={handleActualLocation}>Localização Atual</button>
+        <ResponsiveRow>
+          <button type="button" className={styles.mapButton} onClick={onSelectMap}>Mapa Interativo</button>
+          <button type="button" className={styles.actualLocationButton} onClick={handleActualLocation}>Localização Atual</button>
+        </ResponsiveRow>
         <FormGroup>
           <label htmlFor="description">Descrição do Projeto</label>
           <textarea className={styles.textarea} name="description" placeholder="Descreva o telhado verde" onChange={handleChange}></textarea>
@@ -77,8 +81,10 @@ export default function TechnicalSection({ data, handleChange, handleVegetationC
           </FormGroup>
         </ResponsiveRow>
         <ResponsiveRow>
-          <label htmlFor="vegetation">Vegetação</label>
-          <TagInput name="vegetation" value={data?.vegetation ?? []} onChange={handleVegetationChange} />
+          <FormGroup>
+            <label htmlFor="vegetation">Vegetação</label>
+            <TagInput name="vegetation" value={data?.vegetation ?? []} onChange={handleVegetationChange} />
+          </FormGroup>
         </ResponsiveRow>
       </section>
       <section className={styles.formSection}>
