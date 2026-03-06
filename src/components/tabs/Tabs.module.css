@@ -10,17 +10,14 @@
     padding: 1rem;
     cursor: pointer;
     flex: 1;
+    font-weight: 700;
 }
 
 .tabs span:hover {
-    background-color: #CCCC;
+    background-color: rgba(245, 245, 245);
 }
 
 .tabs span.selected {
     background-color: rgba(122, 143, 92, 0.1);
     border-bottom: 3px solid var(--primary-dark);
-}
-
-@media (max-width: 600px) {
-    
 }
