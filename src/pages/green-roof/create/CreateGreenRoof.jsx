@@ -96,7 +96,10 @@ export default function CreateGreenRoof() {
   const [isPickingLocation, setIsPickingLocation] = useState(false);
   const [tab, setTab] = useState(1);
   const [state, dispatch] = useReducer(stateReducer, {
-    greenroof: {},
+    greenroof: {
+      isAccessible: false,
+      isMandatory: false,
+    },
     reservoir: {},
     images: {
       toAdd: [],
@@ -144,8 +147,11 @@ export default function CreateGreenRoof() {
   }
 
   function onGreenRoofChange(e) {
-    const { name, value } = e.target;
-    dispatch({ type: "on-greenroof-change", name, value });
+    const { name, value, type, checked } = e.target;
+
+    const finalValue = type === "checkbox" ? checked : value;
+
+    dispatch({ type: "on-greenroof-change", name, value: finalValue });
   }
 
   function onReservoirChange(e) {
@@ -168,7 +174,7 @@ export default function CreateGreenRoof() {
   async function submit() {
     let greenroof = await submitGreenRoofData(state.greenroof);
     if (!greenroof) return;
-    submitReservoirData(state.reservoir, greenroof.id);
+    submitReservoirData(state?.reservoir, greenroof.id);
     submitImages(state?.images?.toAdd, greenroof.id);
   }
 
@@ -213,7 +219,7 @@ function SuccessScreen() {
   );
 }
 
-function submitGreenRoofData(payload) {
+async function submitGreenRoofData(payload) {
   let options = {
     method: "POST",
     headers: { 
@@ -222,25 +228,22 @@ function submitGreenRoofData(payload) {
     },
     body: JSON.stringify(payload),
   };
-  return fetch("http://localhost:8080/api/green-roofs", options)
-    .then(res => {
-      if (!res.ok) throw new Error("Erro ao cadastrar telhado!");
-      toast.success("Telhado cadastrado com sucesso!");
-      return res.json();
-    })
-    .then(data => {
-      return data;
-    })
-    .catch(err => {
-      toast.error("Erro ao cadastrar telhado!");
-      console.log(err);
-      return false;
-    });
+  try {
+    const res = await fetch("http://localhost:8080/api/green-roofs", options);
+    if (!res.ok) throw new Error("Erro ao cadastrar telhado!");
+    toast.success("Telhado cadastrado com sucesso!");
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    toast.error(err.message);
+    console.log(err.message);
+    return false;
+  }
 }
 
-function submitReservoirData(data, greenRoofId) {
+async function submitReservoirData(data, greenRoofId) {
   const payload = { ...data, greenRoofId };
-  const endpoint = "http://localhost:8080/api/reservoirs";
+  const endpoint = "http://localhost:8080/api/green-roofs/" + greenRoofId + "/reservoirs";
   const options = {
     method: "POST",
     headers: { 
@@ -249,27 +252,23 @@ function submitReservoirData(data, greenRoofId) {
     },
     body: JSON.stringify(payload),
   };
-  return fetch(endpoint, options)
-    .then(res => {
-      if (!res.ok) throw new Error("Erro ao cadastrar reservatório!");
-      return res.json();
-    })
-    .then(data => {
-      toast.success("Reservatório cadastrado com sucesso!");
-    })
-    .catch(err => {
-      toast.error("Erro ao cadastrar reservatório!");
-      console.error(err);
-    });
+  try {
+    const res = await fetch(endpoint, options)
+    if (!res.ok) throw new Error("Erro ao cadastrar reservatório!")
+    toast.success("Reservatório cadastrado com sucesso!")
+  } catch (err) {
+    toast.error(err.message)
+    console.error(err.message);
+  }
 }
 
-function submitImages(images, greenRoofId) {
+async function submitImages(images, greenRoofId) {
   let formData = new FormData();
   images.forEach(file => {
     formData.append("images", file);
   });
   formData.append("greenRoofId", greenRoofId);
-  const endpoint = "http://localhost:8080/api/images";
+  const endpoint = "http://localhost:8080/api/green-roofs/" + greenRoofId + "/images";
   const options = {
     method: "POST",
     headers: {
@@ -277,16 +276,11 @@ function submitImages(images, greenRoofId) {
     },
     body: formData,
   };
-  return fetch(endpoint, options)
-    .then(res => {
-      if (!res.ok) throw new Error("Erro ao salvar as imagens!");
-      return res.json();
-    })
-    .then(data => {
-      toast.success("Imagens salvas com sucesso!");
-    })
-    .catch(err => {
-      toast.error("Erro ao salvar as imagens!");
-      console.error(err);
-    });
+  try {
+    const res = await fetch(endpoint, options);
+    if (!res.ok) throw new Error("Erro ao salvar as imagens!");
+  } catch (err) {
+    toast.error(err.message);
+    console.error(err.message);
+  }
 }

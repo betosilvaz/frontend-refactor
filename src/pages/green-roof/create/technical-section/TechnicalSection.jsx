@@ -5,14 +5,21 @@ import ResponsiveRow from '@components/responsive-row/ResponsiveRow'
 import Input from '@components/input/Input'
 import Select from '@components/select/Select'
 import FormGroup from '@components/form-group/FormGroup'
+import Checkbox from "../../../../components/checkbox/Checkbox";
 
 
 export default function TechnicalSection({ data, handleChange, handleVegetationChange, onSelectMap, handleActualLocation }) {
 
   const typeOptions = [
-    { name: 'intensivo', value: 'intensivo' },
-    { name: 'semi-intensivo', value: 'semi-intensivo'},
-    { name: 'extensivo', value: 'extensivo' }    
+    { name: 'Intensivo', value: 'intensivo' },
+    { name: 'Semi-Intensivo', value: 'semi-intensivo'},
+    { name: 'Extensivo', value: 'extensivo' }    
+  ]
+
+  const situationOptions = [
+    { name: 'Habita-se', value: 'habita-se' },
+    { name: 'Iniciada', value: 'iniciada' },
+    { name: 'Não iniciada', value: 'não iniciada' }
   ]
 
   return (
@@ -24,11 +31,15 @@ export default function TechnicalSection({ data, handleChange, handleVegetationC
             <label htmlFor="name">Nome</label>
             <Input type="text" name="name" placeholder="Ex: Edificio Cobertura Principal" value={data?.name ?? ""} onChange={handleChange} />
           </FormGroup>
+          <FormGroup>
+            <label htmlFor="situation">Situação</label>
+            <Select value={data?.situation ?? ""} name="situation" options={situationOptions} onSelect={handleChange}/>
+          </FormGroup>
         </ResponsiveRow>
         <ResponsiveRow>
           <FormGroup>
             <label htmlFor="type">Tipo</label>
-            <Select value={data?.type ?? ""} options={typeOptions} onSelect={handleChange} />
+            <Select value={data?.type ?? ""} name="type" options={typeOptions} onSelect={handleChange} />
           </FormGroup>
           <FormGroup>
             <label htmlFor="conclusion">Data de Conclusão</label>
@@ -63,6 +74,10 @@ export default function TechnicalSection({ data, handleChange, handleVegetationC
           <label htmlFor="description">Descrição do Projeto</label>
           <textarea className={styles.textarea} name="description" placeholder="Descreva o telhado verde" onChange={handleChange}></textarea>
         </FormGroup>
+        <ResponsiveRow>
+          <Checkbox label="É acessível?" name="isAccessible" checked={data?.isAccessible || false} onChange={handleChange} />
+          <Checkbox label="É obrigatório por lei?" name="isMandatory" checked={data?.isMandatory || false} onChange={handleChange} />
+        </ResponsiveRow>
       </section>
       <section className={styles.formSection}>
         <h2 className={styles.sectionHeader}>Dados técnicos</h2>

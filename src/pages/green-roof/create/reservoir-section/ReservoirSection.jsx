@@ -16,14 +16,20 @@ export default function ReservoirSection({ data, handleChangeReservoir }) {
     <form className={styles.reservoirForm}>
       <section className={styles.formSection}>
         <h2 className={styles.sectionHeader}>Informações do reservatório (OPCIONAL)</h2>
-        <FormGroup>
-          <label htmlFor="name">Nome do Reservatório</label>
-          <Input type="text" name="name" placeholder="EX: Reservatório X" value={data?.name ?? ""} onChange={handleChangeReservoir} />
-        </FormGroup>
+        <ResponsiveRow>
+          <FormGroup>
+            <label htmlFor="name">Nome do Reservatório</label>
+            <Input type="text" name="name" placeholder="EX: Reservatório X" value={data?.name ?? ""} onChange={handleChangeReservoir} />
+          </FormGroup>
+          <FormGroup>
+            <label htmlFor="material">Material</label>
+            <Input type="text" name="material" placeholder="Ex: plástico, concreto..." value={data?.material ?? ""} onChange={handleChangeReservoir}/>
+          </FormGroup>
+        </ResponsiveRow>
         <ResponsiveRow>
           <FormGroup>
             <label htmlFor="type">Tipo</label>
-            <Select value={data?.type ?? ""} options={typeOptions} onSelect={handleChangeReservoir} />
+            <Select value={data?.type ?? ""} name="type" options={typeOptions} onSelect={handleChangeReservoir} />
           </FormGroup>
           <FormGroup>
             <label htmlFor="capacity">Capacidade do Reservatório (Em Litros)</label>
