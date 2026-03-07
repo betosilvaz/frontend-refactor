@@ -1,8 +1,8 @@
+import styles from './GreenRoofDetails.module.css';
+
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { createPortal } from 'react-dom';
-
-import styles from './GreenRoofDetails.module.css';
 
 // import Carousel from '@components/carousel/Carousel';
 import Container from '@components/container/Container';
@@ -50,7 +50,8 @@ function useGreenRoofData(id) {
 
         if (imagesRes.ok) {
           const imagesData = await imagesRes.json();
-          setImages(imagesData || []);
+          const i = imagesData.map(img => API_URL+ "/" + img.url);
+          setImages(i || []);
         }
 
       } catch (err) {
@@ -101,7 +102,7 @@ export default function GreenRoofDetails() {
       
       <Container variant="small">
           { /* <Carousel images={images} /> */}
-          <Carousel slides={["https://picsum.photos/800/600", "https://picsum.photos/800/600"]} options={{ loop: true }}/>
+          <Carousel slides={images || []} options={{ loop: true }}/>
         
         <div className={styles.data}>
           <section className={styles.info}>
@@ -115,10 +116,12 @@ export default function GreenRoofDetails() {
             <h2>Detalhes técnicos</h2>
             <div>
               <InfoItem label="Tipo" value={data.type} />
-              <InfoItem label="Área" value={data.area} />
+              <InfoItem label="Área (m²)" value={data.area} />
               <InfoItem label="Inclinação (graus)" value={data.slope} />
               <InfoItem label="Profundidade (cm)" value={data.depth} />
               <InfoItem label="Peso (Kg/m²)" value={data.weight} />
+              <InfoItem label="É acessível?" value={data.isAccessible ? "Sim" : "Não"}/>
+              <InfoItem label="É obrigatório por lei?" value={data.isMandatory ? "Sim" : "Não"}/>
             </div>
           </section>
           )}
