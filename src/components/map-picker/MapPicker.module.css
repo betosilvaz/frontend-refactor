@@ -48,4 +48,13 @@
     z-index: 99999;
     color: white;
     margin-top: 0;
+    pointer-events: none;
+}
+
+.popup {
+    padding: 0.5rem 1rem;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+    width: fit-content;
 }
