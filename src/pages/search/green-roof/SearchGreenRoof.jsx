@@ -1,6 +1,6 @@
 import styles from './SearchGreenRoof.module.css'
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
 import Container from '@components/container/Container'
 import FormGroup from '@components/form-group/FormGroup'
@@ -17,6 +17,7 @@ import toast from 'react-hot-toast';
 
 export default function SearchGreenRoof() {
   const [results, setResults] = useState([]);
+  const resultsRef = useRef(null);
   const [form, setForm] = useState({
     page: 0,
     size: 12,
@@ -48,8 +49,12 @@ export default function SearchGreenRoof() {
   }, [form]);
   
   useEffect(() => {
-    submit();
-  }, [form.page, submit]);
+    submit().then(() => {
+      if(resultsRef.current) {
+        resultsRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }, [form.page, submit, resultsRef]);
 
   function onInputChange(e) { 
     const { name, value } = e.target;
@@ -109,7 +114,7 @@ export default function SearchGreenRoof() {
             </div>
           </form>
         </section>
-        <span className={styles.resultCount}>{results.length} resultados encontrados</span>
+        <span className={styles.resultCount} ref={resultsRef}>{results.length} resultados encontrados</span>
         <section className={styles.results}>
           {results.map(c => <Card data={c}/>)}
         </section>
