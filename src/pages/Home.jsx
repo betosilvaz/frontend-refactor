@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from 'react'
 
 import Map from '@components/map/Map'
 import ActionBar from '@components/action-bar/ActionBar'
-import SearchIcon from '@components/icons/SearchIcon'
+import SearchBar from '@components/search-bar/SearchBar'
 
 import  { API_URL } from '@config/api/api.js'
 import toast from 'react-hot-toast'
@@ -72,16 +72,5 @@ export default function Home() {
       <SearchBar onSubmit={handleSubmit}/>
       <Map markers={markers} initialPosition={initialPosition}/>
     </>
-  )
-}
-
-function SearchBar({ onSubmit }) {
-  return (
-    <form className={styles.searchBar}onSubmit={onSubmit} >
-      <input type="text" name="query" placeholder="Pesquise por endereços"/>
-      <button type="submit">
-        <SearchIcon />
-      </button>
-    </form>
   )
 }
