@@ -8,7 +8,7 @@ export default function Card({ data }) {
   return (
     <div className={styles.card}>
       {data?.images.length == 0 && <div className={styles.placeholder}>Sem imagens</div>}
-      {data?.images && data?.images.length != 0 && <img src={`${API_URL}/${data.images[0]}`} />}
+      {data?.images && data?.images.length != 0 && <img src={`${API_URL}/${data.images[0].url}`} />}
       <div className={styles.cardInfo}>
         {data?.type && <span className={styles.tag}>{data.type}</span>}
         <h2>{data.name}</h2>
