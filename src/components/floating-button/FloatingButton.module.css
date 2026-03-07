@@ -3,7 +3,6 @@
     box-shadow: var(--shadow);
     border-radius: 5px;
     color: var(--primary-darker);
-    /* use fixed so the button stays relative to the viewport (more predictable) */
     position: fixed;
     top: 30px;
     left: 30px;
