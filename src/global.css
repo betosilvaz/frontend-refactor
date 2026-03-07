@@ -10,6 +10,7 @@
   color: #333333;
   font-size: 16px;
   font-family: sans-serif;
+  --color: #333333;
   --background: #F7F9F7;
   --primary: #D1E8D5;
   --primary-dark: #84B38D;
@@ -51,7 +52,7 @@ body {
 /* 4. Opcional: Ajusta o botão de fechar (X) padrão do Leaflet */
 /* Se quiser esconder o 'X' padrão e criar um no seu componente, mude para display: none */
 .leaflet-popup-close-button {
-  color: #4b5563 !important; /* Cor cinza para combinar com seu layout */
+  color: #4b5563 !important;
   top: 10px !important;
   right: 10px !important;
   z-index: 10;
