@@ -1,0 +1,60 @@
+.checkboxContainer {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 10px;
+    user-select: none;
+    margin-top: 5px;
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.hiddenCheckbox {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.styledCheckbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    /* Use a cor de borda dos seus inputs */
+    border-radius: 4px;
+    background-color: #fff;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checked {
+    background-color: #2e7d32;
+    /* Um verde temático ou a cor primária do seu sistema */
+    border-color: #2e7d32;
+}
+
+.icon {
+    fill: none;
+    stroke: white;
+    stroke-width: 3px;
+    width: 14px;
+    height: 14px;
+}
+
+.labeltext {
+    font-size: 0.95rem;
+    color: #333;
+    /* Cor do texto das suas labels */
+}
+
+/* Efeito de foco para acessibilidade */
+.hiddenCheckbox:focus+.styledCheckbox {
+    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+}
