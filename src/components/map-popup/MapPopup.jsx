@@ -54,7 +54,6 @@ const MapPopup = ({ data }) => {
         </div>
       )}
 
-      {/* 3. Grid de Dados Técnicos (Condicionais) */}
       <div className={styles.grid}>
         {type && <DetailItem label="Tipo" value={type} />}
         {area && <DetailItem label="Área" value={`${area} m²`} />}
@@ -64,14 +63,12 @@ const MapPopup = ({ data }) => {
         {vegetation && <DetailItem label="Vegetação" value={vegetation} isFullWidth />}
       </div>
 
-      {/* 4. Descrição (Se houver) */}
       {description && (
         <div className={styles.description}>
           <p>{description}</p>
         </div>
       )}
 
-      {/* 5. Ação */}
       <div className={styles.action}>
         <Link to={`/green-roof/${id}`} className={styles.button}>Detalhes</Link>
       </div>
