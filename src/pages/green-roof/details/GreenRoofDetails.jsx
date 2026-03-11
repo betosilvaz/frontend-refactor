@@ -10,8 +10,10 @@ import ActionBar from '@components/action-bar/ActionBar';
 import EditIcon from '@components/icons/EditIcon';
 import FloatingButton from '@components/floating-button/FloatingButton';
 import Carousel from './Carousel/Carousel';
+import Map from '@components/map/Map';
 
 import { API_URL } from '@config/api/api.js';
+import { useAuth } from '@providers/AuthProvider';
 
 // 1. Custom Hook para isolar a regra de negócio e requisições
 function useGreenRoofData(id) {
@@ -30,10 +32,9 @@ function useGreenRoofData(id) {
 
       try {
         // Executa todas as requisições em paralelo para maior performance
-        const [roofRes, reservoirRes, imagesRes] = await Promise.all([
+        const [roofRes, reservoirRes] = await Promise.all([
           fetch(`${API_URL}/api/green-roofs/${id}`),
-          fetch(`${API_URL}/api/green-roofs/${id}/reservoirs`),
-          fetch(`${API_URL}/api/green-roofs/${id}/images`)
+          fetch(`${API_URL}/api/green-roofs/${id}/reservoirs`)
         ]);
 
         // Se a requisição principal falhar, interrompemos e lançamos o erro
@@ -41,17 +42,13 @@ function useGreenRoofData(id) {
         
         const roofData = await roofRes.json();
         setData(roofData);
+        const i = roofData.images?.map(img => API_URL+ "/" + img.url);
+        setImages(i || []);
 
         // Tratamento tolerante a falhas para dados secundários
         if (reservoirRes.ok) {
           const reservoirData = await reservoirRes.json();
           setReservoir(reservoirData[0] || null);
-        }
-
-        if (imagesRes.ok) {
-          const imagesData = await imagesRes.json();
-          const i = imagesData.map(img => API_URL+ "/" + img.url);
-          setImages(i || []);
         }
 
       } catch (err) {
@@ -71,6 +68,7 @@ function useGreenRoofData(id) {
 // 2. Componente principal focado apenas em UI
 export default function GreenRoofDetails() {
   const { id } = useParams();
+  const { isAuthenticated } = useAuth();
   const { data, reservoir, images, loading, error } = useGreenRoofData(id);
 
   // Tratamento de Estados (Loading, Error, Empty)
@@ -97,7 +95,7 @@ export default function GreenRoofDetails() {
   return (
     <>
       <FloatingButton to="-1">Voltar</FloatingButton>
-      <UpdateButton id={id} />
+      { isAuthenticated && <UpdateButton id={id} /> }
       <ActionBar />
       
       <Container variant="small">
@@ -126,6 +124,17 @@ export default function GreenRoofDetails() {
           </section>
           )}
 
+          {data.vegetation && data.vegetation.length > 0 && (
+            <section className={styles.infoGroup}>
+              <h2>Vegetação</h2>
+              <div>
+                {data.vegetation.map(veg => (
+                  <InfoItem label="" value={veg} />
+                ))}
+              </div>
+            </section>
+          )}
+
           {reservoir && (
             <section className={styles.infoGroup}>
               <h2>Reservatório</h2>
@@ -141,9 +150,11 @@ export default function GreenRoofDetails() {
 
           <section className={styles.infoGroup}>
             <h2>Localização</h2>
+            <Map className={styles.map} zoom={13} markers={[{ latitude: data.latitude, longitude: data.longitude }]} initialPosition={[data.latitude, data.longitude]} simpleMarker={true} />
             <div>
               <InfoItem label="Latitude" value={data.latitude} />
               <InfoItem label="Longitude" value={data.longitude} />
+              <InfoItem label="Endereço" value={data.address} />
             </div>
           </section>
         </div>
@@ -156,10 +167,10 @@ export default function GreenRoofDetails() {
 function InfoItem({ label, value }) {
   // Opcional: Não renderiza a linha se a informação não existir
   if (value === undefined || value === null || value === '') return null;
-  
+
   return (
     <div className={styles.item}>
-      <span>{label}</span>
+      {label && <span>{label}</span>}
       <span>{value}</span>
     </div>
   );
