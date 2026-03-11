@@ -109,8 +109,8 @@ export default function SearchGreenRoof() {
                   <label htmlFor="maxConclusion">Ano máximo de conclusão</label>
                   <Input type="number" value={form.maxConclusion} name="maxConclusion" onChange={onInputChange}/>
                 </FormGroup>
-                <Button type="button" onClick={submit}>Filtrar</Button>
               </ResponsiveRow>
+              <Button type="button" onClick={submit}>Filtrar</Button>
             </div>
           </form>
         </section>
