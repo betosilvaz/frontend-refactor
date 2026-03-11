@@ -7,11 +7,10 @@ import { useEffect } from 'react'
 import MapPopup from '@components/map-popup/MapPopup'
 const { BaseLayer } = LayersControl;
 
-export default function Map({ markers = [], initialPosition = [-8.058211417035023, -34.871517645983225] }) {
-
+export default function Map({ className, zoom = 16, markers = [], initialPosition = [-8.058211417035023, -34.871517645983225], simpleMarker = false }) {
   return (
-    <MapContainer center={initialPosition} zoom={13} className={styles.map}>
-      <ChangeView center={initialPosition} zoom={16} />
+    <MapContainer center={initialPosition} zoom={13} className={`${styles.map} ${className || ''}`}>
+      <ChangeView center={initialPosition} zoom={zoom} />
 
       <LayersControl position="topright">
         <BaseLayer checked name="Mapa Colorido (Voyager)">
@@ -41,9 +40,11 @@ export default function Map({ markers = [], initialPosition = [-8.05821141703502
       <MarkerClusterGroup chunkLoading showCoverageOnHover={false} maxClusterRadius={50}>
         {markers.map((marker) => (
           <Marker position={[marker.latitude, marker.longitude]}>
-            <Popup>
-              <MapPopup data={marker}/>
-            </Popup>
+            {!simpleMarker && (
+              <Popup>
+                <MapPopup data={marker}/>
+              </Popup>
+            )}
           </Marker>
         ))}
       </MarkerClusterGroup>
