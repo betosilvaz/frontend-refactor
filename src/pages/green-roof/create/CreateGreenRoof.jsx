@@ -2,111 +2,26 @@ import styles from "./CreateGreenRoof.module.css"
 
 import Tabs from "@components/tabs/Tabs.jsx"
 import ActionBar from '@components/action-bar/ActionBar'
-import TechnicalSection from "./technical-section/TechnicalSection"
-import ReservoirSection from "./reservoir-section/ReservoirSection"
-import ImageSection from "./image-section/ImageSection"
-import SaveSection from "./save-section/SaveSection"
-import SuccessIcon from '@components/icons/SuccessIcon'
+import TechnicalSection from "./components/technical-section/TechnicalSection"
+import ReservoirSection from "./components/reservoir-section/ReservoirSection"
+import ImageSection from "./components/image-section/ImageSection"
+import SaveSection from "./components/save-section/SaveSection"
 import Container from '@components/container/Container'
 import MapPicker from "@components/map-picker/MapPicker"
+import SuccessScreen from "./components/success-screen/SuccessScreen"
 
-import { useEffect, useState, useReducer, useRef } from "react";
-import { Link } from "react-router";
+import useSubmit from "./hooks/useSubmit.js"
+import { stateReducer, initialState } from "./reducers/stateReducer.js"
+
+import { useState, useReducer } from "react";
 import toast from "react-hot-toast";
-
-function stateReducer(state, action) {
-  switch (action.type) {
-    case "set-location":
-      return {
-        ...state,
-        greenroof: {
-          ...state.greenroof,
-          latitude: action?.latitude || state?.greenroof?.latitude,
-          longitude: action?.longitude || state?.greenroof?.longitude,
-          address: action?.address || state?.greenroof?.address || null,
-        }
-      }
-    case "on-greenroof-change":
-      return {
-        ...state,
-        greenroof: {
-          ...state.greenroof,
-          [action.name]: action.value
-        }
-      }
-    case "on-reservoir-change":
-      return {
-        ...state,
-        reservoir: {
-          ...state.reservoir,
-          [action.name]: action.value
-        }
-      }
-    case "on-vegetation-change":
-      return {
-        ...state,
-        greenroof: {
-          ...state.greenroof,
-          vegetation: action.tags
-        }
-      }
-    case "add-image":
-      return {
-        ...state,
-        images: {
-          ...state?.images,
-          toAdd: [
-            ...state?.images?.toAdd,
-            action.image
-          ]
-        }
-      }
-    case "remove-image":
-      // Se a imagem tiver um ID, ela já existe no banco de dados (original)
-      const isExistingImage = action.image && action.image.id;
-
-      if (isExistingImage) {
-        return {
-          ...state,
-          images: {
-            ...state.images,
-            // Remove da lista de exibição (original)
-            original: state.images.original.filter((img) => img.id !== action.image.id),
-            // Adiciona à lista de IDs que serão deletados no backend
-            toRemove: [...state.images.toRemove, action.image.id]
-          }
-        };
-      }
-
-      // Se não tem ID, é uma imagem recém-adicionada (Blob/File) que ainda não foi salva
-      return {
-        ...state,
-        images: {
-          ...state.images,
-          // Filtramos pelo índice ou pelo próprio objeto de arquivo
-          toAdd: state.images.toAdd.filter((_, index) => index !== action.index)
-        }
-      };
-    default:
-      return state;
-  }
-}
 
 export default function CreateGreenRoof() {
   const [isPickingLocation, setIsPickingLocation] = useState(false);
-  const [tab, setTab] = useState(1);
-  const [state, dispatch] = useReducer(stateReducer, {
-    greenroof: {
-      isAccessible: false,
-      isMandatory: false,
-    },
-    reservoir: {},
-    images: {
-      toAdd: [],
-      toRemove: [],
-      original: []
-    }
-  });
+  const [successfullySubmitted, setSuccessfullySubmitted] = useState(false);
+  const [greenRoofId, setGreenRoofId] = useState(null);
+  const [state, dispatch] = useReducer(stateReducer, initialState);
+  const { submitGreenRoof, submitReservoir, submitImages, validate } = useSubmit();
 
   function actualLocation() {
     if (!navigator.geolocation) return toast.error("Geolocalização não é suportada pelo seu navegador!");
@@ -172,21 +87,30 @@ export default function CreateGreenRoof() {
   }
 
   async function submit() {
-    let greenroof = await submitGreenRoofData(state.greenroof);
+    if (!validate(state)) return toast.error("Por favor, preencha todos os campos obrigatórios!");
+    let greenroof = await submitGreenRoof(state.greenroof);
     if (!greenroof) return;
-    submitReservoirData(state?.reservoir, greenroof.id);
+    setGreenRoofId(greenroof.id);
+    submitReservoir(state?.reservoir, greenroof.id);
     submitImages(state?.images?.toAdd, greenroof.id);
+    setSuccessfullySubmitted(true);
+
   }
 
-  let tabOptions = [
-    "Informações",
-    "Reservatório",
-    "Imagens",
-    "Salvar"
-  ]
+  if (successfullySubmitted) {
+    return <SuccessScreen detailsUrl={`/green-roof/${greenRoofId}`} />
+  }
 
-  if (isPickingLocation) return <MapPicker marker={{lat: state?.greenroof?.latitude, lng: state?.greenroof?.longitude}} onConfirm={setLocation} onExit={() => {setIsPickingLocation(false)}} />
-
+  if (isPickingLocation) {
+    return (
+      <MapPicker 
+        marker={{lat: state?.greenroof?.latitude, lng: state?.greenroof?.longitude}} 
+        onConfirm={setLocation} 
+        onExit={() => {setIsPickingLocation(false)}}
+      />
+    )
+  }
+  
   return (
     <>
       <ActionBar/>
@@ -196,91 +120,41 @@ export default function CreateGreenRoof() {
           <p>Contribua para a expansão do catálogo de telhados já registrados na região da cidade do Recife!</p>
         </div>
         <div className={styles.infos}>
-          <Tabs changeTab={(tabNumber) => setTab(tabNumber)} actual={tab} options={tabOptions} />
-          <div className={styles.forms}>
-            {tab === 1 && <TechnicalSection data={state?.greenroof} handleChange={onGreenRoofChange} handleVegetationChange={onVegetationChange} onSelectMap={() => setIsPickingLocation(true)} handleActualLocation={actualLocation} />}
-            {tab === 2 && <ReservoirSection data={state?.reservoir} handleChangeReservoir={onReservoirChange} />}
-            {tab === 3 && <ImageSection images={state?.images ?? []} addImage={addImage} removeImage={removeImage} />}
-            {tab === 4 && <SaveSection handleSubmit={submit} />}
-          </div>
+          <Tabs defaultValue="Informações">
+            <Tabs.List>
+              <Tabs.Trigger value="Informações">Informações</Tabs.Trigger>
+              <Tabs.Trigger value="Reservatório">Reservatório</Tabs.Trigger>
+              <Tabs.Trigger value="Imagens">Imagens</Tabs.Trigger>
+              <Tabs.Trigger value="Salvar">Salvar</Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="Informações">
+              <TechnicalSection 
+                data={state?.greenroof} 
+                handleChange={onGreenRoofChange} 
+                handleVegetationChange={onVegetationChange} 
+                onSelectMap={() => setIsPickingLocation(true)} 
+                handleActualLocation={actualLocation} 
+              />
+            </Tabs.Content>
+            <Tabs.Content value="Reservatório">
+              <ReservoirSection 
+                data={state?.reservoir} 
+                handleChangeReservoir={onReservoirChange} 
+              />
+            </Tabs.Content>
+            <Tabs.Content value="Imagens">
+              <ImageSection 
+                images={state?.images ?? []} 
+                addImage={addImage} 
+                removeImage={removeImage} 
+              />
+            </Tabs.Content>
+            <Tabs.Content value="Salvar">
+              <SaveSection handleSubmit={submit} />
+            </Tabs.Content>
+          </Tabs>
         </div>
       </Container>
     </>
   );
-}
-
-function SuccessScreen() {
-  return (
-    <div className={styles.successScreen}>
-      <span className={styles.successIcon}><SuccessIcon/></span>
-      <p>Telhado cadastrado com sucesso!</p>
-      <Link to="/">Inicio</Link>
-    </div>
-  );
-}
-
-async function submitGreenRoofData(payload) {
-  let options = {
-    method: "POST",
-    headers: { 
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + localStorage.getItem("jwt"),
-    },
-    body: JSON.stringify(payload),
-  };
-  try {
-    const res = await fetch("http://localhost:8080/api/green-roofs", options);
-    if (!res.ok) throw new Error("Erro ao cadastrar telhado!");
-    toast.success("Telhado cadastrado com sucesso!");
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    toast.error(err.message);
-    console.log(err.message);
-    return false;
-  }
-}
-
-async function submitReservoirData(data, greenRoofId) {
-  const payload = { ...data, greenRoofId };
-  const endpoint = "http://localhost:8080/api/green-roofs/" + greenRoofId + "/reservoirs";
-  const options = {
-    method: "POST",
-    headers: { 
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + localStorage.getItem("jwt"), 
-    },
-    body: JSON.stringify(payload),
-  };
-  try {
-    const res = await fetch(endpoint, options)
-    if (!res.ok) throw new Error("Erro ao cadastrar reservatório!")
-    toast.success("Reservatório cadastrado com sucesso!")
-  } catch (err) {
-    toast.error(err.message)
-    console.error(err.message);
-  }
-}
-
-async function submitImages(images, greenRoofId) {
-  let formData = new FormData();
-  images.forEach(file => {
-    formData.append("images", file);
-  });
-  formData.append("greenRoofId", greenRoofId);
-  const endpoint = "http://localhost:8080/api/green-roofs/" + greenRoofId + "/images";
-  const options = {
-    method: "POST",
-    headers: {
-      "Authorization": "Bearer " + localStorage.getItem("jwt"), 
-    },
-    body: formData,
-  };
-  try {
-    const res = await fetch(endpoint, options);
-    if (!res.ok) throw new Error("Erro ao salvar as imagens!");
-  } catch (err) {
-    toast.error(err.message);
-    console.error(err.message);
-  }
 }
