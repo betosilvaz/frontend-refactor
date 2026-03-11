@@ -5,6 +5,8 @@ import { useState, useRef, useEffect } from "react";
 import CloseIcon from '@components/icons/CloseIcon';
 import ImageIcon from '@components/icons/ImageIcon';
 
+import { API_URL } from '@config/api/api.js'
+
 export default function ImageUploader({ images, addImage, removeImage }) {
   const imageInputRef = useRef();
 
@@ -25,7 +27,7 @@ export default function ImageUploader({ images, addImage, removeImage }) {
       <button type="button" className={styles.addImageButton} onClick={() => imageInputRef.current.click()}>Adicionar Imagem</button>
       <div className={styles.previewGrid}>
         {isEmpty && <div className={styles.previewEmpty}><ImageIcon/></div>}
-        {originals.map(img => <Preview source={img} onRemove={() => removeImage(img, null)}/>)}
+        {originals.map(img => <Preview source={API_URL + "/" +img.url} onRemove={() => removeImage(img, null)}/>)}
         {toAdd.map((url, index) => <Preview source={url} onRemove={() => removeImage(null, index)}/>)}
       </div>
     </div>
