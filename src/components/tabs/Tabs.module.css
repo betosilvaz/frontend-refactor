@@ -4,20 +4,26 @@
     flex-wrap: wrap;
 }
 
-.tabs span {
+.tabs button {
     text-align: center;
     flex-grow: 1;
     padding: 1rem;
     cursor: pointer;
     flex: 1;
     font-weight: 700;
+    background-color: transparent;
+    border: none;
 }
 
-.tabs span:hover {
+.tabs button:hover {
     background-color: rgba(245, 245, 245);
 }
 
-.tabs span.selected {
+.tabs button.selected {
     background-color: rgba(122, 143, 92, 0.1);
     border-bottom: 3px solid var(--primary-dark);
+}
+
+.forms {
+    padding: 2rem;
 }
