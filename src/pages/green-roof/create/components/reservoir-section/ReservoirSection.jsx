@@ -15,7 +15,7 @@ export default function ReservoirSection({ data, handleChangeReservoir }) {
   return (
     <form className={styles.reservoirForm}>
       <section className={styles.formSection}>
-        <h2 className={styles.sectionHeader}>Informações do reservatório (OPCIONAL)</h2>
+        <h2 className={styles.sectionHeader}>Informações do reservatório (Opcional)</h2>
         <ResponsiveRow>
           <FormGroup>
             <label htmlFor="name">Nome do Reservatório</label>

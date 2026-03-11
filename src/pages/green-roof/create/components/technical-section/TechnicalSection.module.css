@@ -55,6 +55,10 @@
     outline: none;
 }
 
+.required {
+    color: red;
+}
+
 @media (max-width: 600px) {
     .sectionHeader {
         font-size: 1.1rem;

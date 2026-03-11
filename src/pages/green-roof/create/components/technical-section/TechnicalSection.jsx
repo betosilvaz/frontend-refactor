@@ -5,15 +5,14 @@ import ResponsiveRow from '@components/responsive-row/ResponsiveRow'
 import Input from '@components/input/Input'
 import Select from '@components/select/Select'
 import FormGroup from '@components/form-group/FormGroup'
-import Checkbox from "../../../../components/checkbox/Checkbox";
-
+import Checkbox from "@components/checkbox/Checkbox";
 
 export default function TechnicalSection({ data, handleChange, handleVegetationChange, onSelectMap, handleActualLocation }) {
 
   const typeOptions = [
     { name: 'Intensivo', value: 'intensivo' },
     { name: 'Semi-Intensivo', value: 'semi-intensivo'},
-    { name: 'Extensivo', value: 'extensivo' }    
+    { name: 'Extensivo', value: 'extensivo' }
   ]
 
   const situationOptions = [
@@ -28,7 +27,7 @@ export default function TechnicalSection({ data, handleChange, handleVegetationC
         <h2 className={styles.sectionHeader}>Informações do Telhado Verde</h2>
         <ResponsiveRow>
           <FormGroup>
-            <label htmlFor="name">Nome</label>
+            <label htmlFor="name">Nome <Required/></label>
             <Input type="text" name="name" placeholder="Ex: Edificio Cobertura Principal" value={data?.name ?? ""} onChange={handleChange} />
           </FormGroup>
           <FormGroup>
@@ -52,17 +51,17 @@ export default function TechnicalSection({ data, handleChange, handleVegetationC
             <Input type="number" name="area" placeholder="Ex: 150" value={data?.area ?? ""} onChange={handleChange} />
           </FormGroup>
           <FormGroup>
-            <label htmlFor="address">Endereço</label>
+            <label htmlFor="address">Endereço <Required/></label>
             <Input type="text" name="address" placeholder="Ex: Recife, PE" value={data?.address ?? ""} onChange={handleChange} />
           </FormGroup>
         </ResponsiveRow>
         <ResponsiveRow>
           <FormGroup>
-            <label htmlFor="latitude">Latitude</label>
+            <label htmlFor="latitude">Latitude <Required/></label>
             <Input type="text" name="latitude" value={data?.latitude ?? ""} onChange={handleChange} />
           </FormGroup>
           <FormGroup>
-            <label htmlFor="longitude">Longitude</label>
+            <label htmlFor="longitude">Longitude <Required/></label>
             <Input type="text" name="longitude" value={data?.longitude ?? ""} onChange={handleChange} />
           </FormGroup>
         </ResponsiveRow>
@@ -121,4 +120,10 @@ export default function TechnicalSection({ data, handleChange, handleVegetationC
       </section>
     </form>
   );
+}
+
+function Required() {
+  return (
+    <span className={styles.required}>*</span>
+  )
 }
