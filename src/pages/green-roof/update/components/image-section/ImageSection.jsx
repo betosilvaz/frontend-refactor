@@ -1,8 +1,8 @@
 import ImageUploader from "@components/image-uploader/ImageUploader";
-import { useCreateGreenRoofContext } from "../../providers/ContextProvider";
+import { useUpdateGreenRoofContext } from "../../providers/ContextProvider";
 
 export default function ImageSection() {
-  const { state, dispatch } = useCreateGreenRoofContext();
+  const { state, dispatch } = useUpdateGreenRoofContext();
   const images = state?.images;
 
   function addImage(image) {

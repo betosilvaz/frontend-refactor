@@ -6,12 +6,11 @@ import Input from '@components/input/Input'
 import Select from '@components/select/Select'
 import FormGroup from '@components/form-group/FormGroup'
 import Checkbox from "@components/checkbox/Checkbox";
-
-import { useCreateGreenRoofContext } from "../../providers/ContextProvider.jsx";
+import { useUpdateGreenRoofContext } from "../../providers/ContextProvider";
 
 export default function TechnicalSection() {
-  const { state, dispatch, setIsPickingLocation, actualLocation } = useCreateGreenRoofContext();
-  const data = state?.greenroof;
+  const { state, dispatch, setIsPickingLocation, actualLocation } = useUpdateGreenRoofContext();
+  const data = state?.greenroof || {};
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
@@ -20,11 +19,11 @@ export default function TechnicalSection() {
   }
 
   function handleVegetationChange(tags) {
-    form.dispatch({ type: "on-vegetation-change", tags });
+    dispatch({ type: "on-vegetation-change", tags });
   };
 
   function onSelectMap() {
-    setIsPickingLocation(true);
+    setIsPickingLocation(true)
   }
 
   function handleActualLocation() {
@@ -93,7 +92,7 @@ export default function TechnicalSection() {
         </ResponsiveRow>
         <FormGroup>
           <label htmlFor="description">Descrição do Projeto</label>
-          <textarea className={styles.textarea} name="description" placeholder="Descreva o telhado verde" onChange={handleChange}></textarea>
+          <textarea className={styles.textarea} value={data?.description ?? ""} name="description" placeholder="Descreva o telhado verde" onChange={handleChange}></textarea>
         </FormGroup>
         <ResponsiveRow>
           <Checkbox label="É acessível?" name="isAccessible" checked={data?.isAccessible || false} onChange={handleChange} />

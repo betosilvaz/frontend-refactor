@@ -1,15 +1,12 @@
-import { toast } from "react-hot-toast";
-import { API_URL } from "@config/api/api.js"
+import toast from "react-hot-toast";
 
-/**
- * A função valida os dados do formulário e, caso estejam corretos, submete o telhado, o reservatório e as imagens para a API.
- */
+// TODO: refatorar pra usar o id do reservatório ao invés de usar o id do telhado verde para atualizar o reservatório, isso porque pode ser que um telhado verde tenha mais de um reservatório no futuro, e aí vai ser necessário atualizar um reservatório específico ao invés de atualizar o primeiro reservatório do telhado verde
 export default function useSubmit() {
-
-  const submitGreenRoof = async (payload) => {
-    let endpoint = API_URL + "/api/green-roofs";
+  
+  const submitGreenRoof = async (payload, greenRoofId) => {
+    let endpoint = `${API_URL}/api/green-roofs/${greenRoofId}`;
     let options = {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + localStorage.getItem("jwt"),
@@ -24,17 +21,18 @@ export default function useSubmit() {
       return data;
     } catch (err) {
       toast.error(err.message);
+      console.log(err.message);
       return false;
     }
   }
 
   const submitReservoir = async (payload, greenRoofId) => {
-    const endpoint = API_URL + "/api/green-roofs/" + greenRoofId + "/reservoirs";
+    const endpoint = `${API_URL}/api/green-roofs/${greenRoofId}/reservoirs`;
     const options = {
-      method: "POST",
-      headers: { 
+      method: "PUT",
+      headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("jwt"), 
+        "Authorization": "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify(payload),
     };
@@ -44,6 +42,7 @@ export default function useSubmit() {
       toast.success("Reservatório cadastrado com sucesso!")
     } catch (err) {
       toast.error(err.message)
+      console.error(err.message);
     }
   }
 
@@ -53,11 +52,11 @@ export default function useSubmit() {
       formData.append("images", file);
     });
     formData.append("greenRoofId", greenRoofId);
-    const endpoint = "http://localhost:8080/api/green-roofs/" + greenRoofId + "/images";
+    const endpoint = `${API_URL}/api/green-roofs/${greenRoofId}/images`;
     const options = {
-      method: "POST",
+      method: "PUT",
       headers: {
-        "Authorization": "Bearer " + localStorage.getItem("jwt"), 
+        "Authorization": "Bearer " + localStorage.getItem("jwt"),
       },
       body: formData,
     };
@@ -66,6 +65,7 @@ export default function useSubmit() {
       if (!res.ok) throw new Error("Erro ao salvar as imagens!");
     } catch (err) {
       toast.error(err.message);
+      console.error(err.message);
     }
   }
 
@@ -76,17 +76,16 @@ export default function useSubmit() {
     return true;
   }
 
-  const submit = async (state) => {
+  const submit = async () => {
     if (!validate(state)) return toast.error("Por favor, preencha todos os campos obrigatórios!");
-    let greenroof = await submitGreenRoof(state.greenroof);
+    let greenroof = await submitGreenRoof(state.greenroof, id);
     if (!greenroof) return;
     setGreenRoofId(greenroof.id);
-    submitReservoir(state?.reservoir, greenroof.id);
-    submitImages(state?.images?.toAdd, greenroof.id);
+    submitReservoir(state?.reservoir, id);
+    submitImages(state?.images?.toAdd, id);
     setSuccessfullySubmitted(true);
 
   }
 
   return submit;
-
 }

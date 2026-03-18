@@ -1,0 +1,35 @@
+.saveButton {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.saveButton h3 {
+    font-weight: 500;
+    font-size: 1.2rem;
+    color: var(--primary-dark);
+}
+
+.saveButton button {
+    width: 100%;
+    padding: 1rem;
+    font-weight: 600;
+    color: white;
+    background-color: var(--primary-dark);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.saveButton button:hover {
+    background-color: var(--primary-darker);
+}
+
+@media (max-width: 600px) {
+    .sectionHeader {
+        font-size: 1.1rem;
+    }
+    .formSection {
+        grid-template-columns: 1fr;
+    }
+}

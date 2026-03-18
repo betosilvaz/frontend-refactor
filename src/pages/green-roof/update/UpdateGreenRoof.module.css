@@ -1,0 +1,18 @@
+/* ## HEADER STYLES */
+.header {
+    text-align: center;
+    padding: 2.5rem;
+    color: var(--primary-dark);
+}
+
+/* ## FORMS STYLE */
+.infos {
+    box-shadow: var(--shadow);
+    background-color: white;
+    margin-inline: 2rem;
+    border-radius: 5px;
+}
+
+.forms {
+    padding: 2rem;
+}
