@@ -3,20 +3,14 @@ export function stateReducer(state, action) {
     case "set-location":
       return {
         ...state,
-        greenroof: {
-          ...state.greenroof,
-          latitude: action?.latitude || state?.greenroof?.latitude,
-          longitude: action?.longitude || state?.greenroof?.longitude,
-          address: action?.address || state?.greenroof?.address || null,
-        }
+        latitude: action?.latitude || state?.latitude,
+        longitude: action?.longitude || state?.longitude,
+        address: action?.address || state?.address || null,
       }
     case "on-greenroof-change":
       return {
         ...state,
-        greenroof: {
-          ...state.greenroof,
-          [action.name]: action.value
-        }
+        [action.name]: action.value
       }
     case "on-reservoir-change":
       return {
@@ -26,14 +20,38 @@ export function stateReducer(state, action) {
           [action.name]: action.value
         }
       }
-    case "on-vegetation-change": // TODO: adicionar edge case para remover vegeração ja cadastrada
+    case "set-original-vegetation":
       return {
         ...state,
-        greenroof: {
-          ...state.greenroof,
-          vegetation: action.tags
+        vegetation: {
+          ...state.vegetation,
+          originals: action.value.map(v => ({ id: v.id, value: v.name }))
         }
-      }
+      };
+    case "on-vegetation-change":
+      const { tags } = action;
+      // Filtra o que é novo (sem ID) para o toAdd
+      const newTags = tags.filter(t => !t.id).map(t => typeof t === 'string' ? t : t.value);
+      
+      return {
+        ...state,
+        vegetation: {
+          ...state.vegetation,
+          toAdd: newTags
+        }
+      };
+    case "remove-vegetation-original":
+      const { tagId } = action;
+      return {
+        ...state,
+        vegetation: {
+          ...state.vegetation,
+          // Remove da lista de exibição original
+          originals: state.vegetation.originals.filter(t => t.id != tagId),
+          // Adiciona ao array de exclusão para o backend
+          toRemove: [...state.vegetation.toRemove, tagId]
+        }
+      };
     case "set-original-images":
       return {
         ...state,
@@ -85,19 +103,17 @@ export function stateReducer(state, action) {
 }
 
 export const initialState = {
-    greenroof: {
-      isAccessible: false,
-      isMandatory: false,
-      vegetation: {
-        orignals: [],
-        toRemove: [],
-        toAdd: []
-      }
-    },
-    reservoir: {},
-    images: {
-      toAdd: [],
-      toRemove: [],
-      originals: []
-    }
+  isAccessible: false,
+  isMandatory: false,
+  vegetation: {
+    originals: [],
+    toRemove: [],
+    toAdd: []
+  },
+  reservoir: {},
+  images: {
+    toAdd: [],
+    toRemove: [],
+    originals: []
   }
+}

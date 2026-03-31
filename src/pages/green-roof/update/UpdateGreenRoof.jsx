@@ -28,7 +28,7 @@ export default function UpdateGreenRoof() {
   if (form.isPickingLocation) {
     return (
       <MapPicker 
-        marker={{ lat: form.state?.greenroof?.latitude, lng: form.state?.greenroof?.longitude }} 
+        marker={{ lat: form.state?.latitude, lng: form.state?.longitude }} 
         onConfirm={form.setLocation} 
         onExit={() => { form.setIsPickingLocation(false) }} 
       />
@@ -61,7 +61,7 @@ export default function UpdateGreenRoof() {
               <ImageSection />
             </Tabs.Content>
             <Tabs.Content value="Salvar">
-              <SaveSection handleSubmit={submit} />
+              <SaveSection handleSubmit={() => submit(form.state)} />
             </Tabs.Content>
           </Tabs>
         </div>

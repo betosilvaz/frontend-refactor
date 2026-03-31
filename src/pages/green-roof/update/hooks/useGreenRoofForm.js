@@ -9,6 +9,10 @@ export default function useGreenRoofForm(id) {
   const [state, dispatch] = useReducer(stateReducer, initialState);
 
   useEffect(() => {
+    console.log(state);
+  }, [state]);
+
+  useEffect(() => {
     async function fetchGreenRoof() {
       const endpoint = `${API_URL}/api/green-roofs/${id}`;
       const options = {
@@ -23,10 +27,10 @@ export default function useGreenRoofForm(id) {
         if (!response.ok) throw new Error("Erro ao buscar dados do telhado!");
         const data = await response.json();
         dispatch({ type: "set-location", latitude: data.latitude, longitude: data.longitude, address: data.address });
+        dispatch({ type: "on-greenroof-change", name: "id", value: id});
         dispatch({ type: "on-greenroof-change", name: "name", value: data.name });
         dispatch({ type: "on-greenroof-change", name: "area", value: data.area });
         dispatch({ type: "on-greenroof-change", name: "type", value: data.type });
-        dispatch({ type: "on-greenroof-change", name: "vegetation", value: data.vegetation });
         dispatch({ type: "on-greenroof-change", name: "isAccessible", value: data.isAccessible });
         dispatch({ type: "on-greenroof-change", name: "isMandatory", value: data.isMandatory });
         dispatch({ type: "on-greenroof-change", name: "conclusion", value: data.conclusion });
@@ -38,7 +42,9 @@ export default function useGreenRoofForm(id) {
         dispatch({ type: "on-greenroof-change", name: "ownerName", value: data.ownerName });
         dispatch({ type: "on-greenroof-change", name: "ownerEmail", value: data.ownerEmail });
         dispatch({ type: "on-greenroof-change", name: "ownerNumber", value: data.ownerNumber });
+        dispatch({ type: "set-original-vegetation", value: data.vegetation });
         if (data.reservoirs && data.reservoirs.length > 0) {
+          dispatch({ type: "on-reservoir-change", name: "id", value: data.reservoirs[0].id});
           dispatch({ type: "on-reservoir-change", name: "capacity", value: data.reservoirs[0].capacity });
           dispatch({ type: "on-reservoir-change", name: "name", value: data.reservoirs[0].name });
           dispatch({ type: "on-reservoir-change", name: "useCases", value: data.reservoirs[0].useCases });
@@ -70,7 +76,6 @@ export default function useGreenRoofForm(id) {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        console.log(coords);
         setLocation(coords);
       }, (error) => {
         toast.error("Não foi possível obter sua localização atual. Por favor, selecione manualmente no mapa.");

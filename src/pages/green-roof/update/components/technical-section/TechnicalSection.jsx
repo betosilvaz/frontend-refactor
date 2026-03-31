@@ -7,10 +7,16 @@ import Select from '@components/select/Select'
 import FormGroup from '@components/form-group/FormGroup'
 import Checkbox from "@components/checkbox/Checkbox";
 import { useUpdateGreenRoofContext } from "../../providers/ContextProvider";
+import { useCallback } from "react";
 
 export default function TechnicalSection() {
   const { state, dispatch, setIsPickingLocation, actualLocation } = useUpdateGreenRoofContext();
-  const data = state?.greenroof || {};
+  const data = state || {};
+  const vegData = state?.vegetation || { originals: [], toAdd: [] };
+  const combinedVegetation = [
+    ...vegData.originals, 
+    ...vegData.toAdd
+  ];
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
@@ -18,9 +24,14 @@ export default function TechnicalSection() {
     dispatch({ type: "on-greenroof-change", name, value: finalValue });
   }
 
-  function handleVegetationChange(tags) {
+
+  const handleVegetationChange = useCallback((tags) => {
     dispatch({ type: "on-vegetation-change", tags });
-  };
+  }, [dispatch]);
+
+  const handleVegetationDelete = useCallback((id) => {
+    dispatch({ type: "remove-vegetation-original", tagId: id });
+  }, [dispatch]);
 
   function onSelectMap() {
     setIsPickingLocation(true)
@@ -37,9 +48,9 @@ export default function TechnicalSection() {
   ]
 
   const situationOptions = [
-    { name: 'Habita-se', value: 'habita-se' },
-    { name: 'Iniciada', value: 'iniciada' },
-    { name: 'Não iniciada', value: 'não iniciada' }
+    { name: 'Habite-se', value: 'habite-se' },
+    { name: 'Iniciado', value: 'iniciado' },
+    { name: 'Não iniciada', value: 'não-iniciado' }
   ]
 
   return (
@@ -118,7 +129,7 @@ export default function TechnicalSection() {
         <ResponsiveRow>
           <FormGroup>
             <label htmlFor="vegetation">Vegetação</label>
-            <TagInput name="vegetation" value={data?.vegetation ?? []} onChange={handleVegetationChange} />
+            <TagInput name="vegetation" value={combinedVegetation} onChange={handleVegetationChange} onTagDelete={handleVegetationDelete} />
           </FormGroup>
         </ResponsiveRow>
       </section>
