@@ -9,21 +9,29 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['192x192.png', '512x512.png'],
       manifest: {
-        name: 'Green Roof Atlas',
-        short_name: 'GRA',
+        name: 'Green Roof Atlas v2',
+        short_name: 'GRA v2',
         description: 'Um atlas de telhados verdes para a cidade do Recife',
+        display: 'standalone',
         theme_color: '#ffffff',
         icons: [
           {
-            src: '/pwa-192x192.png',
+            src: '/192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/pwa-512x512.png',
+            src: '/512x512.png',
             sizes: '512x512',
             type: 'image/png'
+          },
+          {
+            src: '/512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable' // O Android vai usar este
           }
         ]
       }
