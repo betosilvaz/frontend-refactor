@@ -1,46 +1,110 @@
+/* ActionBar.module.css */
+
+/* =========================================
+   MOBILE FIRST (Padrão: Full Width no Rodapé)
+   ========================================= */
 .actionBar {
     position: fixed;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 0.5rem;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-    background-color: white;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     display: flex;
-    z-index: 999999;
+    justify-content: space-around;
+    align-items: center;
+
+    /* Efeito "Glassmorphism" moderno */
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+    /* Safe area para iPhones modernos (Evita que a barra fique por baixo do risco do iOS) */
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    z-index: 9990;
+
+    /* UX: Transição suave caso a tela seja redimensionada (ex: girar um tablet) */
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.actionBar a, .actionBar button {
-    padding: 1rem;
-    flex-grow: 1;
-    cursor: pointer;
-}
-
-.actionBar button {
-    background-color: transparent;
+.actionItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    color: #4a5568;
+    background: transparent;
     border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
 }
 
-.actionBar svg {
-    fill: var(--color);
-    width: 30px;
-    height: 30px;
+/* Feedback tátil e visual ao tocar/passar o mouse */
+.actionItem:hover {
+    color: #1a202c;
+    background: rgba(0, 0, 0, 0.05);
 }
 
-.actionBar a:hover svg, .actionBar button:hover svg {
-    fill: var(--primary-dark);
+.actionItem:active {
+    transform: scale(0.92);
+    /* Efeito de "apertar" o botão */
 }
 
-@media (max-width: 768px) {
+/* =========================================
+   DESKTOP / TABLET LNDSCAPE (Pílula Flutuante)
+   ========================================= */
+@media (min-width: 768px) {
     .actionBar {
-        bottom: 0px;
-        left: 0px;
-        width: 100%;
-        border-radius: 0;
-        transform: translate(0px);
+        /* Descola do fundo e das laterais */
+        bottom: 32px;
+        left: 50%;
+
+        /* Centraliza perfeitamente no meio da tela */
+        transform: translateX(-50%);
+
+        /* Remove os comportamentos de 100% width do mobile */
+        width: auto;
+        min-width: 320px;
+
+        /* Arredonda totalmente as bordas para criar o formato de pílula */
+        border-radius: 999px;
+
+        /* Ajusta o padding (remove o env safe-area do mobile pois não é mais necessário no desktop) */
+        padding: 12px 32px;
+
+        /* Espaçamento interno entre os ícones */
+        gap: 48px;
+
+        /* Substitui a borda do topo por uma borda completa e adiciona sombra flutuante */
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12),
+            0 4px 12px rgba(0, 0, 0, 0.04);
     }
-    .actionBar a {
-        text-align: center;
-    }
+}
+
+/* =========================================
+   OVERLAY & SIDEBAR
+   ========================================= */
+.overlay {
+    position: fixed;
+    inset: 0;
+    /* Substitui top: 0, left: 0, right: 0, bottom: 0 */
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+}
+
+.sidebarContainer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100dvh;
+    /* Usa dynamic viewport height para mobile */
+    width: min(280px, 85vw);
+    /* Evita que ocupe a tela toda em celulares muito finos */
+    background-color: #ffffff;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
 }
