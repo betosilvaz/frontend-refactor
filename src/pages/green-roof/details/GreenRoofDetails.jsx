@@ -129,7 +129,7 @@ export default function GreenRoofDetails() {
               <h2>Vegetação</h2>
               <div>
                 {data.vegetation.map(veg => (
-                  <InfoItem label="" value={veg} />
+                  <InfoItem label="" value={veg.name} />
                 ))}
               </div>
             </section>
