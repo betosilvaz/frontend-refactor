@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router'
 import { Navigate } from 'react-router'
 
 import Home from '@pages/Home'
+import About from '@pages/About'
 import Login from '@pages/auth/login/Login'
 import Register from '@pages/auth/register/Register'
 import ForgotPassword from '@pages/auth/forgot-password/ForgotPassword'
@@ -28,6 +29,7 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />}/>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
