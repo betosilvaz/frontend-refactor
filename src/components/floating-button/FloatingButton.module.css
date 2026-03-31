@@ -2,7 +2,7 @@
     padding: 0.5rem 1rem;
     box-shadow: var(--shadow);
     border-radius: 5px;
-    color: var(--primary-darker);
+    color: #059669;
     position: fixed;
     top: 30px;
     left: 30px;
@@ -12,6 +12,6 @@
 }
 
 .button:hover {
-    background-color: var(--primary-darker);
+    background-color: #059669;
     color: white;
 }
