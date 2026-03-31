@@ -9,7 +9,7 @@ function SuccessScreen({ detailsUrl }) {
     <div className={styles.successScreen}>
       <span className={styles.successIcon}><SuccessIcon /></span>
       <p>Telhado cadastrado com sucesso!</p>
-      <Link to={detailsUrl}>Ver Detalhes</Link>
+      {detailsUrl && <Link to={detailsUrl}>Ver Detalhes</Link>}
       <Link to="/">Inicio</Link>
     </div>
   );

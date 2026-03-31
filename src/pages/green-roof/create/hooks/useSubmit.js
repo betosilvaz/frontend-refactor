@@ -5,88 +5,40 @@ import { API_URL } from "@config/api/api.js"
  * A função valida os dados do formulário e, caso estejam corretos, submete o telhado, o reservatório e as imagens para a API.
  */
 export default function useSubmit() {
-
-  const submitGreenRoof = async (payload) => {
-    let endpoint = API_URL + "/api/green-roofs";
-    let options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("jwt"),
-      },
-      body: JSON.stringify(payload),
-    };
-    try {
-      const res = await fetch(endpoint, options);
-      if (!res.ok) throw new Error("Erro ao cadastrar telhado!");
-      toast.success("Telhado cadastrado com sucesso!");
-      const data = await res.json();
-      return data;
-    } catch (err) {
-      toast.error(err.message);
-      return false;
-    }
-  }
-
-  const submitReservoir = async (payload, greenRoofId) => {
-    const endpoint = API_URL + "/api/green-roofs/" + greenRoofId + "/reservoirs";
-    const options = {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("jwt"), 
-      },
-      body: JSON.stringify(payload),
-    };
-    try {
-      const res = await fetch(endpoint, options)
-      if (!res.ok) throw new Error("Erro ao cadastrar reservatório!")
-      toast.success("Reservatório cadastrado com sucesso!")
-    } catch (err) {
-      toast.error(err.message)
-    }
-  }
-
-  const submitImages = async (images, greenRoofId) => {
-    let formData = new FormData();
-    images.forEach(file => {
-      formData.append("images", file);
-    });
-    formData.append("greenRoofId", greenRoofId);
-    const endpoint = "http://localhost:8080/api/green-roofs/" + greenRoofId + "/images";
-    const options = {
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer " + localStorage.getItem("jwt"), 
-      },
-      body: formData,
-    };
-    try {
-      const res = await fetch(endpoint, options);
-      if (!res.ok) throw new Error("Erro ao salvar as imagens!");
-    } catch (err) {
-      toast.error(err.message);
-    }
-  }
-
-  const validate = (state) => {
-    const { greenroof } = state;
-    if (!greenroof) return false;
-    if (!greenroof.latitude || !greenroof.longitude || !greenroof.address) return false;
-    return true;
-  }
-
   const submit = async (state) => {
-    if (!validate(state)) return toast.error("Por favor, preencha todos os campos obrigatórios!");
-    let greenroof = await submitGreenRoof(state.greenroof);
-    if (!greenroof) return;
-    setGreenRoofId(greenroof.id);
-    submitReservoir(state?.reservoir, greenroof.id);
-    submitImages(state?.images?.toAdd, greenroof.id);
-    setSuccessfullySubmitted(true);
+    if (!isValid(state)) return toast.error("Por favor, preencha todos os campos obrigatórios!");
+
+    let formData = new FormData();
+
+    let { images, vegetation, ...data } = state;
+    data.vegetation = vegetation.toAdd;
+    formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
+
+    if (state.images && state.images.toAdd && state.images.toAdd.length > 0) {
+      images.toAdd.forEach(file => formData.append("images", file));
+    }
+
+    try {
+      let response = await fetch(`${API_URL}/api/green-roofs`, {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem("jwt"),
+        },
+        body: formData
+      });
+      if (!response.ok) {
+        throw new Error("Não foi possível cadastrar os dados!");
+      }
+      toast.success("Dados cadastrados com sucesso!");
+    } catch (error) {
+      toast.error(error.message);
+    }
 
   }
-
   return submit;
+}
 
+function isValid(state) {
+  if (!state.latitude || !state.longitude || !state.address) return false;
+  return true;
 }

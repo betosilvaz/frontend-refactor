@@ -11,7 +11,8 @@ import { useCreateGreenRoofContext } from "../../providers/ContextProvider.jsx";
 
 export default function TechnicalSection() {
   const { state, dispatch, setIsPickingLocation, actualLocation } = useCreateGreenRoofContext();
-  const data = state?.greenroof;
+  const data = state || {};
+  const vegetation = data?.vegetation?.toAdd;
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
@@ -20,7 +21,7 @@ export default function TechnicalSection() {
   }
 
   function handleVegetationChange(tags) {
-    form.dispatch({ type: "on-vegetation-change", tags });
+    dispatch({ type: "on-vegetation-change", tags });
   };
 
   function onSelectMap() {
@@ -38,7 +39,7 @@ export default function TechnicalSection() {
   ]
 
   const situationOptions = [
-    { name: 'Habita-se', value: 'habita-se' },
+    { name: 'Habite-se', value: 'habite-se' },
     { name: 'Iniciada', value: 'iniciada' },
     { name: 'Não iniciada', value: 'não iniciada' }
   ]
@@ -93,7 +94,7 @@ export default function TechnicalSection() {
         </ResponsiveRow>
         <FormGroup>
           <label htmlFor="description">Descrição do Projeto</label>
-          <textarea className={styles.textarea} name="description" placeholder="Descreva o telhado verde" onChange={handleChange}></textarea>
+          <textarea className={styles.textarea} name="description" value={data?.description ?? ""} placeholder="Descreva o telhado verde" onChange={handleChange}></textarea>
         </FormGroup>
         <ResponsiveRow>
           <Checkbox label="É acessível?" name="isAccessible" checked={data?.isAccessible || false} onChange={handleChange} />
@@ -119,7 +120,7 @@ export default function TechnicalSection() {
         <ResponsiveRow>
           <FormGroup>
             <label htmlFor="vegetation">Vegetação</label>
-            <TagInput name="vegetation" value={data?.vegetation ?? []} onChange={handleVegetationChange} />
+            <TagInput name="vegetation" value={vegetation ?? []} onChange={handleVegetationChange} />
           </FormGroup>
         </ResponsiveRow>
       </section>

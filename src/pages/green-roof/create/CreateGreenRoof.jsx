@@ -14,21 +14,16 @@ import useSubmit from "./hooks/useSubmit.js"
 import useGreenRoofForm from "./hooks/useGreenRoofForm.js"
 import ContextProvider from "./providers/ContextProvider.jsx"
 
-import { useState } from "react";
-
 export default function CreateGreenRoof() {
-  const [greenRoofId, setGreenRoofId] = useState(null);
   const submit = useSubmit();
   const form = useGreenRoofForm();
 
-  if (form.successfullySubmitted) {
-    return <SuccessScreen detailsUrl={`/green-roof/${greenRoofId}`} />
-  }
+  if (form.successfullySubmitted) return <SuccessScreen />;
 
   if (form.isPickingLocation) {
     return (
       <MapPicker 
-        marker={{lat: form.state?.greenroof?.latitude, lng: form.state?.greenroof?.longitude}} 
+        marker={{lat: form.state?.latitude, lng: form.state?.longitude}} 
         onConfirm={form.setLocation} 
         onExit={() => {form.setIsPickingLocation(false)}}
       />
