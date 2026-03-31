@@ -3,6 +3,7 @@ import styles from './Reports.module.css';
 import { useState } from 'react';
 
 import Container from '@components/container/Container';
+import ActionBar from '@components/action-bar/ActionBar';
 
 export default function Reports() {
   // Dados de exemplo simulando uma API
@@ -31,6 +32,7 @@ export default function Reports() {
 
   return (
     <Container>
+      <ActionBar />
       <div className={styles.container}>
         <header className={styles.header}>
           <div>
