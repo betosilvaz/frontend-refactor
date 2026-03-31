@@ -1,97 +1,170 @@
+/* Container Principal: Ocupa mais espaço na tela */
 .box {
-    border-radius: 5px;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    row-gap: 3rem;
-}
-
-.box > svg {
-    width: 100px;
-    height: 100px;
-    fill: var(--primary-dark);
-    padding: 0.5rem;
-    border-radius: 50%;
-    border: 4px solid var(--primary-dark);
-    box-sizing: content-box;
-    margin: 0 auto;
-}
-
-.header {
-    color: var(--primary-dark);
-    text-align: center;
-}
-
-.section {
-    display: flex;
-    flex-direction: column;
-    row-gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-
-.changePasswordButton {
-    padding: 0.8rem 2rem;
-    background-color: var(--primary-dark);
-    border-radius: 5px;
-    color: white;
-    text-decoration: none;
     width: 100%;
-    text-align: center;
-    font-weight: 700;
+    max-width: 1200px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 40px;
+    align-items: start;
 }
 
-.changePasswordButton:hover {
-    background-color: var(--primary-darker);
-}
-
-.editButton, .saveButton {
-    padding: 0.8rem 2rem;
-    background-color: var(--primary-dark);
-    border-radius: 5px;
-    color: white;
-    font-weight: 700;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-}
-
-.editButton:hover, .saveButton:hover {
-    background-color: var(--primary-darker);
-}
-
-.cancelButton {
-    padding: 0.8rem 2rem;
-    background-color: #CCCC;
-    border-radius: 5px;
-    color: white;
-    font-weight: 700;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-}
-
-.cancelButton:hover {
-    background-color: #AAAA;
-}
-
-.successScreen {
+/* Coluna da Esquerda: Resumo do Perfil */
+.profileHeader {
+    background-color: #ffffff;
+    padding: 40px 24px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
-    row-gap: 2rem;
+    align-items: center;
+    text-align: center;
+}
+
+.avatarContainer {
+    width: 120px;
+    height: 120px;
+    background-color: #d1fae5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    border: 4px solid #ffffff;
+    box-shadow: var(--shadow);
+}
+
+.userIcon {
+    width: 56px;
+    height: 56px;
+    color: #059669;
+}
+
+.headerTitle {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 8px 0;
+}
+
+.headerSubtitle {
+    font-size: 16px;
+    color: #718096;
+    margin: 0;
+    background-color: #edf2f7;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+/* Coluna da Direita: Formulário */
+.form {
+    background-color: #ffffff;
+    padding: 48px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    /* Espaço generoso entre as seções */
+}
+
+.sectionTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #edf2f7;
+    /* Linha divisória para dar estrutura */
+}
+
+.form[data-state="viewing"] input:disabled {
+    background-color: transparent;
+    border-color: transparent;
+    color: #718096;
+    padding-left: 0;
+    font-weight: 500;
+    cursor: default;
+}
+
+/* Segurança e Ações */
+.securityRow {
+    padding: 16px;
+    background-color: #fffaf0;
+    /* Fundo levemente destacado */
+    border: 1px solid #feebc8;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
 }
 
-.successScreen svg {
-    padding: 1rem;
-    border-radius: 50%;
-    background-color: var(--primary-dark);
-    width: 70px;
-    height: 70px;
-    fill: white;
-    box-sizing: content-box;
+.ghostButton {
+    color: #dd6b20;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 16px;
 }
 
-.successScreen p {
-    font-style: italic;
+.ghostButton:hover {
+    text-decoration: underline;
+}
+
+/* Botões base da página */
+.actionGroup {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.primaryButton,
+.secondaryButton {
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.primaryButton {
+    background-color: #d1fae5;
+    border: 1px solid #059669;
+    color: #059669;
+}
+
+.primaryButton:hover {
+    background-color: #059669;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.secondaryButton {
+    background-color: #edf2f7;
+    color: #4a5568;
+}
+
+.secondaryButton:hover {
+    background-color: #e2e8f0;
+}
+
+/* Responsividade: Quebra para uma coluna em telas menores */
+@media (max-width: 992px) {
+    .box {
+        grid-template-columns: 1fr;
+        /* Volta para coluna única */
+        gap: 24px;
+        padding: 0 16px;
+    }
+
+    .profileHeader {
+        position: static;
+    }
+
+    .form {
+        padding: 32px 24px;
+    }
 }
