@@ -8,6 +8,7 @@ import Container from '@components/container/Container';
 import FormGroup from '@components/form-group/FormGroup';
 import Input from '@components/input/Input';
 import ResponsiveRow from '@components/responsive-row/ResponsiveRow';
+import ActionBar from '@components/action-bar/ActionBar';
 import useProfileForm from './hooks/useProfileForm';
 
 export default function Profile() {
@@ -15,7 +16,7 @@ export default function Profile() {
 
   return (
     <Container>
-      <FloatingButton to="/">Início</FloatingButton>
+      <ActionBar />
       
       <div className={styles.box}>
         <div className={styles.profileHeader}>
