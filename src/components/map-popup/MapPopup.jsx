@@ -60,7 +60,6 @@ const MapPopup = ({ data }) => {
         {depth && <DetailItem label="Prof." value={`${depth} cm`} />}
         {slope && <DetailItem label="Inclinação" value={`${slope}%`} />}
         {weight && <DetailItem label="Peso" value={`${weight} kg/m²`} />}
-        {vegetation && <DetailItem label="Vegetação" value={vegetation} isFullWidth />}
       </div>
 
       {description && (
