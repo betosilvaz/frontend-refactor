@@ -1,4 +1,5 @@
 import styles from "./ReservoirSection.module.css";
+import { motion } from "framer-motion";
 
 import FormGroup from '@components/form-group/FormGroup'
 import Input from '@components/input/Input'
@@ -8,9 +9,9 @@ import { useUpdateGreenRoofContext } from "../../providers/ContextProvider";
 
 export default function ReservoirSection() {
   const { state, dispatch } = useUpdateGreenRoofContext();
-  const data = state?.reservoir || {};
+  const data = state?.reservoir;
 
-  function handleChangeReservoir(e) {
+  function handleChange(e) {
     const { name, value } = e.target;
     dispatch({ type: "on-reservoir-change", name, value });
   }
@@ -18,37 +19,54 @@ export default function ReservoirSection() {
   const typeOptions = [
     { name: 'Acúmulo', value: 'ACUMULO' },
     { name: 'Retardo', value: 'RETARDO' }
-  ]
+  ];
 
   return (
-    <form className={styles.reservoirForm}>
-      <section className={styles.formSection}>
-        <h2 className={styles.sectionHeader}>Informações do reservatório (Opcional)</h2>
-        <ResponsiveRow>
+    <motion.form 
+      className={styles.reservoirForm}
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <section className={styles.cardSection}>
+        <div className={styles.sectionHeader}>
+          <h2>Configuração do Reservatório</h2>
+          <p>Preencha os dados abaixo caso o telhado verde possua um sistema de armazenamento de água (Opcional).</p>
+        </div>
+        
+        <div className={styles.formGrid}>
+          <ResponsiveRow>
+            <FormGroup>
+              <label htmlFor="name">Identificação do Reservatório</label>
+              <Input type="text" name="name" placeholder="Ex: Tanque Principal Sul" value={data?.name ?? ""} onChange={handleChange} />
+            </FormGroup>
+            <FormGroup>
+              <label htmlFor="material">Material de Construção</label>
+              <Input type="text" name="material" placeholder="Ex: Fibra de vidro, concreto..." value={data?.material ?? ""} onChange={handleChange}/>
+            </FormGroup>
+          </ResponsiveRow>
+          <ResponsiveRow>
+            <FormGroup>
+              <label htmlFor="type">Tipo de Sistema</label>
+              <Select value={data?.type ?? ""} name="type" options={typeOptions} onSelect={handleChange} />
+            </FormGroup>
+            <FormGroup>
+              <label htmlFor="capacity">Capacidade Total (Litros)</label>
+              <Input name="capacity" type="number" placeholder="Ex: 5000" value={data?.capacity ?? ""} onChange={handleChange} />
+            </FormGroup>
+          </ResponsiveRow>
           <FormGroup>
-            <label htmlFor="name">Nome do Reservatório</label>
-            <Input type="text" name="name" placeholder="EX: Reservatório X" value={data?.name ?? ""} onChange={handleChangeReservoir} />
+            <label htmlFor="useCase">Finalidade e Casos de Uso</label>
+            <textarea 
+              className={styles.textarea} 
+              name="useCase" 
+              placeholder="Descreva para onde essa água é direcionada (ex: irrigação do próprio telhado, reuso em sanitários...)" 
+              value={data?.useCase ?? ""} 
+              onChange={handleChange}
+            ></textarea>
           </FormGroup>
-          <FormGroup>
-            <label htmlFor="material">Material</label>
-            <Input type="text" name="material" placeholder="Ex: plástico, concreto..." value={data?.material ?? ""} onChange={handleChangeReservoir}/>
-          </FormGroup>
-        </ResponsiveRow>
-        <ResponsiveRow>
-          <FormGroup>
-            <label htmlFor="type">Tipo</label>
-            <Select value={data?.type ?? ""} name="type" options={typeOptions} onSelect={handleChangeReservoir} />
-          </FormGroup>
-          <FormGroup>
-            <label htmlFor="capacity">Capacidade do Reservatório (Em Litros)</label>
-            <Input name="capacity" type="number" placeholder="Ex: 3000" value={data?.capacity ?? ""} onChange={handleChangeReservoir} />
-          </FormGroup>
-        </ResponsiveRow>
-        <FormGroup>
-          <label htmlFor="useCases">Casos de Uso da Água</label>
-          <textarea className={styles.textarea} name="useCases" placeholder="Descreva a finalidade para a qual a água acumulada é utilizada..." value={data?.useCases ?? ""} onChange={handleChangeReservoir}></textarea>
-        </FormGroup>
+        </div>
       </section>
-    </form>
+    </motion.form>
   );
 }
