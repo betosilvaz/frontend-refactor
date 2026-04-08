@@ -70,3 +70,28 @@
 .message a {
     color: var(--link);
 }
+
+/* ==================================================
+ *                    SUCCESS PAGE
+ * ==================================================
+ */
+
+.successWrapper {
+    background-color: white;
+    border-radius: 2rem;
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    align-items: center;
+}
+
+.successIcon {
+    color: var(--primary-dark);
+    box-sizing: content-box;
+}
+
+.link {
+    color: var(--link);
+}

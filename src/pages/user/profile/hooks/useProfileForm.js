@@ -27,7 +27,6 @@ export default function useProfileForm() {
   }, []);
 
   async function submit(e) {
-    console.log("aqui");
     e.preventDefault();
     try {
       const jwt = localStorage.getItem("jwt");

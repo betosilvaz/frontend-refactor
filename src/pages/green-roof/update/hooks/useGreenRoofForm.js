@@ -9,10 +9,6 @@ export default function useGreenRoofForm(id) {
   const [state, dispatch] = useReducer(stateReducer, initialState);
 
   useEffect(() => {
-    console.log(state);
-  }, [state]);
-
-  useEffect(() => {
     async function fetchGreenRoof() {
       const endpoint = `${API_URL}/api/green-roofs/${id}`;
       const options = {

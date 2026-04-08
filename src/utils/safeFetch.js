@@ -19,12 +19,10 @@ export default async function safeFetch(url, options) {
     });
   }
 
-  console.log(response);
   let data;
   try {
     data = await response.json();
   } catch {
-    console.log(data);
     throw new AppError({
       code: ERROR_CODES.PARSE,
       message: 'Resposta inválida',

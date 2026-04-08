@@ -16,8 +16,8 @@ export default function ReservoirSection() {
   }
 
   const typeOptions = [
-    { name: 'Acúmulo', value: 'acúmulo' },
-    { name: 'Retardo', value: 'retardo' }
+    { name: 'Acúmulo', value: 'ACUMULO' },
+    { name: 'Retardo', value: 'RETARDO' }
   ]
 
   return (

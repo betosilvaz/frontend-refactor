@@ -42,15 +42,15 @@ export default function TechnicalSection() {
   }
 
   const typeOptions = [
-    { name: 'Intensivo', value: 'intensivo' },
-    { name: 'Semi-Intensivo', value: 'semi-intensivo'},
-    { name: 'Extensivo', value: 'extensivo' }
+    { name: 'Intensivo', value: 'INTENSIVO' },
+    { name: 'Semi-Intensivo', value: 'SEMI_INTENSIVO'},
+    { name: 'Extensivo', value: 'EXTENSIVO' }
   ]
 
   const situationOptions = [
-    { name: 'Habite-se', value: 'habite-se' },
-    { name: 'Iniciado', value: 'iniciado' },
-    { name: 'Não iniciada', value: 'não-iniciado' }
+    { name: 'Habite-se', value: 'HABITE_SE' },
+    { name: 'Iniciada', value: 'INICIADO' },
+    { name: 'Não iniciada', value: 'NAO_INICIADO' }
   ]
 
   return (

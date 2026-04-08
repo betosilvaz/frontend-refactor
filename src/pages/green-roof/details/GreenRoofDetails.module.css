@@ -125,7 +125,7 @@ hr {
 }
 
 /* Label (Rótulo) */
-.item span:first-child {
+.itemLabel {
     font-size: 0.85rem;
     color: #6b7280;
     text-transform: uppercase;
@@ -135,7 +135,7 @@ hr {
 }
 
 /* Value (Valor) */
-.item span:last-child {
+.itemValue {
     font-size: 1.05rem;
     color: #1f2937;
     font-weight: 500;

@@ -39,7 +39,7 @@ const Sobre = () => {
             <p className="card-text">
               Desenvolvemos uma solução tecnológica integrada que permite aos cidadãos e
               gestores públicos cadastrarem e visualizarem telhados verdes espalhados pelo Recife.
-              Através de um mapa interativo, é possível monitorar a saúde dessas áreas,
+              Através de um mapa interativo, é possível localizar essas iniciativas,
               entender seu impacto microclimático e incentivar a expansão da infraestrutura verde.
             </p>
           </div>
@@ -54,8 +54,8 @@ const Sobre = () => {
             <p className="card-text">
               O avanço das ilhas de calor e a necessidade de espaços sustentáveis nos motivaram a agir.
               Acreditamos que a tecnologia é a chave para democratizar o acesso à informação ambiental.
-              Nosso objetivo é mitigar os efeitos das mudanças climáticas, melhorar a qualidade do ar e
-              proporcionar um ecossistema urbano mais equilibrado para todos.
+              Nosso objetivo é proporcionar um ambiente virtual onde as pessoas possam visualizar a rede de telhados verdes
+              presentes na cidade do Recife e contribuir com mais dados sobre eles.
             </p>
           </div>
         </section>

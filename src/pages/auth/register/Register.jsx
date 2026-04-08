@@ -1,8 +1,9 @@
 import styles from './Register.module.css'
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router'
 
+import { useState } from 'react'
+import { Link } from 'react-router'
 import toast from 'react-hot-toast'
+import { UserCheck } from 'lucide-react'
 
 import Center from '@components/center/Center'
 import FormGroup from '@components/form-group/FormGroup'
@@ -14,7 +15,6 @@ import ResponsiveRow from '@components/responsive-row/ResponsiveRow'
 import { ERROR_CODES } from '@utils/safeFetch.js'
 import AppError from '@utils/AppError.js'
 import { API_URL } from '@config/api/api.js'
-import { useAuth } from '@providers/AuthProvider'
 
 const initialState = {
   name: "",
@@ -26,7 +26,7 @@ const initialState = {
 
 export default function Register() {
   const [form, setForm] = useState(initialState);
-  const navigate = useNavigate();
+  const [submitted, setIsSubmitted] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -52,10 +52,23 @@ export default function Register() {
           status: response.status
         });
       }
-      navigate("/");
+      setIsSubmitted(true);
     } catch (error) {
       return toast.error(error.message);
     }
+  }
+
+  if (submitted) {
+    return (
+      <Center>
+        <div className={styles.successWrapper}>
+          <UserCheck size={60} className={styles.successIcon}/>
+          <h2>Cadastro realizado com sucesso!</h2>
+          <p>Um administrador precisa verificar sua conta antes que você possa usá-la.</p>
+          <Link to="/" onClick={() => {setForm(initialState)}} className={styles.link}>Página inicial</Link>
+        </div>
+      </Center>
+    );
   }
 
   return (

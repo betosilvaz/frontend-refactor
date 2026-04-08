@@ -38,7 +38,6 @@ function useGreenRoofForm() {
           lat: position.coords.latitude, 
           lng: position.coords.longitude 
         };
-        console.log(coords);
         setLocation(coords);
       }, (error) => {
         toast.error("Não foi possível obter sua localização atual. Por favor, selecione manualmente no mapa.");

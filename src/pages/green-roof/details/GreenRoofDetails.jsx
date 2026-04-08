@@ -129,7 +129,7 @@ export default function GreenRoofDetails() {
               <h2>Vegetação</h2>
               <div>
                 {data.vegetation.map(veg => (
-                  <InfoItem label="" value={veg.name} />
+                  <InfoItem label="" value={capitalize(veg.name)} />
                 ))}
               </div>
             </section>
@@ -170,8 +170,8 @@ function InfoItem({ label, value }) {
 
   return (
     <div className={styles.item}>
-      {label && <span>{label}</span>}
-      <span>{value}</span>
+      {label && <span className={styles.itemLabel}>{label}</span>}
+      <span className={styles.itemValue}>{value}</span>
     </div>
   );
 }
@@ -185,4 +185,12 @@ function UpdateButton({ id }) {
     </Link>,
     document.body
   );
+}
+
+function capitalize(phrase) {
+  return phrase
+    ?.toLowerCase()
+    .split(" ")
+    .map(p => p.charAt(0).toUpperCase() + p.slice(1))
+    .join(" ");
 }

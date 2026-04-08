@@ -31,11 +31,6 @@ export default function ResetPassword() {
     }));
   }, []);
 
-  useEffect(() => {
-    console.log(form);
-  }, [form]);
-
-
   function handleChange(e) {
     setForm(prev => ({
       ...prev, 

@@ -1,140 +1,194 @@
 .main {
     display: flex;
     flex-direction: column;
-    row-gap: 2rem;
-    padding: 2rem;
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
+/* --- Cabeçalho --- */
 .header {
     text-align: center;
-    font-size: 1.5rem;
-    color: var(--primary-dark);
+    margin-bottom: 2.5rem;
 }
 
-/* ============================================================= */
+.pageTitle {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #111827;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.025em;
+}
+
+.pageSubtitle {
+    color: #6b7280;
+    font-size: 1.125rem;
+    margin: 0;
+}
+
+/* --- Área de Busca e Formulário --- */
+.searchSection {
+    margin-bottom: 2rem;
+}
 
 .form {
     display: flex;
     flex-direction: column;
-    row-gap: 2rem;
+    gap: 1.5rem;
 }
-
-/* ============================================================= */
 
 .searchBar {
     display: flex;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    background-color: white;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 9999px; /* Pill shape */
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.searchBar button {
-    background-color: transparent;
-    border: none;
+.searchBar:focus-within {
+    border-color: var(--primary-dark);
+    box-shadow: 0 0 0 3px rgba(var(--primary-dark-rgb), 0.1);
+}
+
+.searchIcon {
+    width: 20px;
+    height: 20px;
+    fill: #9ca3af;
+    flex-shrink: 0;
 }
 
 .searchBar input {
-    min-width: 0;
     flex-grow: 1;
-    flex-shrink: 1;
     border: none;
     outline: none;
-    background-color: transparent;
+    background: transparent;
+    font-size: 1rem;
+    padding: 0 1rem;
+    color: #374151;
 }
 
-.searchBar svg {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    flex-shrink: 0;
-    background-color: transparent;
+.searchBar input::placeholder {
+    color: #9ca3af;
 }
 
-.searchBar input, .searchBar svg {
-    box-sizing: content-box;
-    padding: 0.7rem;
-}
-
-.searchBar button:hover svg {
-    fill: var(--primary-dark);
-}
-
-/* ============================================================= */
-
-.filters {
-    display: flex;
-    flex-direction: column;
-    padding: 2rem;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: var(--shadow);
-    row-gap: 2rem;
-}
-
-/* ============================================================= */
-
-.resultCount {
-    display: block;
-    text-align: center;
-}
-
-.results {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 2rem;
-}
-
-@media (max-width: 1024px) {
-    .main {
-        padding: 1rem;
-    }
-    .results {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media (max-width: 600px) {
-    .results {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ============================================================= */
-.paginationButtons {
-    width: fit-content;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    border-radius: 15px;
-    overflow: hidden;
-    background-color: white;
-    border: 1px solid var(--primary-dark);
-}
-
-.paginationButtons button {
-    border: none;
-    padding: 1rem;
-    background-color: white;
-    cursor: pointer;
-    font-weight: 700;
-    transition: 0.15s ease-in-out;
-}
-
-.paginationButtons button:hover {
+.searchSubmit {
     background-color: var(--primary-dark);
     color: white;
+    border: none;
+    border-radius: 9999px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
-.error {
-    animation-name: fadein;
+.searchSubmit:hover {
+    background-color: var(--primary-darker, #0d3b22); /* Ajuste se não tiver a var darker */
 }
 
-@keyframes fadein {
-    from {
-        opacity: 0;
+/* --- Painel de Filtros --- */
+.filtersPanel {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.filtersHeader {
+    background-color: #f3f4f6;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.95rem;
+}
+
+.filtersContent {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* --- Resultados --- */
+.resultsHeader {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 2rem;
+}
+
+.resultCount {
+    font-size: 0.95rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.resultsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* --- Paginação --- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pageButton {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pageButton:hover:not(:disabled) {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.pageButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f9fafb;
+}
+
+.pageIndicator {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+    .resultsHeader {
+        margin: 0 auto;
     }
-    to {
-        opacity: 1;
+    
+    .pageTitle {
+        font-size: 2rem;
+    }
+    
+    .searchBar {
+        padding: 0.5rem;
+    }
+    
+    .searchBar input {
+        width: 100%;
+    }
+
+    
+    .resultsGrid {
+        grid-template-columns: 1fr;
     }
 }
