@@ -1,125 +1,177 @@
-.imagesForm {
-	border: 1px solid rgba(230, 230, 230);
-	border-radius: 7px;
-	padding: 2rem;
-	display: flex;
-	flex-direction: column;
-	gap: 2rem;
+/* Container Principal */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-.header {
-	font-size: 1.5rem;
-	text-align: center;
+.header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
 }
 
-.imageInput {
-	display: none;
+.header p {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
 }
 
-.addImageButton {
-	background-color: transparent;
-	border-radius: 5px;
-	color: var(--primary-dark);
-	border: 1px solid var(--primary-dark);
-	padding: 1rem;
-	cursor: pointer;
-	width: 100%;
-
+/* Área de Upload (Estilo Dropzone) */
+.hiddenInput {
+  display: none;
 }
 
-.addImageButton:hover {
-	background-color: var(--primary-dark);
-	color: white;
+.uploadArea {
+  border: 2px dashed #d1d5db;
+  border-radius: 10px;
+  background-color: #f9fafb;
+  padding: 2.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+.uploadArea:hover {
+  border-color: var(--primary-dark, #3b82f6);
+  background-color: #f0fdf4; /* Ou uma cor neutra puxada pro seu tema */
+}
+
+.uploadContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.iconWrapper svg {
+  width: 40px;
+  height: 40px;
+  fill: #9ca3af;
+  transition: fill 0.2s;
+}
+
+.uploadArea:hover .iconWrapper svg {
+  fill: var(--primary-dark, #3b82f6);
+}
+
+.uploadText {
+  font-size: 1rem;
+  color: #374151;
+}
+
+.uploadText strong {
+  color: var(--primary-dark, #3b82f6);
+  font-weight: 600;
+}
+
+.uploadSubtext {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* Grid de Preview */
 .previewGrid {
-	border-top: 1px solid rgba(230, 230, 230);
-	padding-top: 2rem;
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-top: 0.5rem;
 }
 
-.imageGroup {
-	position: relative;
+/* Card da Imagem */
+.imageCard {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #f3f4f6;
 }
 
-.imageGroup button {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	border: 2px solid rgb(255, 57, 57);
-	border-radius: 50%;
-	z-index: 100000;
-	background-color: transparent;
-	padding: 0.3rem;
-	cursor: pointer;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.imageCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
 }
 
-.imageGroup button svg {
-	width: 15px;
-	height: 15px;
-	fill: rgb(255, 86, 86);
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.3s ease;
 }
 
-.imageGroup button:hover {
-	background-color: rgb(255, 66, 66);
+.imageCard:hover .image {
+  transform: scale(1.05);
 }
 
-.imageGroup button:hover svg {
-	fill: white;
+/* Botão de Remover (Glassmorphism) */
+.removeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
 }
 
-.previewGrid img {
-	width: 100%;
-	height: auto;
-	border-radius: 5px;
-	transition: transform 0.2s ease-in-out;
-	aspect-ratio: 16/9;
-	object-fit: cover;
-	object-position: center;
-	cursor: pointer;
+.removeButton svg {
+  width: 14px;
+  height: 14px;
+  fill: #ef4444; /* Vermelho mais moderno */
+  transition: fill 0.2s ease;
 }
 
-.imageGroup {
-	transition: transform 0.2s ease-in-out;
-	border-radius: 5px;
+.removeButton:hover {
+  background-color: #ef4444;
+  border-color: #ef4444;
+  transform: scale(1.1);
 }
 
-.imageGroup:hover {
-	transform: scale(1.05);
+.removeButton:hover svg {
+  fill: #ffffff;
 }
 
+/* Estado Vazio */
 .previewEmpty {
-	width: 100%;
-	aspect-ratio: 16/9;
-	border: 1px solid var(--primary-dark);
-	border-radius: 5px;
-	padding: 1rem;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	grid-column-start: 1;
-	grid-column-end: -1;
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 3rem 0;
+  color: #9ca3af;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  border: 1px dashed #e5e7eb;
 }
 
 .previewEmpty svg {
-	width: 50px;
-	height: 50px;
-	fill: var(--primary-dark);
-}
-
-@media (max-width: 1024px) {
-	.previewGrid {
-		grid-template-columns: 1fr 1fr;
-	}
-}
-
-@media (max-width: 768px) {
-	.previewGrid {
-		grid-template-columns: 1fr;
-	}
+  width: 32px;
+  height: 32px;
+  fill: #d1d5db;
 }
