@@ -13,6 +13,7 @@ import SuccessScreen from "./components/success-screen/SuccessScreen"
 import useSubmit from "./hooks/useSubmit.js"
 import useGreenRoofForm from "./hooks/useGreenRoofForm.js"
 import ContextProvider from "./providers/ContextProvider.jsx"
+import { motion } from "framer-motion"
 
 export default function CreateGreenRoof() {
   const submit = useSubmit();
@@ -31,36 +32,65 @@ export default function CreateGreenRoof() {
   }
   
   return (
-    <ContextProvider {...form}>
-      <ActionBar/>
-      <Container>
-        <div className={styles.header}>
-          <h1>Adicionar Telhado</h1>
-          <p>Contribua para a expansão do catálogo de telhados já registrados na região da cidade do Recife!</p>
-        </div>
-        <div className={styles.infos}>
-          <Tabs defaultValue="Informações">
-            <Tabs.List>
-              <Tabs.Trigger value="Informações">Informações</Tabs.Trigger>
-              <Tabs.Trigger value="Reservatório">Reservatório</Tabs.Trigger>
-              <Tabs.Trigger value="Imagens">Imagens</Tabs.Trigger>
-              <Tabs.Trigger value="Salvar">Salvar</Tabs.Trigger>
-            </Tabs.List>
-            <Tabs.Content value="Informações">
-              <TechnicalSection />
-            </Tabs.Content>
-            <Tabs.Content value="Reservatório">
-              <ReservoirSection />
-            </Tabs.Content>
-            <Tabs.Content value="Imagens">
-              <ImageSection />
-            </Tabs.Content>
-            <Tabs.Content value="Salvar">
-              <SaveSection handleSubmit={ () => submit(form.state) } />
-            </Tabs.Content>
-          </Tabs>
-        </div>
-      </Container>
-    </ContextProvider>
+    /* Novo wrapper para dar vida ao fundo inteiro da página */
+    <div className={styles.pageWrapper}>
+      <ContextProvider {...form}>
+        <ActionBar/>
+        <Container>
+          <motion.div 
+            className={styles.header}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {/* Novo Badge e Copy */}
+            <span className={styles.badge}>🌿 Mapeamento Verde</span>
+            
+            <h1>
+              Cultive um novo <br/>
+              <span className={styles.highlight}>Telhado Verde</span>
+            </h1>
+            
+            <p>
+              Ajude a transformar a paisagem urbana do Recife. Cada telhado registrado 
+              é um passo em direção a uma cidade mais sustentável, fresca e conectada com a natureza!
+            </p>
+          </motion.div>
+          
+          <motion.div 
+            className={styles.infos}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <Tabs defaultValue="Informações">
+              <div className={styles.tabsWrapper}>
+                <Tabs.List>
+                  <Tabs.Trigger value="Informações">Informações</Tabs.Trigger>
+                  <Tabs.Trigger value="Reservatório">Reservatório</Tabs.Trigger>
+                  <Tabs.Trigger value="Imagens">Imagens</Tabs.Trigger>
+                  <Tabs.Trigger value="Salvar">Salvar</Tabs.Trigger>
+                </Tabs.List>
+              </div>
+              
+              <div className={styles.tabContentArea}>
+                <Tabs.Content value="Informações">
+                  <TechnicalSection />
+                </Tabs.Content>
+                <Tabs.Content value="Reservatório">
+                  <ReservoirSection />
+                </Tabs.Content>
+                <Tabs.Content value="Imagens">
+                  <ImageSection />
+                </Tabs.Content>
+                <Tabs.Content value="Salvar">
+                  <SaveSection handleSubmit={() => submit(form.state)} />
+                </Tabs.Content>
+              </div>
+            </Tabs>
+          </motion.div>
+        </Container>
+      </ContextProvider>
+    </div>
   );
 }
