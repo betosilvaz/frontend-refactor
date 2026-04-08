@@ -1,67 +1,129 @@
-.formSection {
-    margin-bottom: 2rem;
+.technicalDataForm {
     display: flex;
     flex-direction: column;
-    row-gap: 1rem;
+    gap: 2rem;
+}
+
+.cardSection {
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .sectionHeader {
-    font-size: 1.5rem;
+    margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 3px solid rgba(230, 230, 230);
+    border-bottom: 1px solid #f3f4f6;
 }
 
-/* ### INFORMATION FORM STYLES */
-.mapButton, .actualLocationButton {
-    padding: 0.7rem 0;
-    border-radius: 5px;
+.sectionHeader h2 {
+    font-size: 1.25rem;
     font-weight: 600;
+    color: var(--primary-dark, #111827);
+    margin-bottom: 0.25rem;
+}
+
+.sectionHeader p {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.formGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Map Controls Styling */
+.mapControlsContainer {
+    background-color: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.mapActions {
+    display: flex;
+    gap: 1rem;
+}
+
+.mapButton, .actualLocationButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
     cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
 }
 
 .mapButton {
-    background-color: #84b38d57;
-    border: 1px solid var(--primary-dark);
-    color: var(--primary-dark);
-    transition: 0.2s ease-in-out;
+    background-color: var(--primary-color, #10b981);
+    border: 1px solid transparent;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
 }
 
 .mapButton:hover {
-    background-color: #84b38d7d;
+    background-color: var(--primary-dark, #059669);
+    transform: translateY(-1px);
 }
 
 .actualLocationButton {
     background-color: white;
-    border: 1px solid rgba(220, 220, 220);
-    color: #333333;
-    transition: 0.2s ease-in-out;
+    border: 1px solid #cbd5e1;
+    color: #475569;
 }
 
 .actualLocationButton:hover {
-    background-color: rgba(245, 245, 245);
-    border: 1px solid rgba(200, 200, 200);
+    background-color: #f1f5f9;
+    border-color: #94a3b8;
+    color: #0f172a;
 }
 
 .textarea {
     resize: vertical;
-    size: 100%;
+    min-height: 120px;
+    width: 100%;
     padding: 1rem;
-    border-radius: 5px;
-    border: 1px solid #CCCC;
-    outline: none;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+    color: #374151;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
 }
 
 .textarea:focus {
     outline: none;
+    border-color: var(--primary-color, #10b981);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    background-color: #ffffff;
+}
+
+.checkboxGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 0.5rem;
 }
 
 .required {
-    color: red;
+    color: #ef4444;
+    margin-left: 0.25rem;
 }
 
 @media (max-width: 600px) {
-    .sectionHeader {
-        font-size: 1.1rem;
-    }
-
+    .cardSection { padding: 1.5rem; }
+    .mapActions { flex-direction: column; }
 }
