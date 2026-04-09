@@ -48,11 +48,11 @@ export default function Login() {
           <h2>Entrar</h2>
           <FormGroup>
             <label htmlFor='email'>Email</label>
-            <Input type="email" name="email" id="email" placeholder="johndoe@example.com" onChange={handleChange} />
+            <Input type="email" name="email" id="email" placeholder="johndoe@example.com" value={form.email} onChange={handleChange} />
           </FormGroup>
           <FormGroup>
             <label htmlFor='password'>Senha</label>
-            <Input type="password" name="password" id="password" placeholder="********" onChange={handleChange} />
+            <Input type="password" name="password" id="password" placeholder="********" value={form.password} onChange={handleChange} />
           </FormGroup>
           <Link to="/forgot-password" className={styles.forgotPasswordLink}>Esqueci a senha</Link>
           <Button type="submit" onClick={submit}>Entrar</Button>
