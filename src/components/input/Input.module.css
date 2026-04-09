@@ -1,6 +1,116 @@
 .input {
-    padding: 0.5rem;
-    border-radius: 5px;
-    border: 1px solid #CCCC;
+    width: 100%; /* Ocupa o tamanho do container pai por padrão */
     min-width: 0;
+    padding: 0.625rem 0.875rem; /* Espaçamento mais confortável (10px 14px) */
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #1f2937; /* Cor de texto escura e legível */
+    background-color: #ffffff;
+    border: 1px solid #d1d5db; /* Borda cinza suave */
+    border-radius: 6px; /* Borda levemente mais arredondada */
+    outline: none;
+    
+    /* Transição suave ao interagir */
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Estilo para o texto do placeholder */
+.input::placeholder {
+    color: #9ca3af;
+}
+
+/* Estado de Foco (Crucial para acessibilidade e elegância) */
+.input:focus {
+    border-color: #3b82f6; /* Azul moderno */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* Anel de foco suave */
+}
+
+/* Estado Desativado (Disabled) */
+.input:disabled {
+    background-color: #f3f4f6;
+    color: #6b7280;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* Estado de Erro (Quando props.hasError for true) */
+.error {
+    border-color: #ef4444; /* Vermelho alerta */
+}
+
+.error:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+}
+
+/* ESTILOS ESPECÍFICOS ANTERIORES (MANTIDOS) */
+.input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.input[type="number"]::-webkit-inner-spin-button,
+.input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.input[type="password"] {
+    letter-spacing: 0.15em;
+    font-family: monospace;
+}
+
+.input[type="password"]::placeholder {
+    letter-spacing: normal;
+    font-family: inherit;
+}
+
+.input[type="password"]::-ms-reveal,
+.input[type="password"]::-ms-clear {
+    display: none;
+}
+
+
+/* ==========================================================
+   NOVOS ESTILOS PARA O BOTÃO DE VISIBILIDADE DA SENHA
+   ========================================================== */
+
+/* Container para o input e o botão */
+.inputContainer {
+    position: relative;
+    width: 100%;
+}
+
+/* Classe condicional para o input quando houver ícone, para evitar sobreposição de texto */
+.input.hasIcon {
+    /* Padding original à direita (0.875rem) + tamanho do ícone (1.25rem) + um pequeno espaço extra (0.375rem) */
+    padding-right: 2.5rem; 
+}
+
+/* Estilos para o botão que alterna a visibilidade */
+.passwordToggle {
+    position: absolute;
+    right: 0.875rem; /* Alinhado com o padding horizontal original do input */
+    top: 50%;
+    transform: translateY(-50%); /* Centraliza verticalmente */
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #6b7280; /* Cor sutil para o ícone, similar ao placeholder/texto desativado */
+    display: flex; /* Para centralizar o ícone dentro do botão */
+    align-items: center;
+    justify-content: center;
+    outline: none;
+}
+
+/* Sutil efeito de hover/foco no ícone para feedback visual */
+.passwordToggle:hover .icon,
+.passwordToggle:focus .icon {
+    color: #1f2937;
+}
+
+.icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    transition: color 0.15s ease-in-out;
 }
