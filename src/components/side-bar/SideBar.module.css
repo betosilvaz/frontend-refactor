@@ -39,9 +39,26 @@
 .brandTitle {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #1e293b;
     margin: 0;
     letter-spacing: -0.025em;
+
+    color: #15803d;
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+}
+
+.brandTitle::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    left: -2%;
+    width: 104%;
+    height: 14px;
+    background-color: #bbf7d0;
+    z-index: -1;
+    transform: rotate(-1.5deg);
+    border-radius: 4px;
 }
 
 /* Navegação */
