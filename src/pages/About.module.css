@@ -1,0 +1,323 @@
+:root {
+    --color-text-main: #1f2937;
+    --color-text-muted: #4b5563;
+    --color-emerald-main: #059669;
+    --color-border: rgba(229, 231, 235, 0.5);
+}
+
+.sobreContainer {
+    min-height: 100vh;
+    background-color: #fafafa;
+    background-size: 100% 100%, 100% 100%, 24px 24px;
+    color: var(--color-text-main);
+    font-family: system-ui, -apple-system, sans-serif;
+    padding-bottom: 4rem;
+}
+
+.sobreContainer ::selection {
+    background-color: #d1fae5;
+}
+
+/* Hero Section */
+.heroSection {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 3rem;
+    text-align: center;
+}
+
+.badge {
+    display: inline-block;
+    background-color: #dcfce7;
+    color: #166534;
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(22, 101, 52, 0.1);
+}
+
+.heroTitle {
+    font-size: 2.75rem;
+    font-weight: 800;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+}
+
+.highlight {
+    color: #15803d;
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+}
+
+.highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 6px;
+    left: -2%;
+    width: 104%;
+    height: 14px;
+    background-color: #bbf7d0;
+    z-index: -1;
+    transform: rotate(-1.5deg);
+    border-radius: 4px;
+}
+
+.heroSubtitle {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    max-width: 42rem;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .heroTitle {
+        font-size: 2.25rem;
+    }
+}
+
+/* Main Content Floating Container */
+.mainContent {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.floatingContent {
+    background-color: #ffffff;
+    border-radius: 20px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), 0 10px 15px -5px rgba(0, 0, 0, 0.03);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    position: relative;
+    z-index: 10;
+}
+
+@media (min-width: 768px) {
+    .floatingContent {
+        padding: 4rem;
+    }
+}
+
+/* Cards Grid */
+.infoGrid {
+    display: grid;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .infoGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.card {
+    background-color: #fafafa;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    border: 1px solid var(--color-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.cardHeader h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.cardText {
+    color: var(--color-text-muted);
+    line-height: 1.625;
+    font-size: 0.95rem;
+}
+
+/* Utility / Icons */
+.iconWrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem;
+    border-radius: 0.75rem;
+}
+
+.blueBg {
+    background-color: #eff6ff;
+    color: #2563eb;
+}
+
+.orangeBg {
+    background-color: #fff7ed;
+    color: #ea580c;
+}
+
+/* Team Section */
+.sectionHeader {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.sectionHeader h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.025em;
+}
+
+.divider {
+    width: 3rem;
+    height: 0.25rem;
+    background-color: #15803d;
+    margin: 0 auto;
+    border-radius: 9999px;
+}
+
+.teamGrid {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+    .teamGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.teamMember {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.avatar {
+    width: 4.5rem;
+    height: 4.5rem;
+    background-color: #f3f4f6;
+    color: #6b7280;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    border: 1px solid var(--color-border);
+}
+
+.teamMember h3 {
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+}
+
+.teamMember .role {
+    font-size: 0.875rem;
+    color: #15803d;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.teamMember .description {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+/* Support Section */
+.supportSection {
+    border-top: 1px solid #f3f4f6;
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    justify-content: space-between;
+}
+
+@media (min-width: 768px) {
+    .supportSection {
+        flex-direction: row;
+        padding-top: 2.5rem;
+    }
+}
+
+.supportInfo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.iconAward {
+    color: #15803d;
+}
+
+.supportInfo h4 {
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+}
+
+.supportInfo p {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+.cnpqBadge {
+    padding: 0.5rem 1.25rem;
+    background-color: #1e3a8a;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    border-radius: 9999px;
+    /* Pill shape para combinar com a nova estética */
+    font-size: 0.875rem;
+    box-shadow: 0 2px 4px rgba(30, 58, 138, 0.2);
+}
+
+.backButton {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-darker);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}
+
+.backButton:hover {
+    background-color: var(--primary);
+    transform: translateX(-4px);
+}
+
+@media (max-width: 768px) {
+    .backButton {
+        top: 1rem;
+        left: 1rem;
+    }
+}
