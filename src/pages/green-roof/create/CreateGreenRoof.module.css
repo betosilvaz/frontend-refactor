@@ -1,12 +1,6 @@
-/* Novo fundo da página com padrão de bolinhas e gradiente verde suave */
 .pageWrapper {
     min-height: 100vh;
     background-color: #fafafa;
-    /* Mesh gradient + Dotted pattern */
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(220, 252, 231, 0.6) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(187, 247, 208, 0.6) 0px, transparent 50%),
-        radial-gradient(#e5e7eb 1.5px, transparent 1.5px);
     background-size: 100% 100%, 100% 100%, 24px 24px;
     padding-bottom: 4rem;
 }
