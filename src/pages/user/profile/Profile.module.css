@@ -1,20 +1,95 @@
-/* Container Principal: Ocupa mais espaço na tela */
-.box {
-    width: 100%;
-    max-width: 1200px;
-    margin: 40px auto;
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 40px;
-    align-items: start;
+.pageWrapper {
+    min-height: 100vh;
+    background-color: #fafafa;
+    background-size: 100% 100%, 100% 100%, 24px 24px;
+    padding-bottom: 4rem;
+    font-family: system-ui, -apple-system, sans-serif;
+    padding: 1rem;
 }
 
-/* Coluna da Esquerda: Resumo do Perfil */
-.profileHeader {
+/* --- Cabeçalho --- */
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+    max-width: 650px;
+    margin-inline: auto;
+    padding-top: 2rem;
+}
+
+.badge {
+    display: inline-block;
+    background-color: #dcfce7;
+    color: #166534;
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(22, 101, 52, 0.1);
+}
+
+.pageTitle {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 1rem 0;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+}
+
+.highlight {
+    color: #15803d;
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+}
+
+.highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 6px;
+    left: -2%;
+    width: 104%;
+    height: 14px;
+    background-color: #bbf7d0;
+    z-index: -1;
+    transform: rotate(-1.5deg);
+    border-radius: 4px;
+}
+
+.pageSubtitle {
+    color: #4b5563;
+    font-size: 1.15rem;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* --- Layout Grid --- */
+.layoutGrid {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 2rem;
+    align-items: start;
+    position: relative;
+    z-index: 10;
+}
+
+/* --- Cartões Flutuantes --- */
+.profileCard, .formCard {
     background-color: #ffffff;
-    padding: 40px 24px;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
+    border-radius: 20px;
+    border: 1px solid rgba(229, 231, 235, 0.8);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), 0 10px 15px -5px rgba(0, 0, 0, 0.03);
+}
+
+/* Coluna da Esquerda: Resumo */
+.profileCard {
+    padding: 3rem 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,147 +99,271 @@
 .avatarContainer {
     width: 120px;
     height: 120px;
-    background-color: #d1fae5;
+    background-color: #f0fdf4;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 24px;
+    margin-bottom: 1.5rem;
     border: 4px solid #ffffff;
-    box-shadow: var(--shadow);
+    box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.15);
 }
 
 .userIcon {
-    width: 56px;
-    height: 56px;
     color: #059669;
 }
 
 .headerTitle {
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: 700;
-    color: #2d3748;
-    margin: 0 0 8px 0;
+    color: #0f172a;
+    margin: 0 0 0.5rem 0;
 }
 
 .headerSubtitle {
-    font-size: 16px;
-    color: #718096;
+    font-size: 0.9rem;
+    color: #059669;
     margin: 0;
-    background-color: #edf2f7;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-weight: 500;
+    background-color: #dcfce7;
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
 /* Coluna da Direita: Formulário */
+.formCard {
+    padding: 3rem;
+}
+
 .form {
-    background-color: #ffffff;
-    padding: 48px;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
-    gap: 48px;
-    /* Espaço generoso entre as seções */
+    gap: 3rem;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.sectionIcon {
+    color: #059669;
 }
 
 .sectionTitle {
-    font-size: 20px;
+    font-size: 1.25rem;
     font-weight: 600;
-    color: #2d3748;
-    margin-bottom: 24px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #edf2f7;
-    /* Linha divisória para dar estrutura */
+    color: #0f172a;
+    margin: 0;
 }
 
+/* Magia do Modo de Visualização */
 .form[data-state="viewing"] input:disabled {
     background-color: transparent;
     border-color: transparent;
-    color: #718096;
+    color: #334155;
     padding-left: 0;
     font-weight: 500;
     cursor: default;
+    box-shadow: none;
+    opacity: 1;
 }
 
 /* Segurança e Ações */
 .securityRow {
-    padding: 16px;
+    padding: 1.25rem 1.5rem;
     background-color: #fffaf0;
-    /* Fundo levemente destacado */
     border: 1px solid #feebc8;
-    border-radius: 8px;
+    border-radius: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.securityInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #c05621;
+    font-weight: 500;
+}
+
+.securityIcon {
+    color: #dd6b20;
 }
 
 .ghostButton {
     color: #dd6b20;
     font-weight: 600;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background-color 0.2s;
 }
 
 .ghostButton:hover {
-    text-decoration: underline;
+    background-color: #feebc8;
 }
 
-/* Botões base da página */
+/* Botões de Ação */
 .actionGroup {
     display: flex;
     justify-content: flex-end;
-    gap: 16px;
-    margin-top: 16px;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #f1f5f9;
 }
 
 .primaryButton,
-.secondaryButton {
-    padding: 14px 28px;
-    font-size: 16px;
+.secondaryButton,
+.successButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     border: none;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
 }
 
+/* Botão de Editar */
 .primaryButton {
-    background-color: #d1fae5;
-    border: 1px solid #059669;
-    color: #059669;
+    background-color: #f8fafc;
+    color: #0f172a;
+    border: 1px solid #e2e8f0;
 }
 
 .primaryButton:hover {
-    background-color: #059669;
-    color: white;
-    transform: translateY(-2px);
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
 }
 
+/* Botão de Cancelar */
 .secondaryButton {
-    background-color: #edf2f7;
-    color: #4a5568;
+    background-color: transparent;
+    color: #64748b;
 }
 
 .secondaryButton:hover {
-    background-color: #e2e8f0;
+    background-color: #f1f5f9;
+    color: #0f172a;
 }
 
-/* Responsividade: Quebra para uma coluna em telas menores */
+/* Botão de Salvar */
+.successButton {
+    background-color: #059669;
+    color: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2);
+}
+
+.successButton:hover {
+    background-color: #047857;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 8px -1px rgba(5, 150, 105, 0.3);
+}
+
+/* Responsividade */
 @media (max-width: 992px) {
-    .box {
+    .layoutGrid {
         grid-template-columns: 1fr;
-        /* Volta para coluna única */
-        gap: 24px;
-        padding: 0 16px;
+        gap: 2rem;
     }
 
-    .profileHeader {
-        position: static;
+    .formCard {
+        padding: 2rem 1.5rem;
     }
+    
+    .securityRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .ghostButton {
+        padding-left: 0;
+    }
+}
 
-    .form {
-        padding: 32px 24px;
-    }
+
+/* Adicione ou atualize estas classes no Profile.module.css */
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%; /* Garante que preencha a ResponsiveRow */
+}
+
+.formGroup label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputIcon {
+    position: absolute;
+    left: 1rem;
+    color: #94a3b8;
+    opacity: 0.6;
+    pointer-events: none;
+    transition: color 0.3s ease;
+}
+
+.inputWrapper input {
+    width: 100%;
+    padding: 0.875rem 1rem 0.875rem 2.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background-color: #FAFAFA;
+    color: #1e293b;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+/* Estado de Foco (baseado no Login) */
+.inputWrapper input:focus:not(:disabled) {
+    border-color: #059669; /* Cor verde que você usa no profile */
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
+.inputWrapper input:focus + .inputIcon {
+    color: #059669;
+    opacity: 1;
+}
+
+/* Reset para o modo de visualização (mantendo sua lógica original de "viewing") */
+.form[data-state="viewing"] .inputWrapper input:disabled {
+    background-color: transparent;
+    border-color: transparent;
+    color: #334155;
+    padding-left: 0;
+    font-weight: 500;
+    cursor: default;
+    box-shadow: none;
+    opacity: 1;
+}
+
+/* Esconde o ícone quando estiver apenas visualizando para um look mais limpo */
+.form[data-state="viewing"] .inputIcon {
+    display: none;
 }
