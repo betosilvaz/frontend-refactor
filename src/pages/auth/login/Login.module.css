@@ -1,88 +1,266 @@
+/*
+ * ================================================
+ * LAYOUT PRINCIPAL
+ * ================================================
+ */
+.pageBackground {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background);
+  padding: 1rem;
+  position: relative;
+}
+
+.backButton {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-darker);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.backButton:hover {
+  background-color: var(--primary);
+  transform: translateX(-4px);
+}
+
 .panel {
-    min-width: 0;
-    width: min(900px, 100%);
-    min-height: 70vh;
-    max-height: 100vh;
-    overflow: auto;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-    border-radius: 10px;
-    background-color: white;
-    margin: 1rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
+  width: min(1000px, 100%);
+  min-height: 600px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden; /* Mantém a imagem contida nas bordas arredondadas */
 }
 
 @media (max-width: 768px) {
-    .panel {
-        grid-template-columns: 1fr;
-        margin: 0;
-        height: 100vh;
-    }
+  .panel {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  
+  .backButton {
+    top: 1rem;
+    left: 1rem;
+  }
 }
 
 /*
  * ================================================
- *                    IMAGEM
+ * IMAGEM
  * ================================================
  */
-
 .panelImage {
-    background-image: url(https://upload.wikimedia.org/wikipedia/commons/4/40/Green_roof.jpg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    height: 100%;
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/40/Green_roof.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+/* Um degradê sobre a imagem para dar um toque mais luxuoso/profissional */
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(28, 77, 63, 0.9), rgba(58, 158, 130, 0.3));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 3rem;
+  color: white;
+}
+
+.imageOverlay h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.imageOverlay p {
+  font-size: 1rem;
+  opacity: 0.9;
 }
 
 @media (max-width: 768px) {
-    .panelImage {
-        display: none;
-    }
+  .panelImage {
+    display: none;
+  }
 }
-
 
 /*
  * ==================================================
- *                     FORMULARIO
+ * FORMULÁRIO
  * ==================================================
  */
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+}
+
 .form {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
-.form h2 {
-    text-align: center;
-    font-weight: 600;
-    margin-bottom: 2rem;
+.header {
+  text-align: left;
+  margin-bottom: 1rem;
 }
 
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+.header h2 {
+  color: var(--primary-darker);
+  font-weight: 700;
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
 }
 
-.row > * {
-    flex-grow: 1;
-    flex-shrink: 1;
-    min-width: 0;
+.header p {
+  color: var(--secondary-dark);
+  font-size: 0.9rem;
 }
 
-.message {
-    text-align: center;
+/* Campos de Input */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.message a {
-    color: var(--link);
+.labelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.formGroup label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color);
 }
 
 .forgotPasswordLink {
-    color: var(--link);
+  font-size: 0.85rem;
+  color: var(--link);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.forgotPasswordLink:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 1rem;
+  color: var(--secondary-dark);
+  opacity: 0.6;
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+
+.inputWrapper input {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 2.75rem;
+  border: 1px solid var(--secondary);
+  border-radius: 10px;
+  background-color: #FAFAFA;
+  color: var(--color);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+/* Feedback visual moderno ao focar no input */
+.inputWrapper input:focus {
+  border-color: var(--primary-dark);
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(58, 158, 130, 0.15);
+}
+
+.inputWrapper input:focus + .inputIcon,
+.inputWrapper:focus-within .inputIcon {
+  color: var(--primary-dark);
+  opacity: 1;
+}
+
+/* Botão de Submit */
+.submitButton {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: var(--primary-dark);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: var(--primary-darker);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(28, 77, 63, 0.2);
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Mensagem de Rodapé */
+.message {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--secondary-dark);
+  margin-top: 1rem;
+}
+
+.message a {
+  color: var(--primary-dark);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.message a:hover {
+  color: var(--primary-darker);
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .formContainer {
+    padding: 2rem 1.5rem;
+  }
 }
