@@ -1,6 +1,7 @@
 import styles from './Reports.module.css';
-
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FileText, Download, Trash2, Plus, FileBarChart } from 'lucide-react';
 
 import Container from '@components/container/Container';
 import ActionBar from '@components/action-bar/ActionBar';
@@ -14,77 +15,122 @@ export default function Reports() {
   ]);
 
   const handleGenerateReport = () => {
-    // Lógica para gerar novo relatório
     alert('Iniciando geração de um novo relatório...');
   };
 
   const handleDownload = (id) => {
-    // Lógica para baixar o PDF
     alert(`Baixando relatório ${id}...`);
   };
 
   const handleDelete = (id) => {
-    // Lógica para deletar
-    if (window.confirm('Tem certeza que deseja deletar este relatório?')) {
-      setReports(reports.filter(report => report.id !== id));
+    if (window.confirm('Tem certeza de que deseja eliminar este relatório?')) {
+      setReports(reports.filter((report) => report.id !== id));
     }
   };
 
+  // Variantes de animação para a lista
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+  };
+
   return (
-    <Container>
+    <div className={styles.pageWrapper}>
       <ActionBar />
-      <div className={styles.container}>
-        <header className={styles.header}>
-          <div>
-            <h1 className={styles.title}>Relatórios</h1>
-            <p className={styles.subtitle}>Gerencie e baixe seus documentos em PDF</p>
+      <Container>
+        {/* Cabeçalho Principal da Página */}
+        <motion.header
+          className={styles.header}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className={styles.badge}>Central de Dados</span>
+          <h1 className={styles.title}>
+            Gestão de <span className={styles.highlight}>Relatórios</span>
+          </h1>
+          <p className={styles.subtitle}>
+            Aceda, faça a gestão e baixe os seus documentos e métricas do sistema em formato PDF.
+          </p>
+        </motion.header>
+
+        {/* Área Flutuante de Conteúdo */}
+        <motion.div
+          className={styles.floatingContent}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className={styles.toolbar}>
+            <div className={styles.toolbarTitle}>
+              <FileBarChart size={20} className={styles.toolbarIcon} />
+              <h2>Documentos Recentes</h2>
+            </div>
+            <button className={styles.generateBtn} onClick={handleGenerateReport}>
+              <Plus size={18} />
+              <span>Novo Relatório</span>
+            </button>
           </div>
-          <button className={styles.generateBtn} onClick={handleGenerateReport}>
-            + Novo Relatório
-          </button>
-        </header>
 
-        <div className={styles.listContainer}>
-          {reports.length === 0 ? (
-            <div className={styles.emptyState}>Nenhum relatório disponível.</div>
-          ) : (
-            <ul className={styles.reportList}>
-              {reports.map((report) => (
-                <li key={report.id} className={styles.reportItem}>
-
-                  <div className={styles.reportInfo}>
-                    <div className={styles.reportIcon}>📄</div>
-                    <div>
-                      <h2 className={styles.reportTitle}>{report.title}.pdf</h2>
-                      <span className={styles.reportMeta}>
-                        Criado em: {new Date(report.date).toLocaleDateString('pt-BR')} • {report.size}
-                      </span>
+          <div className={styles.listContainer}>
+            {reports.length === 0 ? (
+              <div className={styles.emptyState}>
+                <FileText size={48} className={styles.emptyIcon} />
+                <p>Nenhum relatório disponível no momento.</p>
+              </div>
+            ) : (
+              <motion.ul
+                className={styles.reportList}
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+              >
+                {reports.map((report) => (
+                  <motion.li key={report.id} className={styles.reportItem} variants={itemVariants}>
+                    <div className={styles.reportInfo}>
+                      <div className={styles.iconWrapper}>
+                        <FileText size={24} />
+                      </div>
+                      <div className={styles.reportDetails}>
+                        <h3 className={styles.reportTitle}>{report.title}.pdf</h3>
+                        <span className={styles.reportMeta}>
+                          Criado a: {new Date(report.date).toLocaleDateString('pt-PT')} • {report.size}
+                        </span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className={styles.actions}>
-                    <button
-                      className={styles.downloadBtn}
-                      onClick={() => handleDownload(report.id)}
-                      title="Baixar PDF"
-                    >
-                      Baixar
-                    </button>
-                    <button
-                      className={styles.deleteBtn}
-                      onClick={() => handleDelete(report.id)}
-                      title="Deletar Relatório"
-                    >
-                      Excluir
-                    </button>
-                  </div>
-
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-    </Container>
+                    <div className={styles.actions}>
+                      <button
+                        className={styles.downloadBtn}
+                        onClick={() => handleDownload(report.id)}
+                        title="Baixar PDF"
+                      >
+                        <Download size={18} />
+                        <span className={styles.btnText}>Baixar</span>
+                      </button>
+                      <button
+                        className={styles.deleteBtn}
+                        onClick={() => handleDelete(report.id)}
+                        title="Excluir Relatório"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            )}
+          </div>
+        </motion.div>
+      </Container>
+    </div>
   );
 }
