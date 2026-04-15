@@ -21,7 +21,7 @@ export default function SearchGreenRoof() {
 
   const options = [
     {name: "Intensivo", value: "intensivo"},
-    {name: "Semi-Intensivo", value: "semi-intensivo"},
+    {name: "Semi-Intensivo", value: "semi_intensivo"},
     {name: "Extensivo", value: "extensivo"}
   ]
 
@@ -62,20 +62,6 @@ export default function SearchGreenRoof() {
       page: direction === "back" ? Math.max(0, prev.page - 1) : prev.page + 1
     }));
   }
-
-  // Variantes de Animação
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-  };
 
   return (
     <div className={styles.pageWrapper}>
@@ -165,18 +151,18 @@ export default function SearchGreenRoof() {
               <p>Nenhum telhado verde encontrado com estes filtros.</p>
             </div>
           ) : (
-            <motion.section 
-              className={styles.resultsGrid}
-              variants={containerVariants}
-              initial="hidden"
-              animate="show"
-            >
+            <section className={styles.resultsGrid}>
               {results.map((c, index) => (
-                <motion.div key={c.id || index} variants={itemVariants}>
+                <motion.div 
+                  key={c.id || `page-${form.page}-index-${index}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                >
                   <Card data={c}/>
                 </motion.div>
               ))}
-            </motion.section>
+            </section>
           )}
 
           {results.length > 0 && (

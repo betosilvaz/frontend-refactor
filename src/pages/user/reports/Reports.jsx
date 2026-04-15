@@ -1,45 +1,97 @@
 import styles from './Reports.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FileText, Download, Trash2, Plus, FileBarChart } from 'lucide-react';
 
 import Container from '@components/container/Container';
 import ActionBar from '@components/action-bar/ActionBar';
+import toast from 'react-hot-toast';
+
+import { API_URL } from '@config/api/api';
+
+// Variantes de animação para a lista
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+};
 
 export default function Reports() {
   // Dados de exemplo simulando uma API
-  const [reports, setReports] = useState([
-    { id: 1, title: 'Relatório Financeiro - Q3', date: '2025-10-15', size: '2.4 MB' },
-    { id: 2, title: 'Auditoria de Sistema_v2', date: '2025-10-10', size: '1.1 MB' },
-    { id: 3, title: 'Métricas de Usuários - Setembro', date: '2025-09-30', size: '850 KB' },
-  ]);
+  const [reports, setReports] = useState([]);
 
-  const handleGenerateReport = () => {
-    alert('Iniciando geração de um novo relatório...');
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/reports`, {
+          method: 'GET',
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+          }
+        }); // Ajuste a URL se necessário
+        
+        if (!response.ok) {
+          throw new Error('Erro ao buscar dados do servidor');
+        }
+
+        const data = await response.json();
+        setReports(data);
+      } catch (error) {
+        toast.error("Erro na requisição:", error);
+      }
+    };
+
+    fetchReports();
+  }, []);
+
+  const handleGenerateReport = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/reports`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error('Erro ao gerar relatório');
+      }
+
+      toast.success('Relatório gerado com sucesso! Atualize a página para ver o novo documento.');
+    } catch (error) {
+      toast.error(error.message || 'Ocorreu um erro ao gerar o relatório. Tente novamente mais tarde.');
+    }
   };
 
   const handleDownload = (id) => {
     alert(`Baixando relatório ${id}...`);
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm('Tem certeza de que deseja eliminar este relatório?')) {
-      setReports(reports.filter((report) => report.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`${API_URL}/api/reports/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao eliminar relatório');
+      }
+
+      toast.success('Relatório eliminado com sucesso!');
+      setReports(reports.filter((report) => report.reportId !== id));
+    } catch (error) {
+      toast.error(error.message || 'Ocorreu um erro ao eliminar o relatório. Tente novamente mais tarde.');
     }
-  };
-
-  // Variantes de animação para a lista
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
   return (
@@ -94,31 +146,38 @@ export default function Reports() {
                 animate="show"
               >
                 {reports.map((report) => (
-                  <motion.li key={report.id} className={styles.reportItem} variants={itemVariants}>
+                  <motion.li key={report.reportId} className={styles.reportItem} variants={itemVariants}>
                     <div className={styles.reportInfo}>
                       <div className={styles.iconWrapper}>
                         <FileText size={24} />
                       </div>
                       <div className={styles.reportDetails}>
-                        <h3 className={styles.reportTitle}>{report.title}.pdf</h3>
+                        <h3 className={styles.reportTitle}>{report.url}</h3>
                         <span className={styles.reportMeta}>
-                          Criado a: {new Date(report.date).toLocaleDateString('pt-PT')} • {report.size}
+                          Criado em: {new Intl.DateTimeFormat('pt-BR', {
+                            dateStyle: 'full', // 'full', 'long', 'medium', 'short'
+                            timeStyle: 'short'
+                          }).format(new Date(report.createdAt))} • {report.size}
                         </span>
                       </div>
                     </div>
 
                     <div className={styles.actions}>
-                      <button
+                      {/* <button
                         className={styles.downloadBtn}
-                        onClick={() => handleDownload(report.id)}
+                        onClick={() => handleDownload(report.reportId)}
                         title="Baixar PDF"
                       >
                         <Download size={18} />
                         <span className={styles.btnText}>Baixar</span>
-                      </button>
+                      </button> */}
+                      <a href={`${API_URL}/${report.url}`} target="_blank" rel="noopener noreferrer" className={styles.downloadBtn} title="Baixar PDF">
+                        <Download size={18} />
+                        <span className={styles.btnText}>Baixar</span>
+                      </a>
                       <button
                         className={styles.deleteBtn}
-                        onClick={() => handleDelete(report.id)}
+                        onClick={() => handleDelete(report.reportId)}
                         title="Excluir Relatório"
                       >
                         <Trash2 size={18} />

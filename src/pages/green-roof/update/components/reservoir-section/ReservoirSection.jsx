@@ -61,7 +61,7 @@ export default function ReservoirSection() {
               className={styles.textarea} 
               name="useCase" 
               placeholder="Descreva para onde essa água é direcionada (ex: irrigação do próprio telhado, reuso em sanitários...)" 
-              value={data?.useCase ?? ""} 
+              value={data?.useCases ?? ""} 
               onChange={handleChange}
             ></textarea>
           </FormGroup>

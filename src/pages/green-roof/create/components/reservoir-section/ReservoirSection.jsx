@@ -56,12 +56,12 @@ export default function ReservoirSection() {
             </FormGroup>
           </ResponsiveRow>
           <FormGroup>
-            <label htmlFor="useCase">Finalidade e Casos de Uso</label>
+            <label htmlFor="useCases">Finalidade e Casos de Uso</label>
             <textarea 
               className={styles.textarea} 
-              name="useCase" 
+              name="useCases" 
               placeholder="Descreva para onde essa água é direcionada (ex: irrigação do próprio telhado, reuso em sanitários...)" 
-              value={data?.useCase ?? ""} 
+              value={data?.useCases ?? ""} 
               onChange={handleChange}
             ></textarea>
           </FormGroup>
