@@ -49,7 +49,7 @@ export default function UpdateGreenRoof() {
             transition={{ duration: 0.5 }}
           >
             {/* Novo Badge e Copy */}
-            <span className={styles.badge}>🌿 Mapeamento Verde</span>
+            <span className={styles.badge}>Mapeamento Verde</span>
             
             <h1>
               Cuide de um <br/>
