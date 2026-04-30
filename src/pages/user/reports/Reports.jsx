@@ -1,6 +1,6 @@
 import styles from './Reports.module.css';
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FileText, Download, Trash2, Plus, FileBarChart } from 'lucide-react';
 
 import Container from '@components/container/Container';
@@ -25,31 +25,40 @@ const itemVariants = {
 
 export default function Reports() {
   // Dados de exemplo simulando uma API
-  const [reports, setReports] = useState([]);
+  const [reports, setReports] = useState({
+    content: [],
+    empty: true,
+    size: 10
+  });
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/reports`, {
+        const response = await fetch(`${API_URL}/api/reports?page=${page}&size=${reports.size}`, {
           method: 'GET',
           headers: {
             "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
           }
-        }); // Ajuste a URL se necessário
+        });
         
         if (!response.ok) {
           throw new Error('Erro ao buscar dados do servidor');
         }
 
         const data = await response.json();
+
+        console.log(data);
+
         setReports(data);
       } catch (error) {
-        toast.error("Erro na requisição:", error);
+        console.log(error)
+        toast.error("Erro na requisição:", error.message);
       }
     };
 
     fetchReports();
-  }, []);
+  }, [page]);
 
   const handleGenerateReport = async () => {
     try {
@@ -64,7 +73,22 @@ export default function Reports() {
         throw new Error('Erro ao gerar relatório');
       }
 
-      toast.success('Relatório gerado com sucesso! Atualize a página para ver o novo documento.');
+      const response2 = await fetch(`${API_URL}/api/reports?page=${page}&size=${reports.size}`, {
+        method: 'GET',
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+        }
+      });
+      
+      if (!response2.ok) {
+        throw new Error('Erro ao buscar dados do servidor');
+      }
+
+      const data = await response2.json();
+      setReports(data);
+      setPage(0)
+
+      toast.success('Relatório gerado com sucesso!');
     } catch (error) {
       toast.error(error.message || 'Ocorreu um erro ao gerar o relatório. Tente novamente mais tarde.');
     }
@@ -88,11 +112,22 @@ export default function Reports() {
       }
 
       toast.success('Relatório eliminado com sucesso!');
-      setReports(reports.filter((report) => report.reportId !== id));
+      setReports(prev => ({
+        ...prev,
+        content: reports.content.filter((report) => report.reportId !== id)
+      }))
     } catch (error) {
       toast.error(error.message || 'Ocorreu um erro ao eliminar o relatório. Tente novamente mais tarde.');
     }
   };
+
+  const handlePagination = (direction) => {
+    if (direction === "forward" && !reports.last) {
+      setPage(page + 1);
+    } else if (direction === "back" && page > 0) {
+      setPage(page - 1);
+    }
+  }
 
   return (
     <div className={styles.pageWrapper}>
@@ -133,7 +168,7 @@ export default function Reports() {
           </div>
 
           <div className={styles.listContainer}>
-            {reports.length === 0 ? (
+            {reports.empty ? (
               <div className={styles.emptyState}>
                 <FileText size={48} className={styles.emptyIcon} />
                 <p>Nenhum relatório disponível no momento.</p>
@@ -145,50 +180,73 @@ export default function Reports() {
                 initial="hidden"
                 animate="show"
               >
-                {reports.map((report) => (
-                  <motion.li key={report.reportId} className={styles.reportItem} variants={itemVariants}>
-                    <div className={styles.reportInfo}>
-                      <div className={styles.iconWrapper}>
-                        <FileText size={24} />
+                <AnimatePresence>
+                  {!reports?.empty && reports?.content?.map((report) => (
+                    <motion.li 
+                      key={report.reportId} 
+                      className={styles.reportItem} 
+                      variants={itemVariants}
+                      initial="hidden" // Força o item a iniciar oculto
+                      animate="show"   // Força o item a animar para visível ao montar
+                      exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }} // Animação ao deletar
+                      layout // Reorganiza a lista suavemente quando um item é removido
+                    >
+                      <div className={styles.reportInfo}>
+                        <div className={styles.iconWrapper}>
+                          <FileText size={24} />
+                        </div>
+                        <div className={styles.reportDetails}>
+                          <h3 className={styles.reportTitle}>{report.url.substring(report.url.lastIndexOf('/') + 1)}</h3>
+                          <span className={styles.reportMeta}>
+                            Criado em: {new Intl.DateTimeFormat('pt-BR', {
+                              dateStyle: 'full',
+                              timeStyle: 'short'
+                            }).format(new Date(report.createdAt))} • {report.size}
+                          </span>
+                        </div>
                       </div>
-                      <div className={styles.reportDetails}>
-                        <h3 className={styles.reportTitle}>{report.url.substring(report.url.lastIndexOf('/') + 1)}</h3>
-                        <span className={styles.reportMeta}>
-                          Criado em: {new Intl.DateTimeFormat('pt-BR', {
-                            dateStyle: 'full', // 'full', 'long', 'medium', 'short'
-                            timeStyle: 'short'
-                          }).format(new Date(report.createdAt))} • {report.size}
-                        </span>
-                      </div>
-                    </div>
 
-                    <div className={styles.actions}>
-                      {/* <button
-                        className={styles.downloadBtn}
-                        onClick={() => handleDownload(report.reportId)}
-                        title="Baixar PDF"
-                      >
-                        <Download size={18} />
-                        <span className={styles.btnText}>Baixar</span>
-                      </button> */}
-                      <a href={`${API_URL}/${report.url}`} target="_blank" rel="noopener noreferrer" className={styles.downloadBtn} title="Baixar PDF">
-                        <Download size={18} />
-                        <span className={styles.btnText}>Baixar</span>
-                      </a>
-                      <button
-                        className={styles.deleteBtn}
-                        onClick={() => handleDelete(report.reportId)}
-                        title="Excluir Relatório"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </motion.li>
-                ))}
+                      <div className={styles.actions}>
+                        <a href={`${API_URL}/${report.url}`} target="_blank" rel="noopener noreferrer" className={styles.downloadBtn} title="Baixar PDF">
+                          <Download size={18} />
+                          <span className={styles.btnText}>Baixar</span>
+                        </a>
+                        <button
+                          className={styles.deleteBtn}
+                          onClick={() => handleDelete(report.reportId)}
+                          title="Excluir Relatório"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </motion.li>
+                  ))}
+                </AnimatePresence>
               </motion.ul>
             )}
           </div>
         </motion.div>
+        {!reports.empty && (
+          <section className={styles.pagination}>
+            <button 
+              type="button" 
+              onClick={() => handlePagination("back")}
+              disabled={reports.number === 0}
+              className={styles.pageButton}
+            >
+              Anterior
+            </button>
+            <span className={styles.pageIndicator}>Página {page + 1}</span>
+            <button 
+              type="button" 
+              onClick={() => handlePagination("forward")}
+              disabled={reports.last}
+              className={styles.pageButton}
+            >
+              Próxima
+            </button>
+          </section>
+        )}
       </Container>
     </div>
   );
