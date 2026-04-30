@@ -35,6 +35,7 @@ export default function ReservoirSection() {
         </div>
         
         <div className={styles.formGrid}>
+          <input type="hidden" name="id" value={data?.id} />
           <ResponsiveRow>
             <FormGroup>
               <label htmlFor="name">Identificação do Reservatório</label>
