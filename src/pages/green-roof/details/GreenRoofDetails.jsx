@@ -29,22 +29,17 @@ function useGreenRoofData(id) {
       setError(null);
 
       try {
-        const [roofRes, reservoirRes] = await Promise.all([
-          fetch(`${API_URL}/api/green-roofs/${id}`),
-          fetch(`${API_URL}/api/green-roofs/${id}/reservoirs`)
-        ]);
+        const roofRes = await fetch(`${API_URL}/api/green-roofs/${id}`);
 
         if (!roofRes.ok) throw new Error("Não foi possível carregar os dados deste telhado.");
         
         const roofData = await roofRes.json();
         setData(roofData);
-        const i = roofData.images?.map(img => API_URL+ "/" + img.url);
-        setImages(i || []);
 
-        if (reservoirRes.ok) {
-          const reservoirData = await reservoirRes.json();
-          setReservoir(reservoirData[0] || null);
-        }
+        const imgs = roofData.images?.map(img => API_URL+ "/" + img.url);
+        setImages(imgs || []);
+
+        setReservoir(roofData.reservoirs[0] || null);
 
       } catch (err) {
         console.error(err);
@@ -64,6 +59,8 @@ export default function GreenRoofDetails() {
   const { id } = useParams();
   const { isAuthenticated } = useAuth();
   const { data, reservoir, images, loading, error } = useGreenRoofData(id);
+
+  console.log(reservoir);
 
   if (loading) {
     return (
