@@ -11,7 +11,7 @@
     background-size: 100% 100%, 100% 100%, 24px 24px;
     color: var(--color-text-main);
     font-family: system-ui, -apple-system, sans-serif;
-    padding-bottom: 4rem;
+    padding-bottom: 8rem;
 }
 
 .sobreContainer ::selection {

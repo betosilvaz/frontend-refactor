@@ -1,14 +1,18 @@
 import { MapPin, Target, Users, Award, Code } from 'lucide-react';
-import FloatingButton from '@components/floating-button/FloatingButton';
 import { Link } from 'react-router';
 import { ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
+
+import FloatingButton from '@components/floating-button/FloatingButton';
+import ActionBar from '@components/action-bar/ActionBar'
 
 import styles from './About.module.css';
 
 const Sobre = () => {
   return (
     <div className={styles.sobreContainer}>
+      <ActionBar />
+
       <Link to="/" className={styles.backButton}>
         <ArrowLeft size={20} />
         <span>Inicio</span>
