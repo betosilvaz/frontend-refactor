@@ -16,11 +16,18 @@ import ContextProvider from "./providers/ContextProvider.jsx"
 import { motion } from "framer-motion"
 
 import { useParams } from "react-router";
+import { Trash } from "lucide-react"
+import { use, useState } from "react"
+import toast from "react-hot-toast"
+import { API_URL} from "@config/api/api"
+import { useNavigate } from "react-router"
 
 export default function UpdateGreenRoof() {
   const { id } = useParams();
   const form = useGreenRoofForm(id);
   const submit = useSubmit();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   if (form.successfullySubmitted) {
     return <SuccessScreen detailsUrl={"/green-roof/" + id} />
@@ -36,10 +43,46 @@ export default function UpdateGreenRoof() {
     );
   }
 
+  async function deleteGreenRoof() {
+    try {
+      const response = await fetch(`${API_URL}/api/green-roofs/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+        }
+      })
+    
+      console.log(response);
+      if (!response.ok) throw new Error("Não foi possível excluir o telhado verde");
+
+      toast.success("Telhado verde excluído com sucesso!");
+      navigate("/");
+    } catch (error) {
+      toast.error("Erro ao excluir telhado verde:", error.message);
+    }
+  }
+
   return (
-    /* Novo wrapper para dar vida ao fundo inteiro da página */
     <div className={styles.pageWrapper}>
+
       <ContextProvider {...form}>
+
+        <button className={styles.removeButton} onClick={() => setDeleteModalOpen(true)}>
+          <Trash size={30} />
+        </button>
+
+        {deleteModalOpen && (
+          <div className={styles.modalOverlay}>
+            <div className={styles.deleteModal}>
+              <p>Tem certeza que deseja excluir este telhado verde?</p>
+              <div className={styles.deleteModalActions}>
+                <button className={styles.cancelButton} onClick={() => { setDeleteModalOpen(false); }}>Cancelar</button>
+                <button className={styles.confirmButton} onClick={deleteGreenRoof}>Excluir</button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <ActionBar/>
         <Container>
           <motion.div 

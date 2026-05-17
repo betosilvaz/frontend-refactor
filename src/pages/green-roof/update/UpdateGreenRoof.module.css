@@ -89,3 +89,110 @@
         margin-inline: 1rem;
     }
 }
+
+.removeButton {
+    position: fixed;
+    bottom: 3rem;
+    right: 3rem;
+    background-color: red;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 1rem;
+    font-weight: 800;
+    border-radius: 9999px;
+    z-index: 100;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.removeButton:hover {
+    background-color: #b91c1c;
+    color: #fef2f2;
+}
+
+@media (max-width: 768px) {
+    .removeButton {
+        bottom: 6rem;
+        right: 3rem;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 450px) {
+    .removeButton {
+        right: 1rem;
+    }
+}
+
+
+/* Modal de confirmação de exclusão */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(31, 41, 55, 0.4); /* Tom escuro baseado no seu --primary-dark */
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+.deleteModal {
+    background-color: #ffffff;
+    max-width: 420px;
+    width: 90%;
+    padding: 2.5rem 2rem;
+    border-radius: 20px; /* Mantendo o mesmo padrão da classe .infos */
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    /* Sombra flutuante um pouco mais forte para destacar o modal */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); 
+    text-align: center;
+}
+
+.deleteModal p {
+    color: var(--primary-dark, #1f2937);
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+}
+
+.deleteModal button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px; /* Formato de pílula igual ao selo/removeButton */
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.cancelButton {
+    background-color: #f3f4f6; /* Cinza bem claro */
+    color: #4b5563;
+}
+
+.cancelButton:hover {
+    background-color: #e5e7eb;
+    color: #1f2937;
+}
+
+.confirmButton {
+    background-color: red;
+    color: white;
+    box-shadow: 0 4px 6px rgba(255, 0, 0, 0.2);
+}
+
+.confirmButton:hover {
+    background-color: #b91c1c;
+    color: #fef2f2;
+    box-shadow: 0 6px 8px rgba(185, 28, 28, 0.3);
+}
+
+.deleteModalActions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
