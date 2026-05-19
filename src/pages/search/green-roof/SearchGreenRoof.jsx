@@ -1,7 +1,7 @@
 import styles from './SearchGreenRoof.module.css'
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Search, SlidersHorizontal, Leaf } from 'lucide-react';
+import { Search, SlidersHorizontal, Leaf, Form } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import Container from '@components/container/Container'
@@ -18,12 +18,15 @@ export default function SearchGreenRoof() {
   const [results, setResults] = useState([]);
   const resultsRef = useRef(null);
   const [form, setForm] = useState({ page: 0, size: 12 });
+  const [bairros, setBairros] = useState([]);
 
   const options = [
     {name: "Intensivo", value: "intensivo"},
     {name: "Semi-Intensivo", value: "semi_intensivo"},
     {name: "Extensivo", value: "extensivo"}
   ]
+
+  const bairrosOptions = bairros.map(b => ({ name: b.nome, value: b.id }));
 
   const submit = useCallback(async (e) => {
     if (e && e.preventDefault) e.preventDefault();
@@ -42,6 +45,16 @@ export default function SearchGreenRoof() {
     }
   }, [form]);
   
+  useEffect(() => {
+    // Buscar bairros para filtro
+    fetch(`${API_URL}/api/bairros`)
+      .then(response => response.json())
+      .then(data => {
+        setBairros(data)
+      })
+      .catch(err => console.error("Erro ao buscar bairros:", err));
+  }, []);
+
   useEffect(() => {
     submit().then(() => {
       if(resultsRef.current && form.page > 0) {
@@ -110,10 +123,16 @@ export default function SearchGreenRoof() {
                     <span>Filtros Avançados</span>
                   </div>
                   <div className={styles.filtersContent}>
-                    <FormGroup>
-                      <label htmlFor="type">Tipo de Instalação</label>
-                      <Select name="type" value={form.type} options={options} onSelect={onInputChange}/>
-                    </FormGroup>
+                    <ResponsiveRow>
+                      <FormGroup>
+                        <label htmlFor="type">Tipo de Instalação</label>
+                        <Select name="type" value={form.type} options={options} onSelect={onInputChange}/>
+                      </FormGroup>
+                      <FormGroup>
+                        <label htmlFor="bairro">Bairro</label>
+                        <Select name="bairro" id="bairro" placeholder="Selecione um bairro" value={form.bairro} options={bairrosOptions || []} onSelect={onInputChange}/>
+                      </FormGroup>
+                    </ResponsiveRow>
                     
                     <ResponsiveRow>
                       <FormGroup>
