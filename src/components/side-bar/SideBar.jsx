@@ -58,12 +58,6 @@ export default function SideBar({ onClose }) {
                   <span>Relatórios</span>
                 </Link>
               </li>
-              <li>
-                <Link to="/notifications" onClick={onClose} className={isActive('/notifications') ? styles.active : ''}>
-                  <Bell size={20} />
-                  <span>Alertas</span>
-                </Link>
-              </li>
             </>
           ) : (
             <>

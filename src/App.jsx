@@ -49,7 +49,7 @@ export default function App() {
                 <Route path="/green-roof/update/:id" element={<UpdateGreenRoof />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/reports" element={<Reports />} />
-                <Route path="/notifications" element={<Notifications />} />
+                { /* <Route path="/notifications" element={<Notifications />} /> */}
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
