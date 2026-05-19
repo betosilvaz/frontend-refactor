@@ -19,8 +19,8 @@ export default function Map({ className, zoom = 16, markers = [], initialPositio
       .then(data => setGeoData(data));
   }, []);
 
-  const sudoeste = L.latLng(-8.163, -34.992);
-  const nordeste = L.latLng(-7.925, -34.831);
+  const sudoeste = L.latLng(-8.200, -35.092);
+  const nordeste = L.latLng(-7.890, -34.821);
   const limitesRecife = L.latLngBounds(sudoeste, nordeste);
 
   const estiloLimite = {
