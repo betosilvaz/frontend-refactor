@@ -145,15 +145,7 @@ export default function Register() {
                 <Mail className={styles.inputIcon} size={18} />
                 <input type="email" name="email" id="email" placeholder="johndoe@example.com" value={form.email} onChange={handleChange} />
               </div>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className={styles.formGroup}>
-              <label htmlFor='cpf'>CPF</label>
-              <div className={styles.inputWrapper}>
-                <FileText className={styles.inputIcon} size={18} />
-                <input type="text" name="cpf" id="cpf" placeholder="111.222.333-44" value={form.cpf} onChange={handleChange} />
-              </div>
-            </motion.div>
+            </motion.div >
 
             <motion.div variants={itemVariants} className={styles.row}>
               <div className={styles.formGroup}>
@@ -198,7 +190,7 @@ export default function Register() {
 }
 
 function validateForm(form) {
-  if (!form.name || !form.email || !form.cpf || !form.password || !form.confirmPassword) {
+  if (!form.name || !form.email || !form.password || !form.confirmPassword) {
     throw new AppError({
       code: ERROR_CODES.PARSER,
       message: "Preencha todos os campos!",
