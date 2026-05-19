@@ -42,7 +42,6 @@ function useGreenRoofData(id) {
         setReservoir(roofData.reservoirs[0] || null);
 
       } catch (err) {
-        console.error(err);
         setError(err.message || "Erro inesperado ao carregar os dados.");
       } finally {
         setLoading(false);
@@ -59,8 +58,6 @@ export default function GreenRoofDetails() {
   const { id } = useParams();
   const { isAuthenticated } = useAuth();
   const { data, reservoir, images, loading, error } = useGreenRoofData(id);
-
-  console.log(reservoir);
 
   if (loading) {
     return (
