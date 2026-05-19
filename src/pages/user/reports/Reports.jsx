@@ -94,8 +94,31 @@ export default function Reports() {
     }
   };
 
-  const handleDownload = (id) => {
-    alert(`Baixando relatório ${id}...`);
+  const onDownloadReport = async (id) => {
+    const endpoint = `${API_URL}/api/reports/${id}/download`;
+    try {
+      const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+        }
+      })
+
+      if (!response.ok) throw new Error('Erro ao baixar relatório');
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `relatorio-${id}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+    } catch (error) {
+      toast.error(error.message || 'Ocorreu um erro ao baixar o relatório.');
+    }
   };
 
   const handleDelete = async (id) => {
@@ -207,10 +230,10 @@ export default function Reports() {
                       </div>
 
                       <div className={styles.actions}>
-                        <a href={`${API_URL}/${report.url}`} target="_blank" rel="noopener noreferrer" className={styles.downloadBtn} title="Baixar PDF">
+                        <button onClick={() => onDownloadReport(report.reportId)} className={styles.downloadBtn} title="Baixar PDF">
                           <Download size={18} />
                           <span className={styles.btnText}>Baixar</span>
-                        </a>
+                        </button>
                         <button
                           className={styles.deleteBtn}
                           onClick={() => handleDelete(report.reportId)}
