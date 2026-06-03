@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import { API_URL } from "@config/api/api.js";
+import fetchThis from "@utils/fetchThis.js";
 
 /**
  * Retorna uma função que realiza toda a lógica de requisição referente a atualização
@@ -23,7 +24,7 @@ export default function useSubmit() {
     }
 
     try {
-      let response = await fetch(`${API_URL}/api/green-roofs/${state.id}`, {
+      let response = await fetchThis(`${API_URL}/api/green-roofs/${state.id}`, {
         method: "PUT",
         headers: {
           "Authorization": "Bearer " + localStorage.getItem("jwt"),

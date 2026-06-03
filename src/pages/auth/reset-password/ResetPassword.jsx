@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Lock, KeyRound, ShieldCheck, ArrowLeft, CheckCircle2, Loader2, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from '@config/api/api.js';
 
 // Variáveis de animação para o Framer Motion
@@ -59,7 +60,7 @@ export default function ResetPassword() {
         return toast.error("As novas senhas não coincidem!");
       }
 
-      const response = await fetch(API_URL + '/api/auth/reset-password', {
+      const response = await fetchThis(API_URL + '/api/auth/reset-password', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

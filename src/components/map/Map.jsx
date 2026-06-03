@@ -9,12 +9,14 @@ import { useEffect, useState } from 'react'
 import MapPopup from '@components/map-popup/MapPopup'
 const { BaseLayer } = LayersControl;
 
+import fetchThis from "@utils/fetchThis.js";
+
 export default function Map({ className, zoom = 16, markers = [], initialPosition = [-8.058211417035023, -34.871517645983225], simpleMarker = false }) {
   const [geoData, setGeoData] = useState(null);
   const [showLimits, setShowLimits] = useState(false);
 
   useEffect(() => {
-    fetch('/limites_recife.json')
+    fetchThis('/limites_recife.json')
       .then(response => response.json())
       .then(data => setGeoData(data));
   }, []);

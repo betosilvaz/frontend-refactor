@@ -3,6 +3,8 @@ import { stateReducer, initialState } from "./../reducers/stateReducer.js"
 import { useReducer, useState } from "react";
 import toast from "react-hot-toast";
 
+import fetchThis from "@utils/fetchThis.js";
+
 function useGreenRoofForm() {
   const [isPickingLocation, setIsPickingLocation] = useState(false);
   const [successfullySubmitted, setSuccessfullySubmitted] = useState(false);
@@ -13,7 +15,7 @@ function useGreenRoofForm() {
 
     const options = { headers: { "User-Agent": "GreenRoofApp/1.0" } };
     const enpoint = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}&email=gilbertozn527@gmail.com`;
-    fetch(enpoint, options)
+    fetchThis(enpoint, options)
       .then(res => res.json())
       .then(data => {
         dispatch({ 

@@ -11,6 +11,7 @@ import FloatingButton from '@components/floating-button/FloatingButton';
 import Carousel from './Carousel/Carousel';
 import Map from '@components/map/Map';
 
+import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from '@config/api/api.js';
 import { useAuth } from '@providers/AuthProvider';
 
@@ -29,7 +30,7 @@ function useGreenRoofData(id) {
       setError(null);
 
       try {
-        const roofRes = await fetch(`${API_URL}/api/green-roofs/${id}`);
+        const roofRes = await fetchThis(`${API_URL}/api/green-roofs/${id}`);
 
         if (!roofRes.ok) throw new Error("Não foi possível carregar os dados deste telhado.");
         

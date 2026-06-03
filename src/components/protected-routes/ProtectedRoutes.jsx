@@ -1,19 +1,49 @@
-import { Outlet, Navigate } from "react-router"
+import { useState, useEffect } from "react";
+import { Outlet, Navigate } from "react-router"; // ou react-router-dom dependendo da versão
 import { jwtDecode } from "jwt-decode";
 
+import fetchThis from "@utils/fetchThis";
+import { API_URL } from "@config/api/api.js";
+import LoadingPage from "@components/loading-page/LoadingPage";
+
 export default function ProtectedRoutes({ allowedRoles }) {
+    const [isAuthorized, setIsAuthorized] = useState(null); 
 
-    let jwt = localStorage.getItem("jwt");
-    if (!jwt) return <Navigate to="/login" replace/>
+    useEffect(() => {
+        const verifyAuth = async () => {
+            const jwt = localStorage.getItem("jwt");
+            
+            if (!jwt) return setIsAuthorized(false);
 
-    let decoded = jwtDecode(jwt);
-    let currentTime = Date.now() / 1000;
+            try {
+                const response = await fetchThis(`${API_URL}/api/auth/me`, {
+                    headers: { Authorization: `Bearer ${jwt}` }
+                });
 
-    if(( decoded.exp > currentTime )) {
-        if (!allowedRoles || allowedRoles.length === 0) return <Outlet/>
-        for(let role of decoded.roles)
-            if(allowedRoles.includes(role)) return <Outlet/>
+                if (response.ok) {
+                    const decoded = jwtDecode(jwt);
+
+                    if (!allowedRoles || allowedRoles.length === 0) {
+                        return setIsAuthorized(true);
+                    }
+
+                    const hasRole = decoded.roles?.some(role => allowedRoles.includes(role));
+                    setIsAuthorized(hasRole);
+                } else {
+                    setIsAuthorized(false);
+                }
+            } catch (error) {
+                console.error("Erro ao verificar o token:", error);
+                setIsAuthorized(false);
+            }
+        };
+
+        verifyAuth();
+    }, [allowedRoles]);
+    
+    if (isAuthorized === null) {
+        return <LoadingPage/>;
     }
 
-    return <Navigate to="/login" replace/>
+    return isAuthorized ? <Outlet /> : <Navigate to="/login" replace />;
 }

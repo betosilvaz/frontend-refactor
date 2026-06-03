@@ -1,5 +1,6 @@
 import { toast } from "react-hot-toast";
 import { API_URL } from "@config/api/api.js"
+import fetchThis from "@utils/fetchThis.js";
 
 /**
  * A função valida os dados do formulário e, caso estejam corretos, submete o telhado, o reservatório e as imagens para a API.
@@ -19,7 +20,7 @@ export default function useSubmit() {
     }
 
     try {
-      let response = await fetch(`${API_URL}/api/green-roofs`, {
+      let response = await fetchThis(`${API_URL}/api/green-roofs`, {
         method: "POST",
         headers: {
           "Authorization": "Bearer " + localStorage.getItem("jwt"),

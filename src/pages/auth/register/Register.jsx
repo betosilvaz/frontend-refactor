@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { User, Mail, FileText, Lock, ArrowLeft, UserPlus, UserCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-import { ERROR_CODES } from '@utils/safeFetch.js';
+import fetchThis from "@utils/fetchThis.js";
 import AppError from '@utils/AppError.js';
 import { API_URL } from '@config/api/api.js';
 
@@ -46,7 +46,7 @@ export default function Register() {
     setIsSubmitting(true);
     try {
       validateForm(form);
-      const response = await fetch(API_URL + '/api/auth/register', {
+      const response = await fetchThis(API_URL + '/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

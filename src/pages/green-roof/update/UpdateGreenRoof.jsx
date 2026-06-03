@@ -15,6 +15,7 @@ import useGreenRoofForm from "./hooks/useGreenRoofForm.js"
 import ContextProvider from "./providers/ContextProvider.jsx"
 import { motion } from "framer-motion"
 
+import fetchThis from "@utils/fetchThis.js";
 import { useParams } from "react-router";
 import { Trash } from "lucide-react"
 import { use, useState } from "react"
@@ -45,7 +46,7 @@ export default function UpdateGreenRoof() {
 
   async function deleteGreenRoof() {
     try {
-      const response = await fetch(`${API_URL}/api/green-roofs/${id}`, {
+      const response = await fetchThis(`${API_URL}/api/green-roofs/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('jwt')}`,

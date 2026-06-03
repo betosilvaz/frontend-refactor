@@ -7,6 +7,7 @@ import Container from '@components/container/Container';
 import ActionBar from '@components/action-bar/ActionBar';
 import toast from 'react-hot-toast';
 
+import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from '@config/api/api';
 
 // Variantes de animação para a lista
@@ -35,7 +36,7 @@ export default function Reports() {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/reports?page=${page}&size=${reports.size}`, {
+        const response = await fetchThis(`${API_URL}/api/reports?page=${page}&size=${reports.size}`, {
           method: 'GET',
           headers: {
             "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
@@ -62,7 +63,7 @@ export default function Reports() {
 
   const handleGenerateReport = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/reports`, {
+      const response = await fetchThis(`${API_URL}/api/reports`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
@@ -73,7 +74,7 @@ export default function Reports() {
         throw new Error('Erro ao gerar relatório');
       }
 
-      const response2 = await fetch(`${API_URL}/api/reports?page=${page}&size=${reports.size}`, {
+      const response2 = await fetchThis(`${API_URL}/api/reports?page=${page}&size=${reports.size}`, {
         method: 'GET',
         headers: {
           "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
@@ -97,7 +98,7 @@ export default function Reports() {
   const onDownloadReport = async (id) => {
     const endpoint = `${API_URL}/api/reports/${id}/download`;
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetchThis(endpoint, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
@@ -123,7 +124,7 @@ export default function Reports() {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`${API_URL}/api/reports/${id}`, {
+      const response = await fetchThis(`${API_URL}/api/reports/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwt')}`,

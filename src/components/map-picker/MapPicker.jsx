@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { useEffect, useRef, useState } from 'react';
 
 import SearchBar from '@components/search-bar/SearchBar';
+import fetchThis from "@utils/fetchThis.js";
 
 const { BaseLayer } = LayersControl;
 
@@ -24,7 +25,7 @@ export default function MapPicker({ marker, onConfirm, onExit }) {
     const query = event.target.query.value;
     try {
       let url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`
-      let response = await fetch(url, {
+      let response = await fetchThis(url, {
         headers: {
           'User-Agent': 'GreenRoofApp/1.0'
         }

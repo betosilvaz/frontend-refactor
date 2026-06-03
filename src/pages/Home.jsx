@@ -6,6 +6,7 @@ import Map from '@components/map/Map'
 import ActionBar from '@components/action-bar/ActionBar'
 import SearchBar from '@components/search-bar/SearchBar'
 
+import fetchThis from "@utils/fetchThis.js";
 import  { API_URL } from '@config/api/api.js'
 import toast from 'react-hot-toast'
 
@@ -16,7 +17,7 @@ export default function Home() {
   useEffect(() => {
     async function getGreenRoofs() {
       try {
-        const response = await fetch(API_URL + '/api/green-roofs/all', {
+        const response = await fetchThis(API_URL + '/api/green-roofs/all', {
           method: 'GET',
         });
 
@@ -40,7 +41,7 @@ export default function Home() {
     const query = event.target.query.value;
     try {
       let url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`
-      let response = await fetch(url, {
+      let response = await fetchThis(url, {
         headers: {
           'User-Agent': 'GreenRoofApp/1.0'
         }

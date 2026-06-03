@@ -6,7 +6,6 @@ import { Mail, Lock, ArrowLeft, LogIn } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import AppError from '@utils/AppError.js';
-import { ERROR_CODES } from '@utils/safeFetch.js';
 import { useAuth } from '@providers/AuthProvider';
 
 const initialState = {

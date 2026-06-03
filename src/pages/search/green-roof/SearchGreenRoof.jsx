@@ -11,6 +11,7 @@ import Input from '@components/input/Input'
 import Card from './card/Card'
 import ActionBar from '@components/action-bar/ActionBar'
 import ResponsiveRow from '@components/responsive-row/ResponsiveRow'
+import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from '@config/api/api.js'
 
 export default function SearchGreenRoof() {
@@ -34,7 +35,7 @@ export default function SearchGreenRoof() {
       const query = new URLSearchParams(form).toString();
       const endpoint = `${API_URL}/api/green-roofs?${query}`;
       
-      const response = await fetch(endpoint);
+      const response = await fetchThis(endpoint);
       if (!response.ok) return toast.error("Ocorreu um erro na API");
       
       const data = await response.json();
@@ -47,7 +48,7 @@ export default function SearchGreenRoof() {
   
   useEffect(() => {
     // Buscar bairros para filtro
-    fetch(`${API_URL}/api/bairros`)
+    fetchThis(`${API_URL}/api/bairros`)
       .then(response => response.json())
       .then(data => {
         setBairros(data)
@@ -77,136 +78,148 @@ export default function SearchGreenRoof() {
   }
 
   return (
-    <div className={styles.pageWrapper}>
+    <Container>
       <ActionBar/>
-      <Container>
-        <div className={styles.main}>
-          
-          <motion.section 
-            className={styles.header}
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className={styles.badge}>Explorador Verde</span>
-            <h1 className={styles.pageTitle}>
-              Catálogo de <span className={styles.highlight}>Telhados</span>
-            </h1>
-            <p className={styles.pageSubtitle}>
-              Explore, filtre e descubra projetos sustentáveis espalhados pela cidade.
-            </p>
-          </motion.section>
+      <div className={styles.main}>
+        <Header />
+        <motion.section 
+          className={styles.searchSection}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className={styles.floatingContent}>
+            <form className={styles.form} onSubmit={submit}>
+              
+              <SearchBar onInputChange={onInputChange} />
 
-          <motion.section 
-            className={styles.searchSection}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <div className={styles.floatingContent}>
-              <form className={styles.form} onSubmit={submit}>
-                
-                <div className={styles.searchBar}>
-                  <Search className={styles.searchIcon} size={22}/>
-                  <input 
-                    type="text" 
-                    name="name" 
-                    placeholder="Pesquise por nome ou local..." 
-                    onChange={onInputChange}
-                  />
-                  <button type="submit" className={styles.searchSubmit}>Procurar</button>
+              <div className={styles.filtersPanel}>
+                <div className={styles.filtersHeader}>
+                  <SlidersHorizontal size={18} />
+                  <span>Filtros Avançados</span>
                 </div>
-
-                <div className={styles.filtersPanel}>
-                  <div className={styles.filtersHeader}>
-                    <SlidersHorizontal size={18} />
-                    <span>Filtros Avançados</span>
-                  </div>
-                  <div className={styles.filtersContent}>
-                    <ResponsiveRow>
-                      <FormGroup>
-                        <label htmlFor="type">Tipo de Instalação</label>
-                        <Select name="type" value={form.type} options={options} onSelect={onInputChange}/>
-                      </FormGroup>
-                      <FormGroup>
-                        <label htmlFor="bairro">Bairro</label>
-                        <Select name="bairro" id="bairro" placeholder="Selecione um bairro" value={form.bairro} options={bairrosOptions || []} onSelect={onInputChange}/>
-                      </FormGroup>
-                    </ResponsiveRow>
-                    
-                    <ResponsiveRow>
-                      <FormGroup>
-                        <label htmlFor="minArea">Área Mínima (m²)</label>
-                        <Input type="number" value={form.minArea} name="minArea" placeholder="Ex: 50" onChange={onInputChange}/>
-                      </FormGroup>
-                      <FormGroup>
-                        <label htmlFor="maxArea">Área Máxima (m²)</label>
-                        <Input type="number" value={form.maxArea} name="maxArea" placeholder="Ex: 500" onChange={onInputChange}/>
-                      </FormGroup>
-                      <FormGroup>
-                        <label htmlFor="minConclusion">Ano Min. Conclusão</label>
-                        <Input type="number" value={form.minConclusion} name="minConclusion" placeholder="Ex: 2018" onChange={onInputChange}/>
-                      </FormGroup>
-                      <FormGroup>
-                        <label htmlFor="maxConclusion">Ano Máx. Conclusão</label>
-                        <Input type="number" value={form.maxConclusion} name="maxConclusion" placeholder="Ex: 2024" onChange={onInputChange}/>
-                      </FormGroup>
-                    </ResponsiveRow>
-                  </div>
+                <div className={styles.filtersContent}>
+                  <ResponsiveRow>
+                    <FormGroup>
+                      <label htmlFor="type">Tipo de Instalação</label>
+                      <Select name="type" value={form.type} options={options} onSelect={onInputChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                      <label htmlFor="bairro">Bairro</label>
+                      <Select name="bairro" id="bairro" placeholder="Selecione um bairro" value={form.bairro} options={bairrosOptions || []} onSelect={onInputChange}/>
+                    </FormGroup>
+                  </ResponsiveRow>
+                  
+                  <ResponsiveRow>
+                    <FormGroup>
+                      <label htmlFor="minArea">Área Mínima (m²)</label>
+                      <Input type="number" value={form.minArea} name="minArea" placeholder="Ex: 50" onChange={onInputChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                      <label htmlFor="maxArea">Área Máxima (m²)</label>
+                      <Input type="number" value={form.maxArea} name="maxArea" placeholder="Ex: 500" onChange={onInputChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                      <label htmlFor="minConclusion">Ano Min. Conclusão</label>
+                      <Input type="number" value={form.minConclusion} name="minConclusion" placeholder="Ex: 2018" onChange={onInputChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                      <label htmlFor="maxConclusion">Ano Máx. Conclusão</label>
+                      <Input type="number" value={form.maxConclusion} name="maxConclusion" placeholder="Ex: 2024" onChange={onInputChange}/>
+                    </FormGroup>
+                  </ResponsiveRow>
                 </div>
-              </form>
-            </div>
-          </motion.section>
-
-          <div className={styles.resultsHeader} ref={resultsRef}>
-            <span className={styles.resultCount}>
-              {data.totalElements || 0} {data.totalElements === 1 ? 'resultado encontrado' : 'resultados encontrados'}
-            </span>
+              </div>
+            </form>
           </div>
+        </motion.section>
 
-          {results.length === 0 ? (
-            <div className={styles.emptyState}>
-              <Leaf size={48} className={styles.emptyIcon} />
-              <p>Nenhum telhado verde encontrado com estes filtros.</p>
-            </div>
-          ) : (
-            <section className={styles.resultsGrid}>
-              {results.map((c, index) => (
-                <motion.div 
-                  key={c.id || `page-${form.page}-index-${index}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                >
-                  <Card data={c}/>
-                </motion.div>
-              ))}
-            </section>
-          )}
-
-          {results.length > 0 && (
-            <section className={styles.pagination}>
-              <button 
-                type="button" 
-                onClick={() => handlePagination("back")}
-                disabled={form.page === 0}
-                className={styles.pageButton}
-              >
-                Anterior
-              </button>
-              <span className={styles.pageIndicator}>Página {form.page + 1}</span>
-              <button 
-                type="button" 
-                onClick={() => handlePagination("forward")}
-                disabled={results.length < form.size}
-                className={styles.pageButton}
-              >
-                Próxima
-              </button>
-            </section>
-          )}
+        <div className={styles.resultsHeader} ref={resultsRef}>
+          <span className={styles.resultCount}>
+            {data.totalElements || 0} {data.totalElements === 1 ? 'resultado encontrado' : 'resultados encontrados'}
+          </span>
         </div>
-      </Container>
+
+        {results.length === 0 ? (
+          <div className={styles.emptyState}>
+            <Leaf size={48} className={styles.emptyIcon} />
+            <p>Nenhum telhado verde encontrado com estes filtros.</p>
+          </div>
+        ) : (
+          <section className={styles.resultsGrid}>
+            {results.map((c, index) => (
+              <motion.div 
+                key={c.id || `page-${form.page}-index-${index}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+              >
+                <Card data={c}/>
+              </motion.div>
+            ))}
+          </section>
+        )}
+
+        {results.length > 0 && <Pagination page={form.page + 1} totalPages={form.totalPages} onPageChange={handlePagination} lastPage={results.length < form.size}/>}
+      </div>
+    </Container>
+  )
+}
+
+function Pagination({ page, totalPages, onPageChange, lastPage }) {
+  return (
+    <section className={styles.pagination}>
+      <button 
+        type="button" 
+        onClick={() => onPageChange("back")}
+        disabled={page === 1}
+        className={styles.pageButton}
+      >
+        Anterior
+      </button>
+      <span className={styles.pageIndicator}>Página {page}</span>
+      <button 
+        type="button" 
+        onClick={() => onPageChange("forward")}
+        disabled={lastPage}
+        className={styles.pageButton}
+      >
+        Próxima
+      </button>
+    </section>
+  )
+}
+
+function SearchBar({ onInputChange }) {
+  return (
+    <div className={styles.searchBar}>
+      <Search className={styles.searchIcon} size={22}/>
+      <input 
+        type="text" 
+        name="name" 
+        placeholder="Pesquise por nome ou local..." 
+        onChange={onInputChange}
+      />
+      <button type="submit" className={styles.searchSubmit}>Procurar</button>
     </div>
+  )
+}
+
+function Header() {
+  return (
+    <motion.section 
+      className={styles.header}
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <span className={styles.badge}>Explorador Verde</span>
+      <h1 className={styles.pageTitle}>
+        Catálogo de <span className={styles.highlight}>Telhados</span>
+      </h1>
+      <p className={styles.pageSubtitle}>
+        Explore, filtre e descubra projetos sustentáveis espalhados pela cidade.
+      </p>
+    </motion.section>
   )
 }

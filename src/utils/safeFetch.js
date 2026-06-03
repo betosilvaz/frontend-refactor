@@ -1,4 +1,5 @@
 import AppError from '@utils/AppError.js'
+import fetchThis from "@utils/fetchThis.js";
 
 export const ERROR_CODES = {
   NETWORK: 'NETWORK_ERROR',
@@ -7,11 +8,11 @@ export const ERROR_CODES = {
   PARSE: 'PARSE_ERROR',
 };
 
-export default async function safeFetch(url, options) {
+export default async function safefetchThis(url, options) {
   let response;
 
   try {
-    response = await fetch(url, options);
+    response = await fetchThis(url, options);
   } catch {
     throw new AppError({
       code: ERROR_CODES.NETWORK,

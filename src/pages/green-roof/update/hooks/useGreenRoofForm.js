@@ -1,6 +1,7 @@
 import { useState, useReducer, useEffect } from "react";
 
 import { stateReducer, initialState } from "../reducers/stateReducer";
+import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from "@config/api/api.js";
 
 export default function useGreenRoofForm(id) {
@@ -19,7 +20,7 @@ export default function useGreenRoofForm(id) {
         },
       }
       try {
-        const response = await fetch(endpoint, options);
+        const response = await fetchThis(endpoint, options);
         if (!response.ok) throw new Error("Erro ao buscar dados do telhado!");
         const data = await response.json();
         dispatch({ type: "set-location", latitude: data.latitude, longitude: data.longitude, address: data.address });
@@ -84,7 +85,7 @@ export default function useGreenRoofForm(id) {
 
     const options = { headers: { "User-Agent": "GreenRoofApp/1.0" } };
     const enpoint = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}&email=gilbertozn527@gmail.com`;
-    fetch(enpoint, options)
+    fetchThis(enpoint, options)
       .then(res => res.json())
       .then(data => {
         dispatch({

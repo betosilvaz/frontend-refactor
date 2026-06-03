@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { motion } from 'framer-motion';
 import { Mail, ArrowLeft, Send, CheckCircle, KeyRound, Loader2 } from 'lucide-react';
 
+import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from '@config/api/api.js';
 
 // Variáveis de animação
@@ -31,7 +32,7 @@ export default function ForgotPassword() {
     setError(null);
     
     try {
-      const response = await fetch(API_URL + '/api/auth/forgot-password', {
+      const response = await fetchThis(API_URL + '/api/auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)

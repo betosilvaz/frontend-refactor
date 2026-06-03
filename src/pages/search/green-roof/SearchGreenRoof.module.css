@@ -1,12 +1,3 @@
-/* Fundo com Malha e Padrão de Pontos */
-.pageWrapper {
-    min-height: 100vh;
-    background-color: #fafafa;
-    background-size: 100% 100%, 100% 100%, 24px 24px;
-    padding-bottom: 4rem;
-    font-family: system-ui, -apple-system, sans-serif;
-}
-
 .main {
     display: flex;
     flex-direction: column;

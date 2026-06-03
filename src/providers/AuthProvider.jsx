@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react"
 
 import { jwtDecode } from "jwt-decode";
 
+import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from '@config/api/api.js'
 import AppError from '@utils/AppError'
 
@@ -14,21 +15,18 @@ export default function AuthProvider({ children }) {
   useEffect(() => {
     async function verifyAuthentication() {
       let jwt = localStorage.getItem("jwt");
-      if (!jwt) {
-        setIsAuthenticated(false);
-        return;
-      }
+      if (!jwt) return setIsAuthenticated(false);
 
       try {
-        const decoded = jwtDecode(jwt);
-        const currentTime = Date.now() / 1000;
-        if(decoded.exp < currentTime) {
-          console.log("Token Jwt expirado!");
+        const response = await fetchThis(`${API_URL}/api/auth/me`, {
+          headers: { Authorization: `Bearer ${jwt}` }
+        });
+        
+        if (!response.ok) {
           localStorage.removeItem("jwt");
-          setIsAuthenticated(false);
-        } else {
-          setIsAuthenticated(true);
+          return setIsAuthenticated(false);
         }
+
       } catch (err) {
         console.log("Erro ao tentar autenticação!");
       }
@@ -40,9 +38,10 @@ export default function AuthProvider({ children }) {
   async function login(email, password) {
     try {
 
-      const response = await fetch(API_URL + '/api/auth/login', {
+      const response = await fetchThis(API_URL + '/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: "include",
         body: JSON.stringify({ email, password })
       });
 

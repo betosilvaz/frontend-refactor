@@ -2,6 +2,7 @@ import { useReducer, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 import stateReducer, { initialState } from '../reducers/stateReducer';
+import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from '@config/api/api.js';
 
 export default function useProfileForm() {
@@ -11,7 +12,7 @@ export default function useProfileForm() {
     async function getData() {
       try {
         const jwt = localStorage.getItem("jwt");
-        const response = await fetch(`${API_URL}/api/auth/me`, {
+        const response = await fetchThis(`${API_URL}/api/auth/me`, {
           headers: { 'Authorization': `Bearer ${jwt}` }
         });
 
@@ -30,7 +31,7 @@ export default function useProfileForm() {
     e.preventDefault();
     try {
       const jwt = localStorage.getItem("jwt");
-      const response = await fetch(`${API_URL}/api/users`, {
+      const response = await fetchThis(`${API_URL}/api/users`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
