@@ -3,6 +3,7 @@ import styles from './GreenRoofDetails.module.css';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { createPortal } from 'react-dom';
+import { ArrowLeft } from 'lucide-react';
 
 import Container from '@components/container/Container';
 import ActionBar from '@components/action-bar/ActionBar';
@@ -88,12 +89,15 @@ export default function GreenRoofDetails() {
 
   return (
     <div className={styles.pageWrapper}>
-      <FloatingButton to="-1">Voltar</FloatingButton>
+      <Link to="/" className={styles.backButton}>
+        <ArrowLeft size={20} />
+        <span>Inicio</span>
+      </Link>
       { isAuthenticated && <UpdateButton id={id} /> }
       <ActionBar />
       
       <Container variant="small">
-          <Carousel slides={images || []} options={{ loop: true }}/>
+        <Carousel slides={images || []} options={{ loop: true }}/>
         
         <div className={styles.data}>
           <section className={styles.info}>

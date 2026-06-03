@@ -222,3 +222,37 @@ hr {
         font-size: 2rem;
     }
 }
+
+.backButton {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-darker);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    z-index: 999;
+}
+
+.backButton:hover {
+    background-color: var(--primary);
+    transform: translateX(-4px);
+}
+
+@media (max-width: 1200px) {
+    .pageWrapper {
+        padding-top: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .backButton {
+        top: 1rem;
+        left: 1rem;
+    }
+}
