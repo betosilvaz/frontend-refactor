@@ -12,26 +12,18 @@ import toast from 'react-hot-toast'
 
 export default function Home() {
   const [markers, setMarkers] = useState([]);
-  const [initialPosition, setInitialPosition] = useState([-8.058211417035023, -34.871517645983225]); // São Paulo como posição inicial
+  const [initialPosition, setInitialPosition] = useState([-8.058211417035023, -34.871517645983225]);
 
   useEffect(() => {
     async function getGreenRoofs() {
       try {
-        const response = await fetchThis(API_URL + '/api/green-roofs/all', {
-          method: 'GET',
-        });
-
-        if (!response.ok) {
-          console.log("Erro ao se comunicar com a API");
-          return;
-        }
-
+        const response = await fetchThis(`${API_URL}/api/green-roofs/all`);
+        if (!response.ok) return console.log("Erro na resposta da API: ", response.statusText);
         const data = await response.json();
         setMarkers(data);
       } catch (err) {
-        console.log("Um erro inesperado aconteceu!");
+        console.log("Erro ao se comunicar com a API: ", err.message);
       }
-
     }
     getGreenRoofs();
   }, []);
@@ -41,21 +33,13 @@ export default function Home() {
     const query = event.target.query.value;
     try {
       let url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`
-      let response = await fetchThis(url, {
-        headers: {
-          'User-Agent': 'GreenRoofApp/1.0'
-        }
-      });
+      let response = await fetchThis(url, { headers: { 'User-Agent': 'GreenRoofApp/1.0' } });
 
-      if (!response.ok) {
-        return toast.error("Erro ao se comunicar com o serviço de geocodificação");
-      }
+      if (!response.ok) return toast.error("Erro ao se comunicar com o serviço de geocodificação");
 
       let data = await response.json();
 
-      if (data.length === 0) {
-        return toast.error("Nenhum resultado encontrado para o endereço informado");
-      }
+      if (data.length === 0) return toast.error("Nenhum resultado encontrado para o endereço informado");
 
       const { lat, lon, display_name } = data[0];
       
