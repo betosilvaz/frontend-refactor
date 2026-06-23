@@ -22,6 +22,8 @@ const Reports = lazy(() => import('@pages/user/reports/Reports'));
 const Notifications = lazy(() => import('@pages/user/notifications/Notifications'));
 const Unauthorized = lazy(() => import('@pages/auth/unauthorized/Unauthorized'));
 const ResetPassword = lazy(() => import('@pages/auth/reset-password/ResetPassword'));
+const AdminDashboard = lazy(() => import('@pages/admin/dashboard/AdminDashboard'));
+
 const ProtectedRoutes = lazy(() => import('@components/protected-routes/ProtectedRoutes'));
 const AuthProvider = lazy(() => import('@providers/AuthProvider'));
 
@@ -50,6 +52,9 @@ export default function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/reports" element={<Reports />} />
                 { /* <Route path="/notifications" element={<Notifications />} /> */}
+              </Route>
+              <Route element={<ProtectedRoutes allowedRoles={['admin']} />}>
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

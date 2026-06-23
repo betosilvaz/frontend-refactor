@@ -11,16 +11,20 @@ import {
   LogOut, 
   LogIn, 
   UserPlus,
-  X
+  X,
+  ShieldCheck
 } from 'lucide-react';
 
 import { useAuth } from '@providers/AuthProvider';
+import { jwtDecode } from 'jwt-decode';
 
 export default function SideBar({ onClose }) {
   const { isAuthenticated, logout } = useAuth();
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
+  const jwt = jwtDecode(localStorage.getItem?.("jwt"));
+  const isAdmin = jwt.roles.includes("admin");
 
   return (
     <aside className={styles.sidebar}>
@@ -58,6 +62,14 @@ export default function SideBar({ onClose }) {
                   <span>Relatórios</span>
                 </Link>
               </li>
+              {isAdmin && (
+                <li>
+                  <Link to="/admin/dashboard" onClick={onClose} className={isActive('/admin/dashboard') ? styles.active : ''}>
+                    <ShieldCheck size={20} />
+                    <span>Painel Administrativo</span>
+                  </Link>
+                </li>
+              )}
             </>
           ) : (
             <>

@@ -22,7 +22,7 @@ export default function Map({ className, zoom = 16, markers = [], initialPositio
   }, []);
 
   const sudoeste = L.latLng(-8.200, -35.092);
-  const nordeste = L.latLng(-7.890, -34.821);
+  const nordeste = L.latLng(-7.890, -34.721);
   const limitesRecife = L.latLngBounds(sudoeste, nordeste);
 
   const estiloLimite = {
