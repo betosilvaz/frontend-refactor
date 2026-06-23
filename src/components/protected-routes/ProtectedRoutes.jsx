@@ -1,19 +1,25 @@
 import { useState, useEffect } from "react";
-import { Outlet, Navigate } from "react-router"; // ou react-router-dom dependendo da versão
+import { Outlet, Navigate } from "react-router";
 import { jwtDecode } from "jwt-decode";
 
 import fetchThis from "@utils/fetchThis";
 import { API_URL } from "@config/api/api.js";
 import LoadingPage from "@components/loading-page/LoadingPage";
+import { useAuth } from "@providers/AuthProvider";
 
 export default function ProtectedRoutes({ allowedRoles }) {
-    const [isAuthorized, setIsAuthorized] = useState(null); 
+    const { isAuthenticated, setIsAuthenticated } = useAuth();
+    const [canAccess, setCanAccess] = useState(null);
 
     useEffect(() => {
         const verifyAuth = async () => {
             const jwt = localStorage.getItem("jwt");
             
-            if (!jwt) return setIsAuthorized(false);
+            if (!jwt) {
+                setCanAccess(false);
+                setIsAuthenticated(false);
+                return;
+            }
 
             try {
                 const response = await fetchThis(`${API_URL}/api/auth/me`, {
@@ -22,28 +28,31 @@ export default function ProtectedRoutes({ allowedRoles }) {
 
                 if (response.ok) {
                     const decoded = jwtDecode(jwt);
-
+                    setIsAuthenticated(true)
                     if (!allowedRoles || allowedRoles.length === 0) {
-                        return setIsAuthorized(true);
+                        setCanAccess(false);
+                        return;
                     }
 
                     const hasRole = decoded.roles?.some(role => allowedRoles.includes(role));
-                    setIsAuthorized(hasRole);
+                    setCanAccess(hasRole);
                 } else {
-                    setIsAuthorized(false);
+                    setIsAuthenticated(false);
+                    setCanAccess(false);
                 }
             } catch (error) {
                 console.error("Erro ao verificar o token:", error);
-                setIsAuthorized(false);
+                setIsAuthenticated(false);
+                setCanAccess(false);
             }
         };
 
         verifyAuth();
     }, [allowedRoles]);
     
-    if (isAuthorized === null) {
+    if (canAccess === null) {
         return <LoadingPage/>;
     }
 
-    return isAuthorized ? <Outlet /> : <Navigate to="/login" replace />;
+    return canAccess ? <Outlet /> : <Navigate to="/login" replace />;
 }

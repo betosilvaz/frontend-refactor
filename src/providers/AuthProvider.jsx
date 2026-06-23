@@ -9,7 +9,7 @@ import AppError from '@utils/AppError'
 export const Auth = createContext();
 
 export default function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function AuthProvider({ children }) {
           localStorage.removeItem("jwt");
           return setIsAuthenticated(false);
         }
-
+        setIsAuthenticated(true)
       } catch (err) {
         console.log("Erro ao tentar autenticação!");
       }
@@ -83,7 +83,7 @@ export default function AuthProvider({ children }) {
   }
 
   return (
-    <Auth.Provider value={{ isAuthenticated, login, logout }}>
+    <Auth.Provider value={{ isAuthenticated, setIsAuthenticated, login, logout }}>
       {children}
     </Auth.Provider>
   )
