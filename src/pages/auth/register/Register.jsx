@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 
 import fetchThis from "@utils/fetchThis.js";
 import AppError from '@utils/AppError.js';
+import { ERROR_CODES } from '@utils/ErrorCodes.js';
 import { API_URL } from '@config/api/api.js';
 
 const initialState = {
@@ -192,28 +193,28 @@ export default function Register() {
 function validateForm(form) {
   if (!form.name || !form.email || !form.password || !form.confirmPassword) {
     throw new AppError({
-      code: ERROR_CODES.PARSER,
+      code: ERROR_CODES.PARSE,
       message: "Preencha todos os campos!",
     });
   }
 
   if (form.email.indexOf('@') === -1) {
     throw new AppError({
-      code: ERROR_CODES.PARSER,
+      code: ERROR_CODES.PARSE,
       message: "Insira um email válido!",
     });
   }
 
   if (form.password !== form.confirmPassword) {
     throw new AppError({
-      code: ERROR_CODES.PARSER,
+      code: ERROR_CODES.PARSE,
       message: "As senhas devem ser iguais",
     });
   }
 
   if (form.password.length < 8) {
     throw new AppError({
-      code: ERROR_CODES.PARSER,
+      code: ERROR_CODES.PARSE,
       message: "A senha deve ter no mínimo 8 caracteres!",
     });
   }

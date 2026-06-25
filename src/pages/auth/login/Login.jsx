@@ -6,6 +6,7 @@ import { Mail, Lock, ArrowLeft, LogIn } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import AppError from '@utils/AppError.js';
+import { ERROR_CODES } from '@utils/ErrorCodes.js';
 import { useAuth } from '@providers/AuthProvider';
 
 const initialState = {
@@ -146,7 +147,7 @@ export default function Login() {
 function validateForm(form) {
   if (!form.email || !form.password) {
     throw new AppError({
-      code: ERROR_CODES.PARSER,
+      code: ERROR_CODES.PARSE,
       message: "Todos os campos devem estar preenchidos!",
     });
   }
