@@ -138,7 +138,7 @@ export default function Reports() {
       toast.success('Relatório eliminado com sucesso!');
       setReports(prev => ({
         ...prev,
-        content: reports.content.filter((report) => report.reportId !== id)
+        content: prev.content.filter((report) => report.reportId !== id)
       }))
     } catch (error) {
       toast.error(error.message || 'Ocorreu um erro ao eliminar o relatório. Tente novamente mais tarde.');
