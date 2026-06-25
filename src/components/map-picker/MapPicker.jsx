@@ -3,6 +3,7 @@ import styles from './MapPicker.module.css'
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap, LayersControl } from 'react-leaflet';
 import { createPortal } from 'react-dom';
 import { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import SearchBar from '@components/search-bar/SearchBar';
 import fetchThis from "@utils/fetchThis.js";
