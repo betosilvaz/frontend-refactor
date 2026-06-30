@@ -23,8 +23,8 @@ export default function SideBar({ onClose }) {
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
-  const jwt = jwtDecode(localStorage.getItem?.("jwt"));
-  const isAdmin = jwt.roles.includes("admin");
+  const jwt = localStorage.getItem("jwt") || "";
+  const isAdmin = (jwt === "") ? false : (jwtDecode(jwt)?.roles.includes?.("admin") ?? false);
 
   return (
     <aside className={styles.sidebar}>
