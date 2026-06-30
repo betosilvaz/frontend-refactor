@@ -41,7 +41,7 @@ function useGreenRoofData(id) {
         const imgs = roofData.images?.map(img => API_URL+ "/" + img.url);
         setImages(imgs || []);
 
-        setReservoir(roofData.reservoirs[0] || null);
+        setReservoir(roofData.reservoirs?.[0] ?? null);
 
       } catch (err) {
         setError(err.message || "Erro inesperado ao carregar os dados.");
