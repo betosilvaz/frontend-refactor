@@ -1,58 +1,31 @@
 import { useState, useEffect } from "react";
 import { Outlet, Navigate } from "react-router";
-import { jwtDecode } from "jwt-decode";
 
-import fetchThis from "@utils/fetchThis";
-import { API_URL } from "@config/api/api.js";
 import LoadingPage from "@components/loading-page/LoadingPage";
 import { useAuth } from "@providers/AuthProvider";
 
 export default function ProtectedRoutes({ allowedRoles }) {
-    const { isAuthenticated, setIsAuthenticated } = useAuth();
-    const [canAccess, setCanAccess] = useState(null);
+    const { isAuthenticated, user, refreshAuth } = useAuth();
+    const [checked, setChecked] = useState(false);
 
     useEffect(() => {
-        const verifyAuth = async () => {
-            const jwt = localStorage.getItem("jwt");
-            
-            if (!jwt) {
-                setCanAccess(false);
-                setIsAuthenticated(false);
-                return;
-            }
+        refreshAuth().finally(() => setChecked(true));
+    }, [refreshAuth]);
 
-            try {
-                const response = await fetchThis(`${API_URL}/api/auth/me`, {
-                    headers: { Authorization: `Bearer ${jwt}` }
-                });
-
-                if (response.ok) {
-                    const decoded = jwtDecode(jwt);
-                    setIsAuthenticated(true)
-                    if (!allowedRoles || allowedRoles.length === 0) {
-                        setCanAccess(false);
-                        return;
-                    }
-
-                    const hasRole = decoded.roles?.some(role => allowedRoles.includes(role));
-                    setCanAccess(hasRole);
-                } else {
-                    setIsAuthenticated(false);
-                    setCanAccess(false);
-                }
-            } catch (error) {
-                console.error("Erro ao verificar o token:", error);
-                setIsAuthenticated(false);
-                setCanAccess(false);
-            }
-        };
-
-        verifyAuth();
-    }, [allowedRoles]);
-    
-    if (canAccess === null) {
-        return <LoadingPage/>;
+    if (!checked) {
+        return <LoadingPage />;
     }
 
-    return canAccess ? <Outlet /> : <Navigate to="/login" replace />;
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
+
+    if (allowedRoles && allowedRoles.length > 0) {
+        const hasRole = user?.roles?.some(role => allowedRoles.includes(role));
+        if (!hasRole) {
+            return <Navigate to="/unauthorized" replace />;
+        }
+    }
+
+    return <Outlet />;
 }

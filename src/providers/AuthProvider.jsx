@@ -1,5 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react"
-
+import { createContext, useContext, useState, useEffect, useCallback } from "react"
 import { jwtDecode } from "jwt-decode";
 
 import fetchThis from "@utils/fetchThis.js";
@@ -11,6 +10,7 @@ export const Auth = createContext();
 export default function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     async function verifyAuthentication() {
@@ -29,8 +29,13 @@ export default function AuthProvider({ children }) {
         if (!response.ok) {
           localStorage.removeItem("jwt");
           setIsAuthenticated(false);
+          setUser(null);
           return;
         }
+        const userData = await response.json();
+        setUser({
+          roles: userData?.roles
+        });
         setIsAuthenticated(true)
       } catch (err) {
         setIsAuthenticated(false);
@@ -40,6 +45,39 @@ export default function AuthProvider({ children }) {
     }
     verifyAuthentication();
   }, [])
+
+  const refreshAuth = useCallback(async () => {
+    const jwt = localStorage.getItem("jwt");
+    if (!jwt) {
+      setIsAuthenticated(false);
+      setUser(null);
+      return;
+    }
+
+    try {
+      const response = await fetchThis(`${API_URL}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${jwt}` }
+      });
+
+      if (!response.ok) {
+        localStorage.removeItem("jwt");
+        setIsAuthenticated(false);
+        setUser(null);
+        return { ok: false };
+      }
+
+      const userData = await response.json();
+      setUser({
+        roles: userData.roles
+      });
+      setIsAuthenticated(true);
+      return;
+    } catch (err) {
+      setIsAuthenticated(false);
+      setUser(null);
+      return;
+    }
+  }, []);
 
   async function login(email, password) {
     try {
@@ -60,6 +98,10 @@ export default function AuthProvider({ children }) {
 
       const data = await response.json();
       localStorage.setItem("jwt", data.jwt);
+      const user = jwtDecode(data.jwt);
+      setUser({
+        roles: user.roles
+      });
       setIsAuthenticated(true);
 
     } catch (error) {
@@ -77,6 +119,7 @@ export default function AuthProvider({ children }) {
     try {
       localStorage.removeItem("jwt");
       setIsAuthenticated(false);
+      setUser(null);
       location.href = "/login";
     } catch (error) {
       throw new AppError({
@@ -88,7 +131,7 @@ export default function AuthProvider({ children }) {
   }
 
   return (
-    <Auth.Provider value={{ isAuthenticated, setIsAuthenticated, login, logout }}>
+    <Auth.Provider value={{ isAuthenticated, setIsAuthenticated, user, login, logout, refreshAuth }}>
       {children}
     </Auth.Provider>
   )

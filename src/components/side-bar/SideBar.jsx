@@ -16,15 +16,13 @@ import {
 } from 'lucide-react';
 
 import { useAuth } from '@providers/AuthProvider';
-import { jwtDecode } from 'jwt-decode';
 
 export default function SideBar({ onClose }) {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
-  const jwt = localStorage.getItem("jwt") || "";
-  const isAdmin = (jwt === "") ? false : (jwtDecode(jwt)?.roles.includes?.("admin") ?? false);
+  const isAdmin = user?.roles?.includes("admin") ?? false;
 
   return (
     <aside className={styles.sidebar}>
