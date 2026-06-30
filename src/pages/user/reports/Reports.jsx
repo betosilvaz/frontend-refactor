@@ -220,7 +220,7 @@ export default function Reports() {
                           <FileText size={24} />
                         </div>
                         <div className={styles.reportDetails}>
-                          <h3 className={styles.reportTitle}>{report.url.substring(report.url.lastIndexOf('/') + 1)}</h3>
+                          <h3 className={styles.reportTitle}>{report.url?.split('/').pop() ?? 'relatório'}</h3>
                           <span className={styles.reportMeta}>
                             Criado em: {new Intl.DateTimeFormat('pt-BR', {
                               dateStyle: 'full',
