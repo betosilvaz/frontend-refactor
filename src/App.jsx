@@ -1,11 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import { Suspense, lazy } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 import LoadingPage from "@components/loading-page/LoadingPage";
-
-const queryClient = new QueryClient();
 
 // Lazy loading de todas as páginas e componentes grandes
 const Home = lazy(() => import('@pages/Home'));
@@ -29,7 +26,7 @@ const AuthProvider = lazy(() => import('@providers/AuthProvider'));
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Toaster />
       {/* Suspense único para toda a app */}
       <Suspense fallback={<LoadingPage />}>
@@ -61,6 +58,6 @@ export default function App() {
           </BrowserRouter>
         </AuthProvider>
       </Suspense>
-    </QueryClientProvider>
+    </>
   );
 }
