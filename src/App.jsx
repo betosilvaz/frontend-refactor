@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import { Suspense, lazy } from 'react';
 import { Toaster } from 'react-hot-toast';
 
+import ErrorBoundary from "@components/error-boundary/ErrorBoundary";
 import LoadingPage from "@components/loading-page/LoadingPage";
 
 // Lazy loading de todas as páginas e componentes grandes
@@ -28,11 +29,12 @@ export default function App() {
   return (
     <>
       <Toaster />
-      {/* Suspense único para toda a app */}
-      <Suspense fallback={<LoadingPage />}>
-        <AuthProvider>
-          <BrowserRouter>
-            <Routes>
+      <ErrorBoundary>
+        {/* Suspense único para toda a app */}
+        <Suspense fallback={<LoadingPage />}>
+          <AuthProvider>
+            <BrowserRouter>
+              <Routes>
               <Route path="/loading" element={<LoadingPage />} />
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
@@ -57,7 +59,8 @@ export default function App() {
             </Routes>
           </BrowserRouter>
         </AuthProvider>
-      </Suspense>
+        </Suspense>
+      </ErrorBoundary>
     </>
   );
 }
