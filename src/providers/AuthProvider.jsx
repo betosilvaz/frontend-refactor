@@ -15,7 +15,11 @@ export default function AuthProvider({ children }) {
   useEffect(() => {
     async function verifyAuthentication() {
       let jwt = localStorage.getItem("jwt");
-      if (!jwt) return setIsAuthenticated(false);
+      if (!jwt) {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+        return;
+      }
 
       try {
         const response = await fetchThis(`${API_URL}/api/auth/me`, {
@@ -24,20 +28,21 @@ export default function AuthProvider({ children }) {
         
         if (!response.ok) {
           localStorage.removeItem("jwt");
-          return setIsAuthenticated(false);
+          setIsAuthenticated(false);
+          return;
         }
         setIsAuthenticated(true)
       } catch (err) {
-        console.log("Erro ao tentar autenticação!");
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
     verifyAuthentication();
   }, [])
 
   async function login(email, password) {
     try {
-
       const response = await fetchThis(API_URL + '/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -72,7 +77,7 @@ export default function AuthProvider({ children }) {
     try {
       localStorage.removeItem("jwt");
       setIsAuthenticated(false);
-      window.location.href = "/login";
+      location.href = "/login";
     } catch (error) {
       throw new AppError({
         code: error.code,
