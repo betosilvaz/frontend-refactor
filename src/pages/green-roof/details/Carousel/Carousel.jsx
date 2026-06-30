@@ -40,11 +40,12 @@ const EmblaCarousel = (props) => {
     const isScrollEvent = event?.type === 'scroll'
 
     // NA V8: Acessamos slidesInSnap diretamente do engine
-    const slidesInSnap = engine.slideRegistry 
+    const slidesInSnap = engine?.slideRegistry
 
     emblaApi.scrollSnapList().forEach((scrollSnap, snapIndex) => {
       let diffToTarget = scrollSnap - scrollProgress
-      const slidesInThisSnap = slidesInSnap[snapIndex] // Antes era engine.scrollSnapList.slidesBySnap
+      const slidesInThisSnap = slidesInSnap?.[snapIndex] // Antes era engine.scrollSnapList.slidesBySnap
+      if (!slidesInThisSnap) return
 
       slidesInThisSnap.forEach((slideIndex) => {
         if (isScrollEvent && !slidesInView.includes(slideIndex)) return
