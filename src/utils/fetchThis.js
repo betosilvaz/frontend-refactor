@@ -1,12 +1,12 @@
 import { API_URL } from "@config/api/api.js";
 
-const options = {
+const refreshConfig = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include'
 };
 
-const endpoint = `${API_URL}/api/auth/refresh`;
+const refreshEndpoint = `${API_URL}/api/auth/refresh`;
 
 /**
  * fetchThises data from a REST API endpoint with 
@@ -18,15 +18,25 @@ async function fetchThis(url, options = {}) {
     let response = await fetch(url, options);
     if (response.status === 401) {
         try {
-            const refreshResponse = await fetch(endpoint, options);
+            const refreshResponse = await fetch(refreshEndpoint, refreshConfig);
 
             if (refreshResponse.ok) {
                 const data = await refreshResponse.json();
                 const newAccessToken = data.jwt;
                 localStorage.setItem("jwt", newAccessToken);
-                options.headers = { ...options.headers, 'Authorization': `Bearer ${newAccessToken}` };
-                response = await fetch(url, options);
-            } else {;
+                response = await fetch(url, {
+                    ...options,
+                    headers: {
+                        ...options.headers,
+                        'Authorization': `Bearer ${newAccessToken}`
+                    }
+                });
+
+                if (response.status === 401) {
+                    localStorage.removeItem('jwt');
+                    location.href = '/login';
+                }
+            } else {
                 localStorage.removeItem('jwt');
                 location.href = '/login';
             }
