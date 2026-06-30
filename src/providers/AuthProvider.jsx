@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from '@config/api/api.js'
 import AppError from '@utils/AppError'
+import { ERROR_CODES } from '@utils/ErrorCodes'
 
 export const Auth = createContext();
 
@@ -63,12 +64,12 @@ export default function AuthProvider({ children }) {
         localStorage.removeItem("jwt");
         setIsAuthenticated(false);
         setUser(null);
-        return { ok: false };
+        return;
       }
 
       const userData = await response.json();
       setUser({
-        roles: userData.roles
+        roles: userData?.roles
       });
       setIsAuthenticated(true);
       return;
@@ -97,10 +98,19 @@ export default function AuthProvider({ children }) {
       }
 
       const data = await response.json();
+
+      if (!data?.jwt || typeof data.jwt !== 'string') {
+        throw new AppError({
+          code: ERROR_CODES.PARSE,
+          status: response.status,
+          message: 'Resposta de login inválida.',
+        });
+      }
+
       localStorage.setItem("jwt", data.jwt);
       const user = jwtDecode(data.jwt);
       setUser({
-        roles: user.roles
+        roles: user?.roles
       });
       setIsAuthenticated(true);
 
