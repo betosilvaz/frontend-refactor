@@ -10,12 +10,23 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['192x192.png', '512x512.png'],
+      devOptions: {
+        enabled: true,
+      },
       manifest: {
-        name: 'Green Roof Atlas v2',
-        short_name: 'GRA v2',
+        id: '/',
+        name: 'Green Roof Atlas',
+        short_name: 'GRA',
         description: 'Um atlas de telhados verdes para a cidade do Recife',
+        lang: 'pt-BR',
+        dir: 'ltr',
         display: 'standalone',
-        theme_color: '#ffffff',
+        orientation: 'any',
+        start_url: '/',
+        scope: '/',
+        theme_color: '#2ecc71',
+        background_color: '#2ecc71',
+        categories: ['maps', 'navigation', 'utilities'],
         icons: [
           {
             src: '/192x192.png',
@@ -32,6 +43,26 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable' // O Android vai usar este
+          }
+        ],
+        shortcuts: [
+          {
+            name: 'Buscar telhados',
+            short_name: 'Buscar',
+            url: '/search',
+            description: 'Buscar telhados verdes cadastrados'
+          },
+          {
+            name: 'Entrar',
+            short_name: 'Entrar',
+            url: '/login',
+            description: 'Acessar a conta'
+          },
+          {
+            name: 'Sobre',
+            short_name: 'Sobre',
+            url: '/about',
+            description: 'Sobre o projeto'
           }
         ]
       }
