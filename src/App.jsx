@@ -4,6 +4,8 @@ import { Toaster } from 'react-hot-toast';
 
 import ErrorBoundary from "@components/error-boundary/ErrorBoundary";
 import LoadingPage from "@components/loading-page/LoadingPage";
+import ReloadPrompt from "@components/reload-prompt/ReloadPrompt";
+import OfflineIndicator from "@components/offline-indicator/OfflineIndicator";
 
 // Lazy loading de todas as páginas e componentes grandes
 const Home = lazy(() => import('@pages/Home'));
@@ -29,6 +31,8 @@ export default function App() {
   return (
     <>
       <Toaster />
+      <ReloadPrompt />
+      <OfflineIndicator />
       <ErrorBoundary>
         {/* Suspense único para toda a app */}
         <Suspense fallback={<LoadingPage />}>

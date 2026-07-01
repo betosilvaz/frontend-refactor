@@ -52,7 +52,9 @@ export default class ErrorBoundary extends Component {
           <p className={styles.message}>
             {chunkError
               ? 'O sistema foi atualizado. Recarregue a página para continuar.'
-              : 'Ocorreu um erro inesperado. Tente recarregar ou voltar ao início.'}
+              : !navigator.onLine
+                ? 'Você está offline. Conecte-se à internet e tente novamente.'
+                : 'Ocorreu um erro inesperado. Tente recarregar ou voltar ao início.'}
           </p>
 
           {import.meta.env.DEV && error?.message && (
