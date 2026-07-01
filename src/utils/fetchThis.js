@@ -27,7 +27,16 @@ function throwUnauthorized() {
  * @throws {AppError} UNAUTHORIZED quando a sessão não pode ser restaurada
  */
 async function fetchThis(url, options = {}) {
-    let response = await fetch(url, options);
+    let response;
+    try {
+        response = await fetch(url, options);
+    } catch {
+        throw new AppError({
+            code: ERROR_CODES.NETWORK,
+            status: 0,
+            message: 'Sem conexão. Verifique sua internet e tente novamente.',
+        });
+    }
     if (response.status !== 401) return response;
 
     try {
@@ -55,6 +64,13 @@ async function fetchThis(url, options = {}) {
         return response;
     } catch (error) {
         if (error instanceof AppError) throw error;
+        if (error instanceof TypeError) {
+            throw new AppError({
+                code: ERROR_CODES.NETWORK,
+                status: 0,
+                message: 'Sem conexão. Verifique sua internet e tente novamente.',
+            });
+        }
         throwUnauthorized();
     }
 }
