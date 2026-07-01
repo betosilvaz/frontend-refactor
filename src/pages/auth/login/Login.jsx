@@ -2,7 +2,7 @@ import styles from './Login.module.css';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { motion } from 'motion/react';
-import { Mail, Lock, ArrowLeft, LogIn } from 'lucide-react';
+import { Mail, Lock, ArrowLeft, LogIn, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import AppError from '@utils/AppError.js';
@@ -33,6 +33,7 @@ export default function Login() {
   const { login } = useAuth();
   const [form, setForm] = useState(initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -109,13 +110,22 @@ export default function Login() {
               <div className={styles.inputWrapper}>
                 <Lock className={styles.inputIcon} size={18} />
                 <input 
-                  type="password" 
+                  type={showPassword ? 'text' : 'password'}
                   name="password" 
                   id="password" 
                   placeholder="••••••••" 
                   value={form.password} 
-                  onChange={handleChange} 
+                  onChange={handleChange}
+                  className={styles.hasToggle}
                 />
+                <button
+                  type="button"
+                  className={styles.passwordToggle}
+                  onClick={() => setShowPassword(v => !v)}
+                  aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                >
+                  {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                </button>
               </div>
             </motion.div>
 

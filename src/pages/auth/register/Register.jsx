@@ -2,7 +2,7 @@ import styles from './Register.module.css';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
-import { User, Mail, Lock, ArrowLeft, UserPlus, UserCheck } from 'lucide-react';
+import { User, Mail, Lock, ArrowLeft, UserPlus, UserCheck, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import fetchThis from "@utils/fetchThis.js";
@@ -36,6 +36,8 @@ export default function Register() {
   const [form, setForm] = useState(initialState);
   const [submitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -153,14 +155,38 @@ export default function Register() {
                 <label htmlFor='password'>Senha</label>
                 <div className={styles.inputWrapper}>
                   <Lock className={styles.inputIcon} size={18} />
-                  <input type="password" name="password" id="password" placeholder="••••••••" value={form.password} onChange={handleChange} />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password" id="password" placeholder="••••••••" value={form.password} onChange={handleChange}
+                    className={styles.hasToggle}
+                  />
+                  <button
+                    type="button"
+                    className={styles.passwordToggle}
+                    onClick={() => setShowPassword(v => !v)}
+                    aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                  >
+                    {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                  </button>
                 </div>
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor='confirmPassword'>Confirmar Senha</label>
                 <div className={styles.inputWrapper}>
                   <Lock className={styles.inputIcon} size={18} />
-                  <input type="password" name="confirmPassword" id="confirmPassword" placeholder="••••••••" value={form.confirmPassword} onChange={handleChange} />
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    name="confirmPassword" id="confirmPassword" placeholder="••••••••" value={form.confirmPassword} onChange={handleChange}
+                    className={styles.hasToggle}
+                  />
+                  <button
+                    type="button"
+                    className={styles.passwordToggle}
+                    onClick={() => setShowConfirmPassword(v => !v)}
+                    aria-label={showConfirmPassword ? "Ocultar senha" : "Mostrar senha"}
+                  >
+                    {showConfirmPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                  </button>
                 </div>
               </div>
             </motion.div>
