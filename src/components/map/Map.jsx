@@ -9,17 +9,10 @@ import { useEffect, useState } from 'react'
 import MapPopup from '@components/map-popup/MapPopup'
 const { BaseLayer } = LayersControl;
 
-import fetchThis from "@utils/fetchThis.js";
+import geoData from '@assets/limites_recife.json';
 
 export default function Map({ className, zoom = 16, markers = [], initialPosition = [-8.058211417035023, -34.871517645983225], simpleMarker = false }) {
-  const [geoData, setGeoData] = useState(null);
   const [showLimits, setShowLimits] = useState(false);
-
-  useEffect(() => {
-    fetchThis('/limites_recife.json')
-      .then(response => response.json())
-      .then(data => setGeoData(data));
-  }, []);
 
   const sudoeste = L.latLng(-8.200, -35.092);
   const nordeste = L.latLng(-7.890, -34.721);
@@ -52,7 +45,7 @@ export default function Map({ className, zoom = 16, markers = [], initialPositio
       <MapContainer center={initialPosition} zoom={13} minZoom={12} maxBounds={limitesRecife} maxBoundsViscosity={1} className={`${styles.map} ${className || ''}`}>
         <ChangeView center={initialPosition} zoom={zoom} />
         
-        {geoData && showLimits && <GeoJSON data={geoData} style={estiloLimite}/>}
+        {showLimits && <GeoJSON data={geoData} style={estiloLimite}/>}
 
         <LayersControl position="topright">
           <BaseLayer checked name="Mapa Colorido (Voyager)">
