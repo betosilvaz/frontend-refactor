@@ -1,7 +1,7 @@
 import styles from './ResetPassword.module.css';
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Lock, KeyRound, ShieldCheck, ArrowLeft, CheckCircle2, Loader2, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
 

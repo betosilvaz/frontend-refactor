@@ -1,15 +1,14 @@
 import styles from './SideBar.module.css';
 
 import { Link, useLocation } from 'react-router';
-import { 
-  Leaf, 
-  User, 
-  PlusCircle, 
-  FileText, 
-  Bell, 
-  Info, 
-  LogOut, 
-  LogIn, 
+import {
+  Leaf,
+  User,
+  PlusCircle,
+  FileText,
+  Info,
+  LogOut,
+  LogIn,
   UserPlus,
   X,
   ShieldCheck

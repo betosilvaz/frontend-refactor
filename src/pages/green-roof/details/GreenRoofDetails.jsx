@@ -8,7 +8,6 @@ import { ArrowLeft } from 'lucide-react';
 import Container from '@components/container/Container';
 import ActionBar from '@components/action-bar/ActionBar';
 import EditIcon from '@components/icons/EditIcon';
-import FloatingButton from '@components/floating-button/FloatingButton';
 import Carousel from './Carousel/Carousel';
 import Map from '@components/map/Map';
 

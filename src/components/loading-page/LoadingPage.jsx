@@ -1,5 +1,4 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Loader2 } from 'lucide-react';
 import styles from './LoadingPage.module.css';
 

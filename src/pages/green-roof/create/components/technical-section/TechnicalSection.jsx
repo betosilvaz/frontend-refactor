@@ -1,5 +1,5 @@
 import styles from "./TechnicalSection.module.css";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 import TagInput from "@components/tag-input/TagInput";
 import ResponsiveRow from '@components/responsive-row/ResponsiveRow'

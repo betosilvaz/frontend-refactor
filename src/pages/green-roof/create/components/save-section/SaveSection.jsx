@@ -1,5 +1,5 @@
 import styles from "./SaveSection.module.css";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 export default function SaveSection({ handleSubmit }) {
   return (

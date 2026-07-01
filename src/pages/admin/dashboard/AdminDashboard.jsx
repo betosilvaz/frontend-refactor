@@ -1,14 +1,10 @@
-import { useState, useMemo , useEffect} from "react";
+import { useState, useEffect } from "react";
 import styles from "./AdminDashboard.module.css";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import toast from "react-hot-toast";
-import { jwtDecode } from "jwt-decode";
 
 import ActionBar from '@components/action-bar/ActionBar';
 import Container from '@components/container/Container';
-import Input from '@components/input/Input';
-import FormGroup from '@components/form-group/FormGroup';
-import ResponsiveRow from '@components/responsive-row/ResponsiveRow';
 
 import { API_URL } from "@config/api/api";
 

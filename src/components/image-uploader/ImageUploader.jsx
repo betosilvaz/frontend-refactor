@@ -1,6 +1,6 @@
 import styles from "./ImageUploader.module.css";
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 import CloseIcon from '@components/icons/CloseIcon';
 import ImageIcon from '@components/icons/ImageIcon';

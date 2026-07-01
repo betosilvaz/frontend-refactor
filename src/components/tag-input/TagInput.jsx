@@ -1,4 +1,3 @@
-import styles from './TagInput.module.css';
 import Tagify from "@yaireo/tagify";
 import "@yaireo/tagify/dist/tagify.css";
 import { useEffect, useRef } from "react";

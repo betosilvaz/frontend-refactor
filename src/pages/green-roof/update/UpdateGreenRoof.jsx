@@ -13,12 +13,12 @@ import MapPicker from "@components/map-picker/MapPicker"
 import useSubmit from "./hooks/useSubmit.js";
 import useGreenRoofForm from "./hooks/useGreenRoofForm.js"
 import ContextProvider from "./providers/ContextProvider.jsx"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 
 import fetchThis from "@utils/fetchThis.js";
 import { useParams } from "react-router";
 import { Trash } from "lucide-react"
-import { use, useState } from "react"
+import { useState } from "react"
 import toast from "react-hot-toast"
 import { API_URL} from "@config/api/api"
 import { useNavigate } from "react-router"

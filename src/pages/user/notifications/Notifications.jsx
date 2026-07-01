@@ -1,6 +1,6 @@
 import styles from './Notifications.module.css';
 import { Link } from 'react-router';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Bell, Wrench, Search, Clock, ArrowRight } from 'lucide-react';
 
 import Container from '@components/container/Container';

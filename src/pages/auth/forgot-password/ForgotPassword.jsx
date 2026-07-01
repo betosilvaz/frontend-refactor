@@ -1,7 +1,7 @@
 import styles from './ForgotPassword.module.css';
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Mail, ArrowLeft, Send, CheckCircle, KeyRound, Loader2 } from 'lucide-react';
 
 import fetchThis from "@utils/fetchThis.js";

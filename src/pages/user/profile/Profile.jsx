@@ -4,7 +4,7 @@ import {
   User, Shield, KeyRound, Edit2, Check, X, 
   Mail, Phone, CreditCard 
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 import Container from '@components/container/Container';
 import ResponsiveRow from '@components/responsive-row/ResponsiveRow';

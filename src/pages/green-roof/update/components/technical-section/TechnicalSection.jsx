@@ -9,7 +9,7 @@ import Checkbox from "@components/checkbox/Checkbox";
 import { useUpdateGreenRoofContext } from "../../providers/ContextProvider";
 import { useCallback } from "react";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 15 },

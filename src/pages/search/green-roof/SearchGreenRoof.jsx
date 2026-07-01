@@ -1,7 +1,7 @@
 import styles from './SearchGreenRoof.module.css'
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { Search, SlidersHorizontal, Leaf, Form } from 'lucide-react';
+import { motion } from 'motion/react';
+import { Search, SlidersHorizontal, Leaf } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import Container from '@components/container/Container'

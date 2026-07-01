@@ -1,8 +1,8 @@
 import styles from './Register.module.css';
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { motion } from 'framer-motion';
-import { User, Mail, FileText, Lock, ArrowLeft, UserPlus, UserCheck } from 'lucide-react';
+import { motion } from 'motion/react';
+import { User, Mail, Lock, ArrowLeft, UserPlus, UserCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import fetchThis from "@utils/fetchThis.js";

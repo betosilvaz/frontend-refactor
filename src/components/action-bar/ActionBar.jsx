@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 
 // Importando os ícones da Lucide
-import { Search, Home, Menu, X } from 'lucide-react';
+import { Search, Home, Menu } from 'lucide-react';
 
 import SideBar from '@components/side-bar/SideBar';
 

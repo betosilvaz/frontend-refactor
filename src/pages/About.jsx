@@ -1,9 +1,8 @@
 import { MapPin, Target, Users, Award, Code } from 'lucide-react';
 import { Link } from 'react-router';
 import { ArrowLeft } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
-import FloatingButton from '@components/floating-button/FloatingButton';
 import ActionBar from '@components/action-bar/ActionBar'
 
 import styles from './About.module.css';

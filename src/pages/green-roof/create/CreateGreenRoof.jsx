@@ -13,7 +13,7 @@ import SuccessScreen from "./components/success-screen/SuccessScreen"
 import useSubmit from "./hooks/useSubmit.js"
 import useGreenRoofForm from "./hooks/useGreenRoofForm.js"
 import ContextProvider from "./providers/ContextProvider.jsx"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 
 export default function CreateGreenRoof() {
   const submit = useSubmit();

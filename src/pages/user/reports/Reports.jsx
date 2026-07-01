@@ -1,6 +1,6 @@
 import styles from './Reports.module.css';
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { FileText, Download, Trash2, Plus, FileBarChart } from 'lucide-react';
 
 import Container from '@components/container/Container';

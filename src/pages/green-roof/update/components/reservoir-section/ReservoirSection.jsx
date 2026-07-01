@@ -1,5 +1,5 @@
 import styles from "./ReservoirSection.module.css";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 import FormGroup from '@components/form-group/FormGroup'
 import Input from '@components/input/Input'
