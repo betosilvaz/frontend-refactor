@@ -90,32 +90,32 @@ export default function ChangePassword() {
       >
         {changing ? (
           /* Estado de Carregamento */
-          <motion.div className={styles.statusContainer} variants={itemVariants}>
+          <motion.div className={styles.statusContainer} variants={itemVariants} initial="hidden" animate="visible">
             <Loader2 size={48} className={styles.spinnerIcon} />
             <h2>A redefinir a senha...</h2>
             <p>Por favor, aguarde um momento.</p>
           </motion.div>
         ) : success ? (
           /* Estado de Sucesso */
-          <motion.div className={styles.statusContainer} variants={itemVariants}>
+          <motion.div className={styles.statusContainer} variants={itemVariants} initial="hidden" animate="visible">
             <div className={styles.successIconWrapper}>
               <CheckCircle2 size={56} className={styles.successIcon} />
             </div>
             <h2>Senha redefinida!</h2>
             <p>A sua senha foi alterada com sucesso. Já pode utilizar a nova senha para acessar a sua conta.</p>
-            <Link to="/login" className={styles.submitButton}>
-              Ir para o Login
+            <Link to="/profile" className={styles.submitButton}>
+              Ir para o Perfil
             </Link>
           </motion.div>
         ) : (
           /* Formulário Padrão */
           <div className={styles.formContainer}>
-            <motion.div variants={itemVariants} className={styles.header}>
+            <motion.div variants={itemVariants} className={styles.header} initial="hidden" animate="visible">
               <h2>Redefinir Senha</h2>
               <p>Insira a sua senha atual e escolha uma nova para proteger a sua conta.</p>
             </motion.div>
 
-            <motion.form className={styles.form} onSubmit={handleClick} variants={containerVariants}>
+            <motion.form className={styles.form} onSubmit={handleClick} variants={containerVariants} initial="hidden" animate="visible">
 
               <motion.div variants={itemVariants} className={styles.formGroup}>
                 <label htmlFor='oldPassword'>Senha Atual</label>
