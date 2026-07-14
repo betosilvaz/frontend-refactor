@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { createPortal } from 'react-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Pencil as EditIcon } from 'lucide-react';
 
 import Container from '@components/container/Container';
 import ActionBar from '@components/action-bar/ActionBar';
-import EditIcon from '@components/icons/EditIcon';
 import Carousel from './Carousel/Carousel';
 import Map from '@components/map/Map';
 import FloatingButton from '@components/floating-button/FloatingButton.jsx';

@@ -2,7 +2,7 @@ import styles from "./SuccessScreen.module.css"
 
 import { Link } from "react-router";
 
-import SuccessIcon from '@components/icons/SuccessIcon'
+import { Check as SuccessIcon } from 'lucide-react'
 
 function SuccessScreen({ detailsUrl }) {
   return (

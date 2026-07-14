@@ -56,12 +56,12 @@
 .iconWrapper svg {
   width: 40px;
   height: 40px;
-  fill: #9ca3af;
-  transition: fill 0.2s;
+  color: #9ca3af;
+  transition: color 0.2s;
 }
 
 .uploadArea:hover .iconWrapper svg {
-  fill: var(--primary-dark, #3b82f6);
+  color: var(--primary-dark, #3b82f6);
 }
 
 .uploadText {
@@ -141,8 +141,8 @@
 .removeButton svg {
   width: 14px;
   height: 14px;
-  fill: #ef4444; /* Vermelho mais moderno */
-  transition: fill 0.2s ease;
+  color: #ef4444;
+  transition: color 0.2s ease;
 }
 
 .removeButton:hover {
@@ -152,7 +152,7 @@
 }
 
 .removeButton:hover svg {
-  fill: #ffffff;
+  color: #ffffff;
 }
 
 /* Estado Vazio */
@@ -173,5 +173,5 @@
 .previewEmpty svg {
   width: 32px;
   height: 32px;
-  fill: #d1d5db;
+  color: #d1d5db;
 }

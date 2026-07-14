@@ -1,6 +1,6 @@
 import styles from './SearchBar.module.css';
 
-import SearchIcon from '@components/icons/SearchIcon'
+import { Search as SearchIcon } from 'lucide-react';
 
 export default function SearchBar({ onSubmit }) {
     return (

@@ -15,14 +15,14 @@
 .searchBar svg {
     width: 24px;
     height: 24px;
-    fill: var(--color);
+    color: var(--color);
     box-sizing: content-box;
     padding: 1.5rem;
     transition: 0.2s ease-in-out;
 }
 
 .searchBar svg:hover {
-    fill: var(--primary-dark);
+    color: var(--primary-dark);
     transform: scale(1.1);
 }
 

@@ -2,8 +2,7 @@ import styles from "./ImageUploader.module.css";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
-import CloseIcon from '@components/icons/CloseIcon';
-import ImageIcon from '@components/icons/ImageIcon';
+import { X as CloseIcon, Image as ImageIcon } from 'lucide-react';
 
 import { API_URL } from '@config/api/api.js';
 
