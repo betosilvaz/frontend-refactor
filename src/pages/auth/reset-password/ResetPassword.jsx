@@ -29,7 +29,6 @@ export default function ResetPassword() {
   const [changing, setChanging] = useState(false);
   
   const [form, setForm] = useState({
-    oldPassword: "",
     newPassword: "",
     confirmNewPassword: "",
     token: ""
@@ -64,7 +63,6 @@ export default function ResetPassword() {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem("jwt")
         },
         body: JSON.stringify(form)
       });
@@ -125,23 +123,6 @@ export default function ResetPassword() {
             </motion.div>
 
             <motion.form className={styles.form} onSubmit={handleClick} variants={containerVariants}>
-              
-              <motion.div variants={itemVariants} className={styles.formGroup}>
-                <label htmlFor='oldPassword'>Senha Atual</label>
-                <div className={styles.inputWrapper}>
-                  <Lock className={styles.inputIcon} size={18} />
-                  <input 
-                    type="password" 
-                    name="oldPassword" 
-                    id="oldPassword"
-                    autoComplete={false}
-                    value={form.oldPassword} 
-                    onChange={handleChange}
-                    placeholder="Introduza a senha atual"
-                    required
-                  />
-                </div>
-              </motion.div>
 
               <motion.div variants={itemVariants} className={styles.formGroup}>
                 <label htmlFor='newPassword'>Nova Senha</label>
