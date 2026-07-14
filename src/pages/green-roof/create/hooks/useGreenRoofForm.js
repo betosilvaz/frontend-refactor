@@ -7,7 +7,6 @@ import fetchThis from "@utils/fetchThis.js";
 
 function useGreenRoofForm() {
   const [isPickingLocation, setIsPickingLocation] = useState(false);
-  const [successfullySubmitted, setSuccessfullySubmitted] = useState(false);
   const [state, dispatch] = useReducer(stateReducer, initialState);
 
   const setLocation = (coords) => {
@@ -50,8 +49,6 @@ function useGreenRoofForm() {
   return {
     isPickingLocation,
     setIsPickingLocation,
-    successfullySubmitted,
-    setSuccessfullySubmitted,
     state,
     dispatch,
     setLocation,

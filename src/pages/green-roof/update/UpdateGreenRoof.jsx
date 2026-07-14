@@ -6,7 +6,6 @@ import TechnicalSection from "./components/technical-section/TechnicalSection.js
 import ReservoirSection from "./components/reservoir-section/ReservoirSection.jsx"
 import ImageSection from "./components/image-section/ImageSection.jsx"
 import SaveSection from "./components/save-section/SaveSection.jsx"
-import SuccessScreen from "./components/success-screen/SuccessScreen.jsx"
 import Container from '@components/container/Container'
 import MapPicker from "@components/map-picker/MapPicker"
 
@@ -29,10 +28,6 @@ export default function UpdateGreenRoof() {
   const submit = useSubmit();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const navigate = useNavigate();
-
-  if (form.successfullySubmitted) {
-    return <SuccessScreen detailsUrl={"/green-roof/" + id} />
-  }
 
   if (form.isPickingLocation) {
     return (

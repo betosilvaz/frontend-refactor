@@ -7,7 +7,6 @@ import { API_URL } from "@config/api/api.js";
 
 export default function useGreenRoofForm(id) {
   const [isPickingLocation, setIsPickingLocation] = useState(false);
-  const [successfullySubmitted, setSuccessfullySubmitted] = useState(false);
   const [state, dispatch] = useReducer(stateReducer, initialState);
 
   useEffect(() => {
@@ -106,8 +105,6 @@ export default function useGreenRoofForm(id) {
   return {
     isPickingLocation,
     setIsPickingLocation,
-    successfullySubmitted,
-    setSuccessfullySubmitted,
     state,
     dispatch,
     actualLocation,

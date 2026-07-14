@@ -8,7 +8,6 @@ import ImageSection from "./components/image-section/ImageSection"
 import SaveSection from "./components/save-section/SaveSection"
 import Container from '@components/container/Container'
 import MapPicker from "@components/map-picker/MapPicker"
-import SuccessScreen from "./components/success-screen/SuccessScreen"
 
 import useSubmit from "./hooks/useSubmit.js"
 import useGreenRoofForm from "./hooks/useGreenRoofForm.js"
@@ -19,7 +18,6 @@ export default function CreateGreenRoof() {
   const submit = useSubmit();
   const form = useGreenRoofForm();
 
-  if (form.successfullySubmitted) return <SuccessScreen />;
 
   if (form.isPickingLocation) {
     return (
