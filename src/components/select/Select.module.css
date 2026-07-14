@@ -32,8 +32,8 @@
 /* Estado de Foco (Acessibilidade e Elegância) */
 .select:focus {
     outline: none;
-    border-color: #3b82f6; /* Azul moderno */
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    border-color: var(--focus-color);
+    box-shadow: var(--focus-ring);
     background-color: #fcfcfc;
 }
 

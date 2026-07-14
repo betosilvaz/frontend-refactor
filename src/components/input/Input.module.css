@@ -21,8 +21,8 @@
 
 /* Estado de Foco (Crucial para acessibilidade e elegância) */
 .input:focus {
-    border-color: #3b82f6; /* Azul moderno */
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* Anel de foco suave */
+    border-color: var(--focus-color);
+    box-shadow: var(--focus-ring);
 }
 
 /* Estado Desativado (Disabled) */
@@ -35,12 +35,12 @@
 
 /* Estado de Erro (Quando props.hasError for true) */
 .error {
-    border-color: #ef4444; /* Vermelho alerta */
+    border-color: var(--error-color);
 }
 
 .error:focus {
-    border-color: #ef4444;
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+    border-color: var(--error-color);
+    box-shadow: var(--error-ring);
 }
 
 /* ESTILOS ESPECÍFICOS ANTERIORES (MANTIDOS) */
