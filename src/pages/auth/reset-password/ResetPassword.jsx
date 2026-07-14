@@ -1,12 +1,15 @@
-import styles from './ResetPassword.module.css';
+import { Lock, KeyRound, ShieldCheck, ArrowLeft, CheckCircle2, Loader2, Save } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router';
 import { motion } from 'motion/react';
-import { Lock, KeyRound, ShieldCheck, ArrowLeft, CheckCircle2, Loader2, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+import FloatingButton from '@components/floating-button/FloatingButton.jsx';
 
 import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from '@config/api/api.js';
+
+import styles from './ResetPassword.module.css';
 
 // Variáveis de animação para o Framer Motion
 const containerVariants = {
@@ -79,15 +82,15 @@ export default function ResetPassword() {
     } finally {
       setChanging(false);
     }
-  } 
+  }
 
   return (
     <div className={styles.pageBackground}>
       {/* Botão de Voltar Flutuante */}
-      <Link to="/profile" className={styles.backButton}>
+      <FloatingButton to="/profile">
         <ArrowLeft size={20} />
         <span>Voltar</span>
-      </Link>
+      </FloatingButton>
 
       <motion.div 
         className={styles.panel}

@@ -1,11 +1,14 @@
-import styles from './ForgotPassword.module.css';
+import { Mail, ArrowLeft, Send, CheckCircle, KeyRound, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
-import { Mail, ArrowLeft, Send, CheckCircle, KeyRound, Loader2 } from 'lucide-react';
+
+import FloatingButton from '@components/floating-button/FloatingButton.jsx';
 
 import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from '@config/api/api.js';
+
+import styles from './ForgotPassword.module.css';
 
 // Variáveis de animação
 const cardVariants = {
@@ -89,10 +92,10 @@ export default function ForgotPassword() {
   // TELA PRINCIPAL (FORMULÁRIO)
   return (
     <div className={styles.pageBackground}>
-      <Link to="/login" className={styles.backButton}>
+      <FloatingButton to="/login">
         <ArrowLeft size={20} />
         <span>Voltar</span>
-      </Link>
+      </FloatingButton>
 
       <motion.div 
         className={styles.card}

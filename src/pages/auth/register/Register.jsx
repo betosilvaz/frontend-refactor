@@ -1,14 +1,17 @@
-import styles from './Register.module.css';
+import { User, Mail, Lock, ArrowLeft, UserPlus, UserCheck, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
-import { User, Mail, Lock, ArrowLeft, UserPlus, UserCheck, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+import FloatingButton from '@components/floating-button/FloatingButton.jsx';
 
 import fetchThis from "@utils/fetchThis.js";
 import AppError from '@utils/AppError.js';
 import { ERROR_CODES } from '@utils/ErrorCodes.js';
 import { API_URL } from '@config/api/api.js';
+
+import styles from './Register.module.css';
 
 const initialState = {
   name: "",
@@ -103,10 +106,10 @@ export default function Register() {
   // TELA DE CADASTRO
   return (
     <div className={styles.pageBackground}>
-      <Link to="/" className={styles.backButton}>
+      <FloatingButton to="/">
         <ArrowLeft size={20} />
         <span>Voltar</span>
-      </Link>
+      </FloatingButton>
 
       <motion.div 
         className={styles.panel}

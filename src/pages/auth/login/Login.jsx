@@ -1,13 +1,16 @@
-import styles from './Login.module.css';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { motion } from 'motion/react';
 import { Mail, Lock, ArrowLeft, LogIn, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+import FloatingButton from '@components/floating-button/FloatingButton.jsx';
+
 import AppError from '@utils/AppError.js';
 import { ERROR_CODES } from '@utils/ErrorCodes.js';
 import { useAuth } from '@providers/AuthProvider';
+
+import styles from './Login.module.css';
 
 const initialState = {
   email: "",
@@ -56,10 +59,10 @@ export default function Login() {
 
   return (
     <div className={styles.pageBackground}>
-      <Link to="/" className={styles.backButton}>
+      <FloatingButton to="/">
         <ArrowLeft size={20} />
         <span>Voltar</span>
-      </Link>
+      </FloatingButton>
 
       <motion.div 
         className={styles.panel}

@@ -1,5 +1,3 @@
-import styles from './GreenRoofDetails.module.css';
-
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { createPortal } from 'react-dom';
@@ -10,10 +8,13 @@ import ActionBar from '@components/action-bar/ActionBar';
 import EditIcon from '@components/icons/EditIcon';
 import Carousel from './Carousel/Carousel';
 import Map from '@components/map/Map';
+import FloatingButton from '@components/floating-button/FloatingButton.jsx';
 
 import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from '@config/api/api.js';
 import { useAuth } from '@providers/AuthProvider';
+
+import styles from './GreenRoofDetails.module.css';
 
 function useGreenRoofData(id) {
   const [data, setData] = useState(null);
@@ -88,10 +89,10 @@ export default function GreenRoofDetails() {
 
   return (
     <div className={styles.pageWrapper}>
-      <Link to="/" className={styles.backButton}>
+      <FloatingButton to="/">
         <ArrowLeft size={20} />
         <span>Inicio</span>
-      </Link>
+      </FloatingButton>
       { isAuthenticated && <UpdateButton id={id} /> }
       <ActionBar />
       

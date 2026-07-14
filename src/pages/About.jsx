@@ -3,7 +3,8 @@ import { Link } from 'react-router';
 import { ArrowLeft } from 'lucide-react';
 import { motion } from 'motion/react';
 
-import ActionBar from '@components/action-bar/ActionBar'
+import ActionBar from '@components/action-bar/ActionBar';
+import FloatingButton from '@components/floating-button/FloatingButton';
 
 import styles from './About.module.css';
 
@@ -12,10 +13,10 @@ const Sobre = () => {
     <div className={styles.sobreContainer}>
       <ActionBar />
 
-      <Link to="/" className={styles.backButton}>
+      <FloatingButton to="/">
         <ArrowLeft size={20} />
         <span>Inicio</span>
-      </Link>
+      </FloatingButton>
       
       {/* Hero Section */}
       <motion.header 

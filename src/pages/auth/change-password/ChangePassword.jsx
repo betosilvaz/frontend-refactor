@@ -1,12 +1,15 @@
-import styles from './ChangePassword.module.css';
-import { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router';
-import { motion } from 'motion/react';
 import { Lock, KeyRound, ShieldCheck, ArrowLeft, CheckCircle2, Loader2, Save } from 'lucide-react';
+import { useSearchParams, Link } from 'react-router';
+import { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import toast from 'react-hot-toast';
+
+import FloatingButton from '@components/floating-button/FloatingButton';
 
 import fetchThis from "@utils/fetchThis.js";
 import { API_URL } from '@config/api/api.js';
+
+import styles from './ChangePassword.module.css';
 
 // Variáveis de animação para o Framer Motion
 const containerVariants = {
@@ -76,11 +79,10 @@ export default function ChangePassword() {
 
   return (
     <div className={styles.pageBackground}>
-      {/* Botão de Voltar Flutuante */}
-      <Link to="/profile" className={styles.backButton}>
+      <FloatingButton to="/profile">
         <ArrowLeft size={20} />
         <span>Voltar</span>
-      </Link>
+      </FloatingButton>
 
       <motion.div
         className={styles.panel}
@@ -89,14 +91,12 @@ export default function ChangePassword() {
         animate="visible"
       >
         {changing ? (
-          /* Estado de Carregamento */
           <motion.div className={styles.statusContainer} variants={itemVariants} initial="hidden" animate="visible">
             <Loader2 size={48} className={styles.spinnerIcon} />
             <h2>A redefinir a senha...</h2>
             <p>Por favor, aguarde um momento.</p>
           </motion.div>
         ) : success ? (
-          /* Estado de Sucesso */
           <motion.div className={styles.statusContainer} variants={itemVariants} initial="hidden" animate="visible">
             <div className={styles.successIconWrapper}>
               <CheckCircle2 size={56} className={styles.successIcon} />
@@ -108,7 +108,6 @@ export default function ChangePassword() {
             </Link>
           </motion.div>
         ) : (
-          /* Formulário Padrão */
           <div className={styles.formContainer}>
             <motion.div variants={itemVariants} className={styles.header} initial="hidden" animate="visible">
               <h2>Redefinir Senha</h2>
