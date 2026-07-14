@@ -7,6 +7,7 @@ import ActionBar from '@components/action-bar/ActionBar';
 import Container from '@components/container/Container';
 
 import { API_URL } from "@config/api/api";
+import fetchThis from "@utils/fetchThis";
 
 export default function AdminDashboard() {
   const [pageData, setPageData] = useState(null);
@@ -27,7 +28,7 @@ export default function AdminDashboard() {
   }
 
   function handleActivate(userId) {
-    fetch(`${API_URL}/api/users/${userId}/activate`, {
+    fetchThis(`${API_URL}/api/users/${userId}/activate`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` }
     }).then(async (response) => {
@@ -41,7 +42,7 @@ export default function AdminDashboard() {
   }
 
   function handleDeactivate(userId) {
-    fetch(`${API_URL}/api/users/${userId}/deactivate`, {
+    fetchThis(`${API_URL}/api/users/${userId}/deactivate`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` }
     }).then(async (response) => {
@@ -73,7 +74,7 @@ export default function AdminDashboard() {
 
   async function fetchUsers() {
     try {
-      const response = await fetch(`${API_URL}/api/users/search?page=${page}&name=${searchTerm}&verified=${verifiedFilter ?? ""}`, {
+      const response = await fetchThis(`${API_URL}/api/users/search?page=${page}&name=${searchTerm}&verified=${verifiedFilter ?? ""}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt")}`
         }
