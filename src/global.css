@@ -19,6 +19,11 @@
   --secondary-dark: #2A5C72;
   --link: #F0A045;
   --shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+
+  --focus-color: #3b82f6;
+  --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  --error-color: #ef4444;
+  --error-ring: 0 0 0 3px rgba(239, 68, 68, 0.25);
 }
 
 body {
