@@ -143,7 +143,7 @@ export default function Profile() {
                     <KeyRound size={18} className={styles.securityIcon} />
                     <span>Autenticação e Credenciais</span>
                   </div>
-                  <Link to="/reset-password" className={styles.ghostButton}>
+                  <Link to="/change-password" className={styles.ghostButton}>
                     Redefinir Senha
                   </Link>
                 </div>

@@ -22,6 +22,7 @@ const Reports = lazy(() => import('@pages/user/reports/Reports'));
 const Notifications = lazy(() => import('@pages/user/notifications/Notifications'));
 const Unauthorized = lazy(() => import('@pages/auth/unauthorized/Unauthorized'));
 const ResetPassword = lazy(() => import('@pages/auth/reset-password/ResetPassword'));
+const ChangePassword = lazy(() => import('@pages/auth/change-password/ChangePassword'));
 const AdminDashboard = lazy(() => import('@pages/admin/dashboard/AdminDashboard'));
 
 const ProtectedRoutes = lazy(() => import('@components/protected-routes/ProtectedRoutes'));
@@ -34,7 +35,6 @@ export default function App() {
       <ReloadPrompt />
       <OfflineIndicator />
       <ErrorBoundary>
-        {/* Suspense único para toda a app */}
         <Suspense fallback={<LoadingPage />}>
           <AuthProvider>
             <BrowserRouter>
@@ -45,11 +45,12 @@ export default function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/search" element={<SearchGreenRoof />} />
               <Route path="/green-roof/:id" element={<GreenRoofDetails />} />
               <Route path="/unauthorized" element={<Unauthorized />} />
               <Route element={<ProtectedRoutes allowedRoles={['gestor']} />}>
-                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/change-password" element={<ChangePassword />}/>
                 <Route path="/green-roof/create" element={<CreateGreenRoof />} />
                 <Route path="/green-roof/update/:id" element={<UpdateGreenRoof />} />
                 <Route path="/profile" element={<Profile />} />
