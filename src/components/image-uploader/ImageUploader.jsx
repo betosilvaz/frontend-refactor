@@ -1,10 +1,14 @@
 import styles from "./ImageUploader.module.css";
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { toast } from "react-hot-toast";
 
 import { X as CloseIcon, Image as ImageIcon } from 'lucide-react';
 
 import { API_URL } from '@config/api/api.js';
+
+const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+const MAX_IMAGES = 20;
 
 export default function ImageUploader({ images, addImage, removeImage }) {
   const imageInputRef = useRef();
@@ -15,7 +19,27 @@ export default function ImageUploader({ images, addImage, removeImage }) {
 
   const handleAddImage = e => {
     const files = Array.from(e.target.files);
-    files.forEach(img => addImage(img));
+    const currentCount = originals.length + toAdd.length;
+    let added = 0;
+    let rejectedSize = 0;
+
+    for (const file of files) {
+      if (currentCount + added >= MAX_IMAGES) {
+        toast.error(`Limite de ${MAX_IMAGES} imagens atingido.`);
+        break;
+      }
+      if (file.size > MAX_SIZE) {
+        rejectedSize++;
+        continue;
+      }
+      addImage(file);
+      added++;
+    }
+
+    if (rejectedSize > 0) {
+      toast.error(`${rejectedSize} imagem(ns) excede(m) o limite de 10MB.`);
+    }
+
     e.target.value = ""; // Possibilita o reenvio da mesma imagem 
   }
 
@@ -48,6 +72,7 @@ export default function ImageUploader({ images, addImage, removeImage }) {
             <strong>Clique para fazer upload</strong> ou arraste os arquivos
           </span>
           <span className={styles.uploadSubtext}>Suporta JPG, PNG e WEBP</span>
+          <span className={styles.uploadSubtext}>Limite de 10MB por imagem e 20 imagens</span>
         </div>
       </div>
 
