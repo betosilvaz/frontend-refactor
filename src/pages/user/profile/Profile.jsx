@@ -2,7 +2,7 @@ import styles from './Profile.module.css';
 import { Link } from 'react-router';
 import { 
   User, Shield, KeyRound, Edit2, Check, X, 
-  Mail, Phone, CreditCard 
+  Mail, CreditCard 
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -92,40 +92,6 @@ export default function Profile() {
                         onChange={handleChange} 
                         disabled={!state.isEditing} 
                         placeholder="exemplo@email.com"
-                      />
-                    </div>
-                  </div>
-                </ResponsiveRow>
-                
-                <ResponsiveRow>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="number">Telefone</label>
-                    <div className={styles.inputWrapper}>
-                      <Phone className={styles.inputIcon} size={18} />
-                      <input 
-                        type="text" 
-                        name="number" 
-                        id="number"
-                        value={state.data?.number || ''} 
-                        onChange={handleChange} 
-                        disabled={!state.isEditing} 
-                        placeholder="(00) 00000-0000"
-                      />
-                    </div>
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="cpf">CPF</label>
-                    <div className={styles.inputWrapper}>
-                      <CreditCard className={styles.inputIcon} size={18} />
-                      <input 
-                        type="text" 
-                        name="cpf" 
-                        id="cpf"
-                        value={state.data?.cpf || ''} 
-                        onChange={handleChange} 
-                        disabled={!state.isEditing} 
-                        placeholder="000.000.000-00"
                       />
                     </div>
                   </div>
