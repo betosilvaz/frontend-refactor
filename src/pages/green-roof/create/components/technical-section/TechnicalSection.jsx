@@ -148,28 +148,6 @@ export default function TechnicalSection() {
           </FormGroup>
         </div>
       </motion.section>
-
-      <motion.section variants={fadeUp} className={styles.cardSection}>
-        <div className={styles.sectionHeader}>
-          <h2>Contato do Responsável</h2>
-        </div>
-        <div className={styles.formGrid}>
-          <ResponsiveRow>
-            <FormGroup>
-              <label htmlFor="ownerName">Nome Completo</label>
-              <Input type="text" name="ownerName" placeholder="Ex: João da Silva" value={data?.ownerName ?? ""} onChange={handleChange} />
-            </FormGroup>
-            <FormGroup>
-              <label htmlFor="ownerEmail">Email</label>
-              <Input type="email" name="ownerEmail" placeholder="joao@exemplo.com" value={data?.ownerEmail ?? ""} onChange={handleChange} />
-            </FormGroup>
-            <FormGroup>
-              <label htmlFor="ownerNumber">Telefone</label>
-              <Input type="text" name="ownerNumber" placeholder="(81) 90000-0000" value={data?.ownerNumber ?? ""} onChange={handleChange} />
-            </FormGroup>
-          </ResponsiveRow>
-        </div>
-      </motion.section>
     </motion.form>
   );
 }

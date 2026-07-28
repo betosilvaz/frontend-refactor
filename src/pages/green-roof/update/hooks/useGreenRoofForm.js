@@ -36,9 +36,6 @@ export default function useGreenRoofForm(id) {
         dispatch({ type: "on-greenroof-change", name: "depth", value: data.depth });
         dispatch({ type: "on-greenroof-change", name: "weight", value: data.weight });
         dispatch({ type: "on-greenroof-change", name: "slope", value: data.slope });
-        dispatch({ type: "on-greenroof-change", name: "ownerName", value: data.ownerName });
-        dispatch({ type: "on-greenroof-change", name: "ownerEmail", value: data.ownerEmail });
-        dispatch({ type: "on-greenroof-change", name: "ownerNumber", value: data.ownerNumber });
         dispatch({ type: "set-original-vegetation", value: data.vegetation });
         if (data.reservoirs && data.reservoirs.length > 0) {
           dispatch({ type: "on-reservoir-change", name: "id", value: data.reservoirs[0].id});
