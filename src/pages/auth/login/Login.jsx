@@ -106,10 +106,6 @@ export default function Login() {
             </motion.div>
 
             <motion.div variants={itemVariants} className={styles.formGroup}>
-              <div className={styles.labelRow}>
-                <label htmlFor='password'>Senha</label>
-                <Link to="/forgot-password" className={styles.forgotPasswordLink}>Esqueceu a senha?</Link>
-              </div>
               <div className={styles.inputWrapper}>
                 <Lock className={styles.inputIcon} size={18} />
                 <input 
